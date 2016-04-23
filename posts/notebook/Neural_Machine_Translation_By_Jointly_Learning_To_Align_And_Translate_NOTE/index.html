@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Neural Machine Translation By Jointly Learning To Align And Translate笔记 // underspirit&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="Neural Machine Translation By Jointly Learning To Align And Translate笔记" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://fuck.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/" />
+
+
+  
+  <link rel="stylesheet" href="http://fuck.songru.org//css/base-min.css">
+  <link rel="stylesheet" href="http://fuck.songru.org//css/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="http://fuck.songru.org//css/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://fuck.songru.org//css/redlounge.css">
+  <link href="http://fuck.songru.org//css/font-awesome.min.css" rel="stylesheet">
+  <link href="http://fuck.songru.org//css/googlefonts_raleway.css" rel='stylesheet' type='text/css'>
+  <link href="http://fuck.songru.org//css/googlefonts_Libre.css" rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="underspirit&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="http://fuck.songru.org//css/tomorrow-night-bright.min.css">
+  
+  <script src="http://fuck.songru.org//js/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)'],['&(',')&']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {font: inherit;
+              font-size: 100%;
+              background: inherit;
+              border: inherit;
+              color: #515151;}
+</style>
+
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Leon&#39;s Blog</h1>
+    <h2 class="brand-tagline">Is super awesome</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://fuck.songru.org/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/posts/">Blog</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://weibo.com/songruLi" target="_blank"><i class='fa fa-weibo'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/">Neural Machine Translation By Jointly Learning To Align And Translate笔记</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>27</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2016</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+
+			
+
+			
+
+            <p>本文主要创新在传统的神经机器翻译上进行改进，确切的说是改进了基本的RNN Encoder-Decoder模型,提出了Alignment model，即实现了Attention model.</p>
+
+<hr />
+
+<p>传统的encoder-decoder模型如下图所示:
+<img src="/img/1458651310553.png" alt="Alt text | center" />
+<br />
+该模型通过神经网络将所有的输入信息压缩为一个固定长度的向量$w$,然后通过decoder的神经网络解码这个$w$，最后得出翻译结果.<br />
+使用固定长度的向量是该模型的一个缺点,因为该向量很难将所有需要的信息编码到其中，对于长度大的句子,该模型的效果会显著下降.</p>
+
+<p>本文作者提出的改进模型结构为:<br />
+<img src="/img/1458651809449.png" alt="Alt text | center" />
+<br />
+主要有4个方面改进:<br />
+1. <strong>GRU 和 Bidirectional RNN</strong><br />
+RNN网络的结果采用的是GRU单元，双向神经网络(Bidirectional).一个BiRNN由前向(forward)和后向(backward)RNN组成,前向RNN &amp;(\stackrel{\rightarrow}{\mbox{f}})&amp; 按顺序读取输入序列(从&amp;(x_f)&amp;到&amp;(x_{T_x})&amp;)，计算得出前向RNN的隐含状态序列&amp;((\vec{h_1},\cdots,\vec{h_{T_x}} ))&amp; 。反向RNN$\stackrel{\leftarrow}{\mbox{f}}$则逆序读取输入序列(从$x_{T_x}$到$x_1$)，计算得出$(\stackrel{\leftarrow}{h_1},\cdots,\stackrel{\leftarrow}{h_{T_x}})$ .<br />
+对于一个词$x_j$直接concatenating前向$\vec{h_j}$与后向$\stackrel{\leftarrow}{h_j}$，即$h_j=\left[\begin{array}{c}\stackrel{\rightarrow}{h_j}  \\  \stackrel{\leftarrow}{h_j}  \end{array} \right]$，计算时词向量矩阵$E$是前向与后向网络共享的，其他参数则不是.<br />
+2. <strong>对齐模型(alignment model)</strong><br />
+该模型也可以说是实现了注意力模型(Attention model).<br />
+通过该模型计算得到输入时刻$j$在预测输出时刻$i$时所占的权重$\alpha _{ij}$.比如说翻译<strong>&ldquo;我喜欢飞机&rdquo;</strong>到<strong>&ldquo;I like airplane&rdquo;</strong>,翻译输出<strong>&ldquo;I&rdquo;</strong>时，<strong>&ldquo;我&rdquo;</strong>字所占的权重会比较大.<br />
+权重$\alpha _{ij}$是通过一个单层的多层感知机计算得到,该模型与算法中其他部分同时训练:<br />
+<img src="/img/1458736905308.png" alt="Alt text | center" />
+<br />
+3. <strong>Encoder 和 Decoder</strong><br />
+Encoder的计算如下：<br />
+<img src="/img/1458737365201.png" alt="Alt text | center" />
+<br />
+$E$表示词向量的矩阵，$x_i$表示$i$时刻的词,是一个$k$维的向量(词典大小维度的向量,应该是one-hot的)，反向过程的计算与上面类似。</p>
+
+<p>Decoder的计算如下：<br />
+<img src="/img/1458737469906.png" alt="Alt text | center" />
+<br />
+初始的隐藏状态为：$$s_0 = tanh(W_s\stackrel{\leftarrow}{h_1})$$<br />
+每一步的context向量都需要通过Alignment model重新计算:<br />
+<img src="/img/1458738176634.png" alt="Alt text | center" />
+<br />
+<img src="/img/1458738239955.png" alt="Alt text | center" />
+<br />
+最后计算$y_i$的概率:<br />
+<img src="/img/1458738415785.png" alt="Alt text | center" />
+<br />
+<img src="/img/1458738447372.png" alt="Alt text | center" />
+<br />
+<img src="/img/1458738462004.png" alt="Alt text | center" />
+<br />
+使用了maxout（第二个公式），取相邻两个数中较大的一个。需要计算词典中所有词出现的概率，最后取最大的那一个？</p>
+
+<p><strong>具体的实现细节见论文的附录</strong></p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-nlp" href="http://fuck.songru.org//tags/nlp">nlp</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<div class="paging-label">More Reading</div>
+					
+					<span class="paging-newer">
+						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="/posts/linux/Ubuntu_Matplotlib_fix/">Ubuntu下matplotlib绘图中文乱码</a>
+		            </span>
+		            
+
+					
+					<span class="paging-older">
+						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/">Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation笔记</a>
+		            </span>
+		            
+	            </div>
+            
+          </section>
+          
+			<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'songru';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2016. All rights reserved.</p>
+</div>
+
+    </div>
+  </div>
+	
+
+	
+
+  <script src="http://fuck.songru.org//js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(function(){
+    $('pre code').each(function(){
+        $(this).parent().addClass('codePre');
+    });
+});
+</script>
+</body>
+</html>

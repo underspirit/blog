@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nlp on underspirit&#39;s Blog</title>
+    <link>http://fuck.songru.org/tags/nlp/</link>
+    <description>Recent content in Nlp on underspirit&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sun, 27 Mar 2016 22:09:12 +0800</lastBuildDate>
+    <atom:link href="http://fuck.songru.org/tags/nlp/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Neural Machine Translation By Jointly Learning To Align And Translate笔记</title>
+      <link>http://fuck.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</link>
+      <pubDate>Sun, 27 Mar 2016 22:09:12 +0800</pubDate>
+      
+      <guid>http://fuck.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</guid>
+      <description>&lt;p&gt;本文主要创新在传统的神经机器翻译上进行改进，确切的说是改进了基本的RNN Encoder-Decoder模型,提出了Alignment model，即实现了Attention model.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;传统的encoder-decoder模型如下图所示:
+&lt;img src=&#34;http://fuck.songru.org/img/1458651310553.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+该模型通过神经网络将所有的输入信息压缩为一个固定长度的向量$w$,然后通过decoder的神经网络解码这个$w$，最后得出翻译结果.&lt;br /&gt;
+使用固定长度的向量是该模型的一个缺点,因为该向量很难将所有需要的信息编码到其中，对于长度大的句子,该模型的效果会显著下降.&lt;/p&gt;
+
+&lt;p&gt;本文作者提出的改进模型结构为:&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458651809449.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+主要有4个方面改进:&lt;br /&gt;
+1. &lt;strong&gt;GRU 和 Bidirectional RNN&lt;/strong&gt;&lt;br /&gt;
+RNN网络的结果采用的是GRU单元，双向神经网络(Bidirectional).一个BiRNN由前向(forward)和后向(backward)RNN组成,前向RNN &amp;amp;(\stackrel{\rightarrow}{\mbox{f}})&amp;amp; 按顺序读取输入序列(从&amp;amp;(x_f)&amp;amp;到&amp;amp;(x_{T_x})&amp;amp;)，计算得出前向RNN的隐含状态序列&amp;amp;((\vec{h_1},\cdots,\vec{h_{T_x}} ))&amp;amp; 。反向RNN$\stackrel{\leftarrow}{\mbox{f}}$则逆序读取输入序列(从$x_{T_x}$到$x_1$)，计算得出$(\stackrel{\leftarrow}{h_1},\cdots,\stackrel{\leftarrow}{h_{T_x}})$ .&lt;br /&gt;
+对于一个词$x_j$直接concatenating前向$\vec{h_j}$与后向$\stackrel{\leftarrow}{h_j}$，即$h_j=\left[\begin{array}{c}\stackrel{\rightarrow}{h_j}  \\  \stackrel{\leftarrow}{h_j}  \end{array} \right]$，计算时词向量矩阵$E$是前向与后向网络共享的，其他参数则不是.&lt;br /&gt;
+2. &lt;strong&gt;对齐模型(alignment model)&lt;/strong&gt;&lt;br /&gt;
+该模型也可以说是实现了注意力模型(Attention model).&lt;br /&gt;
+通过该模型计算得到输入时刻$j$在预测输出时刻$i$时所占的权重$\alpha _{ij}$.比如说翻译&lt;strong&gt;&amp;ldquo;我喜欢飞机&amp;rdquo;&lt;/strong&gt;到&lt;strong&gt;&amp;ldquo;I like airplane&amp;rdquo;&lt;/strong&gt;,翻译输出&lt;strong&gt;&amp;ldquo;I&amp;rdquo;&lt;/strong&gt;时，&lt;strong&gt;&amp;ldquo;我&amp;rdquo;&lt;/strong&gt;字所占的权重会比较大.&lt;br /&gt;
+权重$\alpha _{ij}$是通过一个单层的多层感知机计算得到,该模型与算法中其他部分同时训练:&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458736905308.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+3. &lt;strong&gt;Encoder 和 Decoder&lt;/strong&gt;&lt;br /&gt;
+Encoder的计算如下：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458737365201.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+$E$表示词向量的矩阵，$x_i$表示$i$时刻的词,是一个$k$维的向量(词典大小维度的向量,应该是one-hot的)，反向过程的计算与上面类似。&lt;/p&gt;
+
+&lt;p&gt;Decoder的计算如下：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458737469906.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+初始的隐藏状态为：$$s_0 = tanh(W_s\stackrel{\leftarrow}{h_1})$$&lt;br /&gt;
+每一步的context向量都需要通过Alignment model重新计算:&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458738176634.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458738239955.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+最后计算$y_i$的概率:&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458738415785.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458738447372.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458738462004.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+使用了maxout（第二个公式），取相邻两个数中较大的一个。需要计算词典中所有词出现的概率，最后取最大的那一个？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;具体的实现细节见论文的附录&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation笔记</title>
+      <link>http://fuck.songru.org/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/</link>
+      <pubDate>Sun, 27 Mar 2016 21:09:12 +0800</pubDate>
+      
+      <guid>http://fuck.songru.org/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/</guid>
+      <description>&lt;p&gt;本文主要创新在于提出一个新的神经网络模型RNN Encoder-Decoder，并提出GRU单元.将训练的模型作为standard phrase-based statistical machine translation system的一部分，用于计算phrase table中的每一个phrase的得分。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;1. RNN Encoder-Decoder&lt;/strong&gt;
+该模型由两个RNN组成，分别作为Encoder和Decoder，Encoder的作用是读取一个变长的序列数据，将其编码为一个固定长度的向量，再通过Decoder将这个向量解码为一个变长的序列数据.&lt;/p&gt;
+
+&lt;p&gt;Encoder为一个由GRU单元组成的RNN网络:&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458734687528.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+$e(x_t)$代表t时刻输入词的向量表示，初始的隐藏状态$h^{(0)}$固定为$0$，最后计算得出一个固定长度的编码结果：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458735958249.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+Decoder也为一个由GRU单元组成的RNN网络:
+它首先初始化隐藏状态：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458736097645.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+其网络的计算公式为：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/1458736032536.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+这里每一个时刻的计算都用到了Encoder传递过来的编码向量$c$，并且它的值是不变的。&lt;br /&gt;
+最后通过Softmax计算概率（没看懂），还有maxout。。。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Theano 中使用pydot报错</title>
+      <link>http://fuck.songru.org/posts/machine-learning/theano%20pydot/</link>
+      <pubDate>Sun, 03 Jan 2016 10:09:12 +0800</pubDate>
+      
+      <guid>http://fuck.songru.org/posts/machine-learning/theano%20pydot/</guid>
+      <description>&lt;p&gt;运行:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# 切换为使用cpu,有这句var_with_name_simple=True的时候会报错...,换成gpu就不报错...
+theano.printing.pydotprint(forward_prop, var_with_name_simple=True, compact=True, outfile=&#39;img/nn-theano-forward_prop.png&#39;, format=&#39;png&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;报错:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pywintypes.error(2,&#39;RegOpenKeyEx&#39;,&#39;\xcf\xb5\xcd\xb3\xd5\xd2\xb2\xbb\xb5\xb...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;原因是未安装好graphviz,于是下载&lt;a href=&#34;http://www.graphviz.org/Download_windows.php&#34;&gt;安装包&lt;/a&gt;,并把安装目录的bin加入到path中(重要!)&lt;/p&gt;
+
+&lt;p&gt;后来又报错:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;RuntimeError: Failed to import pydot. You must install pydot for `pydotprint` to work.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;原因是使用的pyparsing版本太高(我的是2.0.3),使用低版本的即可:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    pip install pyparsing==1.5.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我还安装了pydot2,不知有什么用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    pip install pydot2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我之后做了一个实验,再把pyparsing升级到2.0.3,报了一个不一样的错:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;InvocationException: Program terminated with status: -1073741819. stderr follows: []
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;将pyparsing再降级即可&amp;hellip;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Written with &lt;a href=&#34;https://stackedit.io/&#34;&gt;StackEdit&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Window7安装theano、anaconda、CUDA</title>
+      <link>http://fuck.songru.org/posts/machine-learning/theano%20cuda%20install/</link>
+      <pubDate>Sat, 02 Jan 2016 10:09:12 +0800</pubDate>
+      
+      <guid>http://fuck.songru.org/posts/machine-learning/theano%20cuda%20install/</guid>
+      <description>
+
+&lt;p&gt;最开始我使用的是anaconda3，但是一直没有成功，并且很多库对python2的支持更好，所以最好尝试使用anaconda2.
+因为要使用mingw，但是新版的anaconda都没有自带mingw，所以下载了老版本anaconda1.9.2.&lt;/p&gt;
+
+&lt;h1 id=&#34;1-安装cuda:10082a9e681b37c239307c871d1bb53d&#34;&gt;1.安装CUDA&lt;/h1&gt;
+
+&lt;p&gt;我的gpu是GTX 750ti|，使用的是CUDA7，安装简单（已久忘了细节，传说中使用默认路径安装好些，笔记本上是GTX 950M，CUDA7.5）。安装好CUDA后，跑程序可能遇到cuda is installed,but unavailale的错误，这个我查的结果说是显卡驱动太低，然后我就更新为最新的显卡驱动！！
+安装完之后在cmd下执行nvcc -V查看版本成功的话，则表示小成。
+要的话，进到sample目录，用相应的vs打开解决方案，然后生成解决方案，中途可能会有无法打开”d3dx9.h”、”d3dx10.h”、”d3dx11.h”头文件，可以&lt;a href=&#34;http://www.microsoft.com/en-us/download/details.aspx?id=6812&#34;&gt;下载DXSDK_Jun10.exe&lt;/a&gt;，然后安装到默认目录下；再编译工程即可；然后到bin目录跑生成的程序（deviceQuery.exe还有一些图形程序等），没问题的话则大成了。&lt;br /&gt;
+下面是一个详细的步骤（copy来的）:&lt;br /&gt;
+　　　1. 查看本机配置，查看显卡类型是否支持NVIDIA GPU，选中计算机&amp;ndash;&amp;gt; 右键属性 &amp;ndash;&amp;gt; 设备管理器 &amp;ndash;&amp;gt; 显示适配器：NVIDIA GeForce GT 610，在&lt;a href=&#34;https://developer.nvidia.com/cuda-gpus&#34;&gt;这里&lt;/a&gt;可以查到相应显卡的compute capability；&lt;br /&gt;
+　　　2. 在&lt;a href=&#34;http://www.nvidia.cn/Download/index.aspx?lang=cn&#34;&gt;这里&lt;/a&gt;下载合适驱动347.88-desktop-win8-win7-winvista-64bit-international-whql.exe 并安装；&lt;br /&gt;
+　　　3. 从&lt;a href=&#34;https://developer.nvidia.com/cuda-toolkit&#34;&gt;https://developer.nvidia.com/cuda-toolkit&lt;/a&gt;   根据本机类型下载相应的最新版本CUDA7.0安装；&lt;br /&gt;
+　　　4. 按照&lt;a href=&#34;http://docs.nvidia.com/cuda/cuda-getting-started-guide-for-microsoft-windows/index.html#axzz3W8BU10Ol&#34;&gt;官方文档&lt;/a&gt;步骤，验证是否安装正确：&lt;br /&gt;
+　　　　　(1) 打开C:\ProgramData\NVIDIACorporation\CUDA Samples\v7.0目录下的Samples_vs2010.sln工程，分别在Debug、Release x64下编译整个工程；&lt;br /&gt;
+　　　　　(2) 编译过程中，会提示找不到”d3dx9.h”、”d3dx10.h”、”d3dx11.h”头文件，可以&lt;a href=&#34;http://www.microsoft.com/en-us/download/details.aspx?id=6812&#34;&gt;下载DXSDK_Jun10.exe&lt;/a&gt;，然后安装到默认目录下；再编译工程即可；&lt;br /&gt;
+　　　　　(3) 打开C:\ProgramData\NVIDIACorporation\CUDA Samples\v7.0\bin\win64\Release目录，打开cmd命令行，将deviceQuery.exe直接拖到cmd中，回车，会显示GPU显卡、CUDA版本等相关信息，最后一行显示：Result = PASS；&lt;br /&gt;
+　　　　　(4) 将bandwidthTest.exe拖到cmd中，回车，会显示Device0: GeForce GT 610等相关信息，后面也会有一行显示：Result = PASS；&lt;/p&gt;
+
+&lt;h1 id=&#34;2-安装anaconda:10082a9e681b37c239307c871d1bb53d&#34;&gt;2.安装anaconda&lt;/h1&gt;
+
+&lt;p&gt;开始使用的是anacond192版本，最后都配置成功了，但是这个版本的ipython notebook等等东西版本太低，我就用conda update了一下，导致一切都玩完了，theano又跑不起来了。所以后来就换成了anaconda2.4.1，是anaconda2的最新版本，但是没有mingw（这时我已经知道怎么配了，所以没有也不怕，我自己安）。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装anaconda很简单，傻瓜式的&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;装mingw，运行conda install mingw即可&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;装theano，因为conda库中没有theano，所以使用pip安装，执行pip install theano即可&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;配置.theanorc.txt&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;在home目录下(我的是c:/uesrs/lisongru)创建.theanorc.txt,输入一下内容&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[blas]
+ldflags =
+[gcc]
+cxxflags = -IE:\Anaconda2\MinGW    #安装的mingw目录
+[nvcc]
+fastmath = True
+flags=-LE:\Anaconda2\libs
+compiler-bindir=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin   #vs的目录,不知是否可以不要,因为下面path也配了
+flags =  -arch=sm_30   #这句没有也行,好像,未测试
+base_compiledir=path_to_a_directory_without_such_characters   #这句没有也行,好像,未测试
+[global]
+openmp = False
+floatX = float32
+device = gpu   #cpu则使用cpu
+allow_input_downcast=True
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;3-配置环境变量:10082a9e681b37c239307c871d1bb53d&#34;&gt;3.配置环境变量&lt;/h1&gt;
+
+&lt;p&gt;这一步非常关键,开始我的电脑有cygwin，并且也在path中，然后运行import theano总是报错，原因是cygwin被用来编译了，但我们要用的是。。。（我也不清楚),后来删除它的path,加入vs_bin的path,就好了.
+下面是一些相关的path&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;VS10_VC_BIN%        #vs的bin目录,和上面的compiler-bindir一样,这必须有,没有则包找不到cl.exe...
+%CUDA_PATH%\bin     #安装cuda好像默认会有,没有自己加,有它才能在cmd中nvcc -V查看
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\libnvvp;        #cuda安装自带
+C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common      #自带
+%ANACONDA2_HOME%;%ANACONDA2_SCRIPTS%;%ANACONDA2_BIN%        #anaconda自带
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;4-遇到的问题:10082a9e681b37c239307c871d1bb53d&#34;&gt;4.遇到的问题&lt;/h1&gt;
+
+&lt;p&gt;在笔记本上安装好一切后，报collect2: ld returned 1 exit status错，查的结果说是python 32位与64位冲突，那时笔记本上正好有32位的一个python，就卸载了，但还是不行。
+再查，说是少了libpython包,安装之:conda install libpython，然后就好了。。。（这里有点奇怪，在台式机上没有这个包也成功了）。&lt;br /&gt;
+&amp;gt; Written with &lt;a href=&#34;https://stackedit.io/&#34;&gt;StackEdit&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【自然语言处理之三】最小编辑距离（Minimum Edit Distance）</title>
+      <link>http://fuck.songru.org/posts/nlp/nlp_3_MinimumEditDistance/</link>
+      <pubDate>Sun, 13 Sep 2015 21:09:12 +0800</pubDate>
+      
+      <guid>http://fuck.songru.org/posts/nlp/nlp_3_MinimumEditDistance/</guid>
+      <description>
+
+&lt;h1 id=&#34;一-最小编辑距离:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;一、最小编辑距离&lt;/h1&gt;
+
+&lt;h2 id=&#34;1-1-定义:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;1.1 定义&lt;/h2&gt;
+
+&lt;p&gt;最小编辑距离（Minimum Edit Distance，MED），又称Levenshtein距离，是指两个字符串之间，由一个转成另一个所需要的最少编辑操作次数。允许的编辑操作包括：将一个字符替换成另一个字符（substitution，s），插入一个字符（insert，i）或者删除一个字符（delete，d），如下图所示：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_3_1.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;1-2-求解:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;1.2 求解&lt;/h2&gt;
+
+&lt;p&gt;在大学算法设计相关课程上，想必大家都已经学习过使用动态规划算法解最小编辑距离，形式化定义如下：
+对于两个字符串X={x1,x2,x3&amp;hellip;,xn}和Y={y1,y2,y3,&amp;hellip;,ym}，x的长度是n，y的长度是m，则定义D(i,j)为子字符串X{x1,x2,&amp;hellip;,xi}于Y{y1,y2,&amp;hellip;,yj}间的最小编辑距离。我们的目标是求出D(n,m)。
+则可以推出如下关系:&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_3_3.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;根据这个递推关系，我们计算所有的i和j的取值填入一个矩阵中：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_3_4.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;最终可以求得右上角的D(n,m)。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-3-回溯法对齐字符串:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;1.3 回溯法对齐字符串&lt;/h2&gt;
+
+&lt;p&gt;通过上面的动态规划方法虽然可以求出来两个字符串之间的最小编辑距离，但是我们并不知道源字符串被编辑的情况，即哪些字符被删除，增加或者替换了。
+我们只要能够将源字符串与目标字符串相应字符对齐，即可以得出具体的编辑情况。这里只需要对上面的动态规划方法稍加改进即可实现。
+我们只需要记住当前位置是从之前哪一个位置计算而来即可，然后从D(n,m)逐个向前回溯就能够将两个字符串对齐，如图所示：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_3_5.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;其递推公式为：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_3_6.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;1-4-加权最小编辑距离:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;1.4 加权最小编辑距离&lt;/h2&gt;
+
+&lt;p&gt;在基本的编辑距离基础上，结合实际应用，往往需要做一些变形或改进，如某些拼写错误相对其他更容易发生，同义词替换、虚词或修饰成分被删除（或插入）应该得到较小的惩罚，等等。
+下图是一个统计好的拼写错误的转移矩阵：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_3_8.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;加权递推公式如下：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_3_9.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;1-5-最小编辑距离的应用:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;1.5 最小编辑距离的应用&lt;/h2&gt;
+
+&lt;p&gt;最小编辑距离通常作为一种相似度计算函数被用于多种实际应用中，详细如下： （特别的，对于中文自然语言处理，一般以词为基本处理单元）&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;拼写纠错（Spell Correction）：又拼写检查（Spell Checker），将每个词与词典中的词条比较，英文单词往往需要做词干提取等规范化处理，如果一个词在词典中不存在，就被认为是一个错误，然后试图提示N个最可能要输入的词——拼写建议。常用的提示单词的算法就是列出词典中与原词具有最小编辑距离的词条。&lt;br /&gt;
+这里肯定有人有疑问：对每个不在词典中的词（假如长度为len）都与词典中的词条计算最小编辑距离，时间复杂度是不是太高了？的确，所以一般需要加一些剪枝策略，如：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;因为一般拼写检查应用只需要给出Top-N的纠正建议即可（N一般取10），那么我们可以从词典中按照长度依次为len、len-1、len+1、len-2、len-3、&amp;hellip;的词条比较；&lt;/li&gt;
+&lt;li&gt;限定拼写建议词条与当前词条的最小编辑距离不能大于某个阈值；&lt;/li&gt;
+&lt;li&gt;如果最小编辑距离为1的候选词条超过N后，终止处理；&lt;/li&gt;
+&lt;li&gt;缓存常见的拼写错误和建议，提高性能。&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;DNA分析：基因学的一个主要主题就是比较 DNA 序列并尝试找出两个序列的公共部分。如果两个 DNA 序列有类似的公共子序列，那么这些两个序列很可能是同源的。在比对两个序列时，不仅要考虑完全匹配的字符，还要考虑一个序列中的空格或间隙（或者，相反地，要考虑另一个序列中的插入部分）和不匹配，这两个方面都可能意味着突变（mutation）。在序列比对中，需要找到最优的比对（最优比对大致是指要将匹配的数量最大化，将空格和不匹配的数量最小化）。如果要更正式些，可以确定一个分数，为匹配的字符添加分数、为空格和不匹配的字符减去分数。&lt;br /&gt;
+全局序列比对尝试找到两个完整的序列 S1和 S2之间的最佳比对。以下面两个 DNA 序列为例&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;S1= GCCCTAGCG
+S2= GCGCAATG
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果为每个匹配字符一分，一个空格扣两分，一个不匹配字符扣一分，那么下面的比对就是全局最优比对：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;S1&#39;= GCCCTAGCG
+S2&#39;= GCGC-AATG
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;连字符（-）代表空格。在 S2&amp;rsquo;中有五个匹配字符，一个空格（或者反过来说，在 S1&amp;rsquo;中有一个插入项），有三个不匹配字符。这样得到的分数是 (5 * 1) + (1 * -2) + (3 * -1) = 0，这是能够实现的最佳结果。&lt;br /&gt;
+使用局部序列比对，不必对两个完整的序列进行比对，可以在每个序列中使用某些部分来获得最大得分。使用同样的序列 S1和 S2，以及同样的得分方案，可以得到以下局部最优比对 S1&amp;rdquo;和 S2&amp;rdquo;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;S1      = GCCCTAGCG
+S1&#39;&#39;=           GCG
+S2&#39;&#39;=           GCG
+S2      =       GCGCAATG
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个局部比对的得分是 (3 * 1) + (0 * -2) + (0 * -1) = 3。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;命名实体抽取（Named Entity Extraction）：由于实体的命名往往没有规律，如品牌名，且可能存在多种变形、拼写形式，如“IBM”和“IBM Inc.”，这样导致基于词典完全匹配的命名实体识别方法召回率较低，为此，我们可以使用编辑距离由完全匹配泛化到模糊匹配，先抽取实体名候选词。&lt;br /&gt;
+具体的，可以将候选文本串与词典中的每个实体名进行编辑距离计算，当发现文本中的某一字符串的编辑距离值小于给定阈值时，将其作为实体名候选词；获取实体名候选词后，根据所处上下文使用启发式规则或者分类的方法判定候选词是否的确为实体名。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;实体共指（Entity Coreference）：通过计算任意两个实体名之间的最小编辑距离判定是否存在共指关系？如“IBM”和“IBM Inc.”, &amp;ldquo;Stanford President John Hennessy &amp;ldquo;和&amp;rdquo;Stanford University President John Hennessy&amp;rdquo;。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;机器翻译（Machine Translation）：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;识别平行网页对：由于平行网页通常有相同或类似的界面结构，因此平行网页在HTML结构上应该有很大近似度。首先将网页的HTML标签抽取出来，连接成一个字符串，然后用最小编辑距离考察两个字符串的近似度。实际中，此策略一般与文档长度比例、句对齐翻译模型等方法结合使用，以识别最终的平行网页对。&lt;/li&gt;
+&lt;li&gt;自动评测：首先存储机器翻译原文和不同质量级别的多个参考译文，评测时把自动翻译的译文对应到与其编辑距离最小的参考译文上，间接估算自动译文的质量，如下图所示：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_3_10.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;字符串核函数（String Kernel）：最小编辑距离作为字符串之间的相似度计算函数，用作核函数，集成在SVM中使用。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;二-参考资料:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;二、参考资料&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Lecture Slides：&lt;a href=&#34;http://spark-public.s3.amazonaws.com/nlp/slides/med.pptx&#34;&gt;Minimum Edit Distance&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://en.wikipedia.org&#34;&gt;http://en.wikipedia.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.google.com.hk/url?sa=t&amp;amp;rct=j&amp;amp;q=%E6%9C%80%E5%B0%8F%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB+%E6%9C%BA%E5%99%A8%E7%BF%BB%E8%AF%91&amp;amp;source=web&amp;amp;cd=7&amp;amp;ved=0CG0QFjAG&amp;amp;url=http%3A%2F%2Fwww.ecice06.com%2FCN%2Farticle%2FdownloadArticleFile.do%3FattachType%3DPDF%26id%3D10174&amp;amp;ei=GNinT4iaKKaViQfDpbnKAw&amp;amp;usg=AFQjCNGbWIzPc5GpPghvdYQAnbQ8iIPMIw&#34;&gt;双语平行网页挖掘系统的设计与实现&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://wenku.baidu.com/view/a50949dc7f1922791688e81d.html&#34;&gt;机器翻译系统评测规范&lt;/a&gt; .&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://wenku.baidu.com/view/a50949dc7f1922791688e81d.html&#34;&gt;matrix67-漫话中文分词算法&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://ir.hit.edu.cn/ir_papers/Vol_3/Improved-Edit-Distance%20Kernel%20for%20Chinese%20Relation%20Extraction.pdf&#34;&gt;Improved-Edit-Distance Kernel for Chinese Relation Extraction&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Written with &lt;a href=&#34;https://stackedit.io/&#34;&gt;StackEdit&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【自然语言处理之二】文本处理基础（Basic Text Processing）</title>
+      <link>http://fuck.songru.org/posts/nlp/nlp_2_BasicTextProcessing/</link>
+      <pubDate>Fri, 11 Sep 2015 10:09:12 +0800</pubDate>
+      
+      <guid>http://fuck.songru.org/posts/nlp/nlp_2_BasicTextProcessing/</guid>
+      <description>
+
+&lt;h1 id=&#34;一-文本处理基础:2e62519647c0e571a1761fc424fb31ad&#34;&gt;一、文本处理基础&lt;/h1&gt;
+
+&lt;h2 id=&#34;1-1-正则表达式:2e62519647c0e571a1761fc424fb31ad&#34;&gt;1.1 正则表达式&lt;/h2&gt;
+
+&lt;p&gt;自然语言处理过程中面临大量的文本处理工作，如词干提取、网页正文抽取、分词、断句、文本过滤、模式匹配等任务，而正则表达式往往是首选的文本预处理工具。
+现在主流的编程语言对正则表达式都有较好的支持，如Grep、Awk、Sed、Python、Perl、Java、C/C++(推荐re2)等。
+&lt;em&gt;注：课程中给出的正则表达式语法和示例在此略去&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-2-分词:2e62519647c0e571a1761fc424fb31ad&#34;&gt;1.2 分词&lt;/h2&gt;
+
+&lt;p&gt;分词的操作就是将一句话中的词语全部切分开来。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-1-词典规模:2e62519647c0e571a1761fc424fb31ad&#34;&gt;1.2.1 词典规模&lt;/h3&gt;
+
+&lt;p&gt;同一词条可能存在不同的时态、变形，那么给定文本语料库，如何确定词典规模呢？
+首先定义两个变量Type和Token：
+    &lt;strong&gt;Type&lt;/strong&gt;：词典中的元素，即独立词条
+    &lt;strong&gt;Token&lt;/strong&gt;：词典中独立词条在文本中的每次出现
+如果定义 N = number of tokens 和 V = vocabulary = set of types，|V| is the size of the vocabulary，那么根据Church and Gale (1990)的研究工作可知: |V| &amp;gt; O(N½) ，验证如下：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_2_1.jpg&#34; alt=&#34;词典规模&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-2-分词算法:2e62519647c0e571a1761fc424fb31ad&#34;&gt;1.2.2 分词算法&lt;/h3&gt;
+
+&lt;p&gt;任务：统计给定文本文件（如shake.txt）中词频分布，子任务：分词，频率统计，实现如下：&lt;/p&gt;
+
+&lt;p&gt;英文分词非常简单，因为英文中每个单词之间（少数特殊写法额外考虑，We&amp;rsquo;re,isn&amp;rsquo;t&amp;hellip;)都由空格分割开来，所以分词只需要按空格将它们切分，然后对一些特殊的写法进一步处理即可。&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_2_2.jpg&#34; alt=&#34;分词算法&#34; /&gt;
+&lt;br /&gt;
+以上实现将非字母字符作为token分隔符作为简单的分词器实现，但是，这难免存在许多不合理之处，如下面的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    - Finland’s capital  -&amp;gt;  Finland Finlands Finland’s  ?
+    - what’re, I’m, isn’t  -&amp;gt;  What are, I am, is not
+    - Hewlett-Packard   -&amp;gt;  Hewlett Packard ?
+    - state-of-the-art     -&amp;gt;   state of the art ?
+    - Lowercase  -&amp;gt;  lower-case lowercase lower case ?
+    - San Francisco -&amp;gt;   one token or two?
+    - m.p.h., PhD.  -&amp;gt;  ??
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的方法对英语这种包含固定分隔符的语言行之有效，对于汉语、日语、德语等文本则不再适用，所以就需要专门的分词技术。其中，最简单、最常用，甚至是最有效的方法就是最大匹配法（Maximum Matching），它是一种基于贪心思想的切词策略，主要包括正向最大匹配法（Forward Maximum Matching，FMM）、逆向最大匹配法（Backward Maximum Matching）与双向最大匹配法（Bi-direction Maximum Matching，BMM）。&lt;/p&gt;
+
+&lt;p&gt;以FMM中文分词为例，步骤如下：
+1.  选取包含N(N通常取6~8)个汉字的字符串作为最大字符串；
+2. 把最大字符串与词典中的单词条目相匹配（词典通常使用Double Array Trie组织）；
+3. 如果不能匹配，就去除最后一个汉字继续匹配，直到在词典中找到相应的词条为止。
+例如：句子“莎拉波娃现在居住在美国东南部的佛罗里达“的分词结果是”莎拉波娃/   现在/   居住/   在/  美国/   东南部/     的/  佛罗里达/”。
+另外，使用较多的分词方法有最少分词法、最短路径法、最大概率法（或词网格法，大规模语料库+HMM/HHMM）、字标注法等。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-3-分词难点:2e62519647c0e571a1761fc424fb31ad&#34;&gt;1.2.3 分词难点&lt;/h3&gt;
+
+&lt;p&gt;-切分歧义：主要包括交集型歧义和覆盖型歧义，在汉语书面文本中占比并不大，而且一般都可以通过规则或建立词表解决。&lt;/p&gt;
+
+&lt;p&gt;-未登录词：就是未在词典中记录的人名（中、外）、地名、机构名、新词、缩略语等，构成了中文自然语言处理永恒的难点。常见的解决方法有互信息、语言模型，以及基于最大熵或隐马尔科夫模型的统计分类方法。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-3-文本归一化-标准化:2e62519647c0e571a1761fc424fb31ad&#34;&gt;1.3 文本归一化(标准化)&lt;/h2&gt;
+
+&lt;p&gt;文本归一化主要包括大小写转换、词干提取、繁简转换等问题。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-4-断句:2e62519647c0e571a1761fc424fb31ad&#34;&gt;1.4 断句&lt;/h2&gt;
+
+&lt;p&gt;句子一般分为大句和小句，大句一般由“！”，“。”，“；”，“\“”、“？”等分割，可以表达完整的含义，小句一般由“，”分割，起停顿作用，需要上下文搭配表达特定的语义。
+中文断句通常使用正则表达式将文本按照有分割意义的标点符号(如句号)分开即可，而对于英文文本，由于英文句号”.“在多种场景下被使用，如缩写“Inc.”、“Dr.”、“.02%”、“4.3”等，无法通过简单的正则表达式处理，为了识别英文句子边界，课程中给出了一种基于决策树（Decision Tree）的分类方法，如下图所示：&lt;br /&gt;
+&lt;img src=&#34;http://fuck.songru.org/img/nlp_2_3.jpg&#34; alt=&#34;断句&#34; /&gt;
+&lt;br /&gt;
+此方法的核心就是如何选取有效的特征？如句号前后的单词是否大写开头、是否为缩略词、前后是否存在数字、句号前的单词长度、句号前后的单词在语料库中作为句子边界的概率等等。当然，你也可以基于上述特征采用其他分类器解决断句问题，如罗辑回归（Logistic regression）、支持向量机（Support Vector Machine）、神经网络（Neural Nets）等。&lt;/p&gt;
+
+&lt;h1 id=&#34;二-参考资料:2e62519647c0e571a1761fc424fb31ad&#34;&gt;二、参考资料&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Lecture Slides：&lt;a href=&#34;http://spark-public.s3.amazonaws.com/nlp/slides/textprocessingboth.pptx&#34;&gt;Basic Text Processing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://en.wikipedia.org&#34;&gt;http://en.wikipedia.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;关毅，统计自然语言处理基础 课程PPT&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.google.com/url?sa=t&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=web&amp;amp;cd=4&amp;amp;ved=0CHAQFjAD&amp;amp;url=http%3A%2F%2Fwww2.denizyuret.com%2Fref%2Fchurch%2Fpublished_1990_darpa.ps.gz&amp;amp;ei=guWlT4rCFOWZ2QW3mbymAg&amp;amp;usg=AFQjCNFcEeYyaP8TQUYJxNVUkdoHZl98hg&amp;amp;sig2=17cCPZhMQzpWCHeWm-knag&#34;&gt;Gale, W. A. and K. W. Church (1990) “Estimation Procedures for Language Context: Poor Estimates are Worse than None,” Proceedings in Computational Statistics, 1990, p.69-74, Physica-Verlag, Heidelberg&lt;/a&gt; .&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.52nlp.cn/matrix67-%E6%BC%AB%E8%AF%9D%E4%B8%AD%E6%96%87%E5%88%86%E8%AF%8D%E7%AE%97%E6%B3%95&#34;&gt;matrix67-漫话中文分词算法&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.52nlp.cn/%E4%B8%AD%E6%96%87%E5%88%86%E8%AF%8D%E5%85%A5%E9%97%A8%E4%B9%8B%E5%AD%97%E6%A0%87%E6%B3%A8%E6%B3%951&#34;&gt;中文分词入门之字标注法&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Written with &lt;a href=&#34;https://stackedit.io/&#34;&gt;StackEdit&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【自然语言处理之一】介绍</title>
+      <link>http://fuck.songru.org/posts/nlp/nlp_1_introduction/</link>
+      <pubDate>Thu, 16 Jul 2015 10:09:12 +0800</pubDate>
+      
+      <guid>http://fuck.songru.org/posts/nlp/nlp_1_introduction/</guid>
+      <description>
+
+&lt;p&gt;今天开始看斯坦福大学的自然语言处理课程。&lt;/p&gt;
+
+&lt;h1 id=&#34;一-什么是自然语言处理-nature-language-processing:a1b5d0a3988a3fc353b3287af28cee1e&#34;&gt;一、什么是自然语言处理（Nature Language Processing）？&lt;/h1&gt;
+
+&lt;p&gt;首先看什么是自然语言，自然语言是指一种自然地随文化演化的语言。各个国家地区的语言,英语、汉语、日语等等都属于自然语言，它们都是随这文化发展自然形成的，自然语言是人类交流和思维的主要工具，是人类智慧的结晶。与之相对的是“人造语言”，比如各种编程语言。&lt;/p&gt;
+
+&lt;p&gt;自然语言处理的任务就是让计算机理解人类的自然语言，从而实现人与计算机之间用自然语言进行有效通信。&lt;/p&gt;
+
+&lt;p&gt;自然语言处理并不是一般地研究自然语言，而在于研制能有效地实现自然语言通信的计算机系统，特别是其中的软件系统。因而它是计算机科学的一部分。&lt;/p&gt;
+
+&lt;h1 id=&#34;二-自然语言处理的实际应用:a1b5d0a3988a3fc353b3287af28cee1e&#34;&gt;二、自然语言处理的实际应用&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;机器翻译&lt;/strong&gt;&lt;br /&gt;
+我们最常接触的自然语言处理的应用就是机器翻译，它能够将某种语言 译为你指定的目标语言。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;回答问题&lt;/strong&gt;&lt;br /&gt;
+比如Iphone中的Siri能够理解用户所说的话,并能做出回应。&lt;br /&gt;
+说到回答问题，不得不提IBM创造的Watson，它是一台懂得人类语言的超级电脑。2011年2月17日,它在美国最受欢迎的智力竞猜电视节目《危险边缘》中击败该节目历史上两位最成功的选手肯-詹宁斯和布拉德-鲁特，成为《危险边缘》节目新的王者。《危险边缘》是哥伦比亚广播公司益智问答游戏节目，已经经历了数十年历史。该节目的比赛以一种独特的问答形式进行，问题设置的涵盖面非常广泛，涉及到各个领域。与一般问答节目相反，《危险边缘》以答案形式提问、提问形式作答，比如这样一个题目：
+&lt;code&gt;这种带刺类型的植物有大约50个种类；因此是依据它的多刺的果实来命名的。&lt;/code&gt;
+这个题目的答案是仙人掌。显然这需要watson具有理解自然语言的能力才能对这种题目进行作答。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;情感分析&lt;/strong&gt;&lt;br /&gt;
+又称倾向性分析和意见挖掘，它是对带有情感色彩的主观性文本进行分析、处理、归纳和推理的过程，如从大量网页文本中分析用户对“数码相机”的“变焦、价格、大小、重量、闪光、易用性”等属性的情感倾向。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;信息抽取&lt;/strong&gt;&lt;br /&gt;
+其目的是将非结构化或半结构化的自然语言描述文本转化结构化的数据，如自动根据邮件内容生成Calendar。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&#34;三-自然语言处理的研究进展:a1b5d0a3988a3fc353b3287af28cee1e&#34;&gt;三、自然语言处理的研究进展&lt;/h1&gt;
+
+&lt;p&gt;自然语言处理也被分为许多小的研究领域，并且在某些方面已经取得了很好成果，但很多方面的研究依然很困难。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;基本解决&lt;/strong&gt;：词性标注、命名实体识别、Spam识别&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;取得长足进展&lt;/strong&gt;：情感分析、共指消解、词义消歧、句法分析、机器翻译、信息抽取&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;挑战&lt;/strong&gt;：自动问答、复述、文摘、会话机器人&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://fuck.songru.org/img/nlp_challenge.png&#34; alt=&#34;challenge&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;这里记录几个专业术语：
+英文 | 中文
+&amp;mdash;- | &amp;mdash;-
+Part-of-speech (POS) tagging | 词性标注
+Named entity recognition(NER) | 命名实体识别
+Sentiment analysis | 情感分析
+Coreference resolution | 指代消解
+Word sense disambiguation(WSD) | 词义消歧
+Paraphrase | 复述
+Summarization | 摘要生成
+neologisms | 新词
+idioms | 成语&lt;/p&gt;
+
+&lt;h1 id=&#34;四-自然语言处理的难点:a1b5d0a3988a3fc353b3287af28cee1e&#34;&gt;四、自然语言处理的难点&lt;/h1&gt;
+
+&lt;p&gt;有多方面原因导致自然语言处理变得相当困难：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;自然语言具有多样性（不同语种、不同地域、不同人群）。让计算机理解一种语言已经足够困难，何况世界上一共有n种语言。&lt;/li&gt;
+&lt;li&gt;自然语言具有进化性。网络语言就是随着社会的发展进化而来，它和传统的正式语言又有一定的差别，出现了很多新的表达方式（网络新词等等）。&lt;/li&gt;
+&lt;li&gt;自然语言具有模糊性。&lt;/li&gt;
+&lt;li&gt;自然语言具有歧义性。处理歧义问题是NLP的核心问题。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&#34;五-自然语言处理的基本方法:a1b5d0a3988a3fc353b3287af28cee1e&#34;&gt;五、自然语言处理的基本方法&lt;/h1&gt;
+
+&lt;p&gt;在NLP领域中，目前使用较多是概率模型（probabilistic model）或称为统计模型（statistical model），或者称为“经验主义模型”，其建模过程基于大规模真实语料库，从中各级语言单位上的统计信息，并且，依据较低级语言单位上的统计信息，运行相关的统计、推理等技术计算较高级语言单位上的统计信息。与其相对的“理想主义模型”，即基于Chomsky形式语言的确定性语言模型，它建立在人脑中先天存在语法规则这一假设基础上，认为语言是人脑语言能力推导出来的，建立语言模型就是通过建立人工编辑的语言规则集来模拟这种先天的语言能力。&lt;/p&gt;
+
+&lt;p&gt;本课程主要侧重于&lt;strong&gt;基于统计的NLP技术，如Viterbi、贝叶斯和最大熵分类器、N-gram语言模型&lt;/strong&gt;等等。
+&amp;gt; Written with &lt;a href=&#34;https://stackedit.io/&#34;&gt;StackEdit&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

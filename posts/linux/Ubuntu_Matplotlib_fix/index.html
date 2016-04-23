@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Ubuntu下matplotlib绘图中文乱码 // underspirit&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="Ubuntu下matplotlib绘图中文乱码" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://fuck.songru.org/posts/linux/Ubuntu_Matplotlib_fix/" />
+
+
+  
+  <link rel="stylesheet" href="http://fuck.songru.org//css/base-min.css">
+  <link rel="stylesheet" href="http://fuck.songru.org//css/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="http://fuck.songru.org//css/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://fuck.songru.org//css/redlounge.css">
+  <link href="http://fuck.songru.org//css/font-awesome.min.css" rel="stylesheet">
+  <link href="http://fuck.songru.org//css/googlefonts_raleway.css" rel='stylesheet' type='text/css'>
+  <link href="http://fuck.songru.org//css/googlefonts_Libre.css" rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="underspirit&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="http://fuck.songru.org//css/tomorrow-night-bright.min.css">
+  
+  <script src="http://fuck.songru.org//js/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)'],['&(',')&']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {font: inherit;
+              font-size: 100%;
+              background: inherit;
+              border: inherit;
+              color: #515151;}
+</style>
+
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Leon&#39;s Blog</h1>
+    <h2 class="brand-tagline">Is super awesome</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://fuck.songru.org/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/posts/">Blog</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://weibo.com/songruLi" target="_blank"><i class='fa fa-weibo'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#方法一-持久性修改:c4a9591d3c6525e63df3a6e304bb9db6">方法一（持久性修改）</a></li>
+<li><a href="#方法二-临时性修改:c4a9591d3c6525e63df3a6e304bb9db6">方法二（临时性修改）</a></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/posts/linux/Ubuntu_Matplotlib_fix/">Ubuntu下matplotlib绘图中文乱码</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>23</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2016</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+
+			
+
+			
+
+            
+
+<p>原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。</p>
+
+<h2 id="方法一-持久性修改:c4a9591d3c6525e63df3a6e304bb9db6">方法一（持久性修改）</h2>
+
+<ol>
+<li>首先查看matplotlib支持的中文字体</li>
+</ol>
+
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+from matplotlib.font_manager import FontManager
+import subprocess
+
+fm = FontManager()
+mat_fonts = set(f.name for f in fm.ttflist)
+
+output = subprocess.check_output(
+    'fc-list :lang=zh -f &quot;%{family}\n&quot;', shell=True)
+# print '*' * 10, '系统可用的中文字体', '*' * 10
+# print output
+zh_fonts = set(f.split(',', 1)[0] for f in output.split('\n'))
+available = mat_fonts &amp; zh_fonts
+
+print '*' * 10, '可用的字体', '*' * 10
+for f in available:
+    print f
+</code></pre>
+
+<p>输出为：
+Droid Sans Fallback
+YaHei Consolas Hybrid
+就是求出系统字体列表与matplotlib字体列表的交集</p>
+
+<p>2.修改matplotlibrc文件
+Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/matplotlibrc，然后配置后者即可
+修改<code>font.sans-serif</code>为上面的一个输出结果即可。</p>
+
+<h2 id="方法二-临时性修改:c4a9591d3c6525e63df3a6e304bb9db6">方法二（临时性修改）</h2>
+
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+ import matplotlib as mpl
+ import matplotlib.pyplot as plt
+ 
+ mpl.rcParams['font.sans-serif'] = ['Droid Sans Fallback'] # 指定字体名字
+ plt.figure()
+ plt.xlabel(u'性别')
+ plt.ylabel(u'人数')
+ plt.xticks((0,1),(u'男',u'女'))
+</code></pre>
+
+<p>或者：</p>
+
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+ import matplotlib.pyplot as plt
+ from matplotlib import font_manager
+
+ zh_font = font_manager.FontProperties(fname=r'/home/lsr/Documents/simsun.ttf', size=14) # 指定字体文件
+ 
+ plt.figure()
+ plt.xlabel(u'性别', fontproperties=zh_font) # 使用字体配置
+ plt.ylabel(u'人数',fontproperties=zh_font)
+ plt.xticks((0,1),(u'男',u'女')) # 没有使用字体配置，乱码
+ plt.bar(left = (0,1),height = (1,0.5),width = 0.35)
+ plt.show()
+</code></pre>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-ubuntu" href="http://fuck.songru.org//tags/ubuntu">ubuntu</a>,
+	                
+	                <a class="post-tag post-tag-linux" href="http://fuck.songru.org//tags/linux">linux</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<div class="paging-label">More Reading</div>
+					
+
+					
+					<span class="paging-older">
+						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/">Neural Machine Translation By Jointly Learning To Align And Translate笔记</a>
+		            </span>
+		            
+	            </div>
+            
+          </section>
+          
+			<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'songru';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2016. All rights reserved.</p>
+</div>
+
+    </div>
+  </div>
+	
+
+	
+
+  <script src="http://fuck.songru.org//js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(function(){
+    $('pre code').each(function(){
+        $(this).parent().addClass('codePre');
+    });
+});
+</script>
+</body>
+</html>

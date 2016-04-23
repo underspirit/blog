@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ubuntu on underspirit&#39;s Blog</title>
+    <link>http://fuck.songru.org/tags/ubuntu/</link>
+    <description>Recent content in Ubuntu on underspirit&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sat, 23 Apr 2016 10:09:12 +0800</lastBuildDate>
+    <atom:link href="http://fuck.songru.org/tags/ubuntu/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Ubuntu下matplotlib绘图中文乱码</title>
+      <link>http://fuck.songru.org/posts/linux/Ubuntu_Matplotlib_fix/</link>
+      <pubDate>Sat, 23 Apr 2016 10:09:12 +0800</pubDate>
+      
+      <guid>http://fuck.songru.org/posts/linux/Ubuntu_Matplotlib_fix/</guid>
+      <description>
+
+&lt;p&gt;原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。&lt;/p&gt;
+
+&lt;h2 id=&#34;方法一-持久性修改:c4a9591d3c6525e63df3a6e304bb9db6&#34;&gt;方法一（持久性修改）&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;首先查看matplotlib支持的中文字体&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# -*- coding: utf-8 -*-
+from matplotlib.font_manager import FontManager
+import subprocess
+
+fm = FontManager()
+mat_fonts = set(f.name for f in fm.ttflist)
+
+output = subprocess.check_output(
+    &#39;fc-list :lang=zh -f &amp;quot;%{family}\n&amp;quot;&#39;, shell=True)
+# print &#39;*&#39; * 10, &#39;系统可用的中文字体&#39;, &#39;*&#39; * 10
+# print output
+zh_fonts = set(f.split(&#39;,&#39;, 1)[0] for f in output.split(&#39;\n&#39;))
+available = mat_fonts &amp;amp; zh_fonts
+
+print &#39;*&#39; * 10, &#39;可用的字体&#39;, &#39;*&#39; * 10
+for f in available:
+    print f
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出为：
+Droid Sans Fallback
+YaHei Consolas Hybrid
+就是求出系统字体列表与matplotlib字体列表的交集&lt;/p&gt;
+
+&lt;p&gt;2.修改matplotlibrc文件
+Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/matplotlibrc，然后配置后者即可
+修改&lt;code&gt;font.sans-serif&lt;/code&gt;为上面的一个输出结果即可。&lt;/p&gt;
+
+&lt;h2 id=&#34;方法二-临时性修改:c4a9591d3c6525e63df3a6e304bb9db6&#34;&gt;方法二（临时性修改）&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# -*- coding: utf-8 -*-
+ import matplotlib as mpl
+ import matplotlib.pyplot as plt
+ 
+ mpl.rcParams[&#39;font.sans-serif&#39;] = [&#39;Droid Sans Fallback&#39;] # 指定字体名字
+ plt.figure()
+ plt.xlabel(u&#39;性别&#39;)
+ plt.ylabel(u&#39;人数&#39;)
+ plt.xticks((0,1),(u&#39;男&#39;,u&#39;女&#39;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# -*- coding: utf-8 -*-
+ import matplotlib.pyplot as plt
+ from matplotlib import font_manager
+
+ zh_font = font_manager.FontProperties(fname=r&#39;/home/lsr/Documents/simsun.ttf&#39;, size=14) # 指定字体文件
+ 
+ plt.figure()
+ plt.xlabel(u&#39;性别&#39;, fontproperties=zh_font) # 使用字体配置
+ plt.ylabel(u&#39;人数&#39;,fontproperties=zh_font)
+ plt.xticks((0,1),(u&#39;男&#39;,u&#39;女&#39;)) # 没有使用字体配置，乱码
+ plt.bar(left = (0,1),height = (1,0.5),width = 0.35)
+ plt.show()
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux命令（目前使用过的）</title>
+      <link>http://fuck.songru.org/posts/linux/linuxComands/</link>
+      <pubDate>Tue, 22 Sep 2015 10:09:12 +0800</pubDate>
+      
+      <guid>http://fuck.songru.org/posts/linux/linuxComands/</guid>
+      <description>&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;移动文件（夹）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mv originalDir/source.txt targetDir/target.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;删除文件（夹）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rm dir/target.file   //删除文件
+rm -r dir //删除文件夹
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;利用软件源下载安装软件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo apt-get install package 安装包
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;解压文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tar -zxvf XXX压缩包
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;创建文件夹&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir dir    // -p参数可以创建子文件夹
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;创建文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;touch dir/a.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;解压文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tar -zxvf file.tar.gz    //解压到当前目录
+tar -zxvf file.tar.gz -C dir    //解压到制定目录
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果是zip格式的话：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;unzip  abc.zip -d /home/test/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;复制文件（夹）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cp target.file copy.file    //复制文件
+cp -r targetDir copyDir //复制文件夹，使用-r递归复制
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;打印当前路径&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pwd
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;管理员权限&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo otherComand...     //使用root权限执行后续命令,一次性的
+sudo su    //登录root,以后的命令都是使用root权限
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看文件系统使用情况信息&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;df
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看文件(夹)大小&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;du filename/dir    //-s易于阅读,-h显示总览
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看内存使用情况&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;free -m    //-m表示单位为m
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;任务管理器&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;top     //退出按 q
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看系统信息&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;uname -a    //-a查看所有信息
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看网络接口信息&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ifconfig
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;MD5校验&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo md5sum filename
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查看文件(夹)权限情况&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ls -l path/filename      //查看path路径下名为filename的文件或文件夹的权限
+ls -ls path    //查看path路径下的所有文件的权限
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;修改文件(夹)权限(change mode)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo chmod -（代表类型）×××（所有者）×××（组用户）×××（其他用户）    //其中×××指文件名（也可以是文件夹名，不过要在chmod后加-ld）,使用 -R 参数来递归修改所有子文件   
+
+
+//三位数的每一位都表示一个用户类型的权限设置。取值是0～7，即二进制的[000]~[111],这个三位的二进制数的每一位分别表示读、写、执行权限。      
+//如000表示三项权限均无，而100表示只读。这样，我们就有了下面的对应：
+0 [000] 无任何权限
+4 [100] 只读权限
+6 [110] 读写权限
+7 [111] 读写执行权限
+
+
+//常用的
+sudo chmod 600 ××× （只有所有者有读和写的权限）
+sudo chmod 644 ××× （所有者有读和写的权限，组用户只有读的权限）
+sudo chmod 700 ××× （只有所有者有读和写以及执行的权限）
+sudo chmod 666 ××× （每个人都有读和写的权限）
+sudo chmod 777 ××× （每个人都有读和写以及执行的权限）
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;修改文件所有者(change owner)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo chown -R lsr software/    // -R 递归修改 software文件夹所有者为lsr
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;读取文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat a.txt   # 读取a.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;转换文件编码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;iconv -f gbk -t utf-8   # 将文件编码从gbk转到utf8
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查找行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;grep -E &amp;quot;&amp;lt;content&amp;gt;|&amp;lt;contenttitle&amp;gt;&amp;quot;  # 保留含有&amp;lt;content&amp;gt;或者&amp;lt;contenttitle&amp;gt;的行,-E表示使用正则
+grep -v &amp;quot;hehe&amp;quot; # -v 排除匹配的行
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;删除文本中指定内容&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tr -d &amp;quot;&amp;lt;content&amp;gt;|&amp;lt;contenttitle&amp;gt;|&amp;lt;/content&amp;gt;|&amp;lt;/contenttitle&amp;gt;|&amp;gt;&amp;quot;   # -d表示删除,删除引号内的字符
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;多个命令连续执行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat a.txt | iconv -f gbk -t utf-8 | grep -E &amp;quot;&amp;lt;content&amp;gt;|&amp;lt;contenttitle&amp;gt;&amp;quot; | tr -d &amp;quot;&amp;lt;content&amp;gt;|&amp;lt;contenttitle&amp;gt;|&amp;lt;/content&amp;gt;|&amp;lt;/contenttitle&amp;gt;|&amp;gt;&amp;quot; &amp;gt; corpus.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;查找文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;find SogouCS/ -name &amp;quot;m_*&amp;quot;   # 在SogouCS目录中按文件名-name查找含有 m_*的文件
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;命令参数传递&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# xargs将文件名传递过来, -i 表示使用传过来的参数替换 {}
+find SogouCS/ -name &amp;quot;m_*&amp;quot; | xargs -i mv {} SogouCS_M/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;大小写转换&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tr A-Z a-z  # 全部转换为小写
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;文本替换&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# 替换’为&#39;，′为&#39;，&#39;为&#39; , -e 表示多个编辑,即多个sed同时, s表示替换,g表示全局替换
+sed -e &amp;quot;s/’/&#39;/g&amp;quot; -e &amp;quot;s/′/&#39;/g&amp;quot; -e &amp;quot;s/&#39;&#39;/ /g&amp;quot;
+
+
+# 替换A-Za-z&#39;_ \n之外的字符为空格,-c 表示排除..之外的都..
+tr -c &amp;quot;A-Za-z&#39;_ \n&amp;quot; &amp;quot; &amp;quot;
+
+
+# 例子             输入文件                                                                    输出到文件
+sed -e &amp;quot;s/’/&#39;/g&amp;quot; -e &amp;quot;s/′/&#39;/g&amp;quot; -e &amp;quot;s/&#39;&#39;/ /g&amp;quot; &amp;lt; news.2012.en.shuffled | tr -c &amp;quot;A-Za-z&#39;_ \n&amp;quot; &amp;quot; &amp;quot; &amp;gt; news.2012.en.shuffled-norm0
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;从第3000行开始，显示1000行。即显示3000~3999行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat filename | tail -n +3000 | head -n 1000
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;显示1000行到3000行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat filename| head -n 3000 | tail -n +1000
+*注意两种方法的顺序
+分解：
+    tail -n 1000：显示最后1000行
+    tail -n +1000：从1000行开始显示，显示1000行以后的
+    tail -n -1000：相当于tail -n 1000
+    head -n 1000：显示前面1000行
+    head -n +1000：显示前面1000行
+    head -n -1000：从第1行到倒数1000行
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;用sed命令&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sed -n &#39;5,10p&#39; filename # 查看文件的第5行到第10行, p表示打印匹配行
+sed -n &#39;5p&#39; filename # 只显示第5行
+sed -n &#39;5,$p&#39; filename # 查看文件的第5行到最后一行, $表示最后一行
+sed -n &#39;3,/movie/&#39;p temp.txt   # 只在第3行查找movie并打印
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Linux统计文件行数&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;wc -l file # - c 统计字节数, - l 统计行数, - w 统计字数。
+
+
+1.统计demo目录下，js文件数量：
+find demo/ -name &amp;quot;*.js&amp;quot; | wc -l
+
+
+2.统计demo目录下所有js文件代码行数：
+find demo/ -name &amp;quot;*.js&amp;quot; | xargs cat | wc -l 或 
+wc -l `find ./ -name &amp;quot;*.js&amp;quot;` | tail -n 1 # 取最后一行,总行数
+
+
+3.统计demo目录下所有js文件代码行数，过滤了空行：
+find /demo -name &amp;quot;*.js&amp;quot; | xargs cat | grep -v ^$ | wc -l
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;打印进程信息&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ps aux
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;ssh连接主机,并执行命令&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ssh username@ip &#39;command&#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;shell中的一种for循环&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;for((i=1;i&amp;lt;=10;i++))
+do
+    echo compute-0-$i
+    ssh compute-0-$i &amp;quot;nvidia-smi | grep &#39;%&#39; &amp;quot;
+ done
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;awk中的while循环&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;awk &#39;BEGIN{s=&amp;quot;&amp;quot;;i=11}{while(i&amp;lt;=NF){ s=s&amp;quot; &amp;quot;&amp;quot;&amp;quot;$i;i++; } print s;}&#39; # 提取出command &amp;quot;&amp;quot;用于拼接字符串, NF表示总的字段数
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;半角字符与全角字符之间的unicode码相差65248,而全角空格为12288,半角为32,需特殊对待.&lt;/p&gt;
+
+&lt;p&gt;java代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+ * 全角转半角
+ * @param str
+ * @return
+ */
+public static String FullWidth2HalfWidth(String str){
+    if (null == str || str.length() &amp;lt;= 0) {
+        return &amp;quot;&amp;quot;;
+    }
+    char []cs;
+    cs = str.toCharArray();
+    int k;
+    for(int i = 0; i &amp;lt; cs.length; i++){
+        k = (int)cs[i];
+        if(k &amp;gt;= 65281 &amp;amp;&amp;amp; k &amp;lt;= 65374){
+            cs[i] -= 65248;
+        }else if(k == 12288 || k == 58380){
+            cs[i] = 32;
+        }
+    }
+    return new String(cs);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;写的bat代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@echo off
+echo Deploying updates to GitHub...
+
+:: Build the project.
+hugo -t red
+
+:: Add changes to git.
+git add -A
+
+:: Commit changes.
+set msg=rebuilding site %date% %time%
+if not &amp;quot;%1&amp;quot;==&amp;quot;&amp;quot; (
+  set msg=%1
+)
+git commit -m &amp;quot;%msg&amp;quot;
+
+:: Push source and build repos.
+git push origin hugo
+git subtree push --prefix=public origin master
+
+pause
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对应的shell代码:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+echo -e &amp;quot;\033[0;32mDeploying updates to GitHub...\033[0m&amp;quot;
+
+# Build the project.
+hugo -t red
+
+# Add changes to git.
+git add -A
+
+# Commit changes.
+msg=&amp;quot;rebuilding site `date`&amp;quot;
+if [ $# -eq 1 ]
+  then msg=&amp;quot;$1&amp;quot;
+fi
+git commit -m &amp;quot;$msg&amp;quot;
+
+# Push source and build repos.
+git push origin hugo
+git subtree push --prefix=public origin master
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

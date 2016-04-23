@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Window7安装theano、anaconda、CUDA // underspirit&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="Window7安装theano、anaconda、CUDA" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://fuck.songru.org/posts/machine-learning/theano%20cuda%20install/" />
+
+
+  
+  <link rel="stylesheet" href="http://fuck.songru.org//css/base-min.css">
+  <link rel="stylesheet" href="http://fuck.songru.org//css/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="http://fuck.songru.org//css/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://fuck.songru.org//css/redlounge.css">
+  <link href="http://fuck.songru.org//css/font-awesome.min.css" rel="stylesheet">
+  <link href="http://fuck.songru.org//css/googlefonts_raleway.css" rel='stylesheet' type='text/css'>
+  <link href="http://fuck.songru.org//css/googlefonts_Libre.css" rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="underspirit&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="http://fuck.songru.org//css/tomorrow-night-bright.min.css">
+  
+  <script src="http://fuck.songru.org//js/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)'],['&(',')&']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {font: inherit;
+              font-size: 100%;
+              background: inherit;
+              border: inherit;
+              color: #515151;}
+</style>
+
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Leon&#39;s Blog</h1>
+    <h2 class="brand-tagline">Is super awesome</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://fuck.songru.org/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/posts/">Blog</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://weibo.com/songruLi" target="_blank"><i class='fa fa-weibo'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li><a href="#1-安装cuda:10082a9e681b37c239307c871d1bb53d">1.安装CUDA</a></li>
+<li><a href="#2-安装anaconda:10082a9e681b37c239307c871d1bb53d">2.安装anaconda</a></li>
+<li><a href="#3-配置环境变量:10082a9e681b37c239307c871d1bb53d">3.配置环境变量</a></li>
+<li><a href="#4-遇到的问题:10082a9e681b37c239307c871d1bb53d">4.遇到的问题</a></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/posts/machine-learning/theano%20cuda%20install/">Window7安装theano、anaconda、CUDA</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>2</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2016</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+
+			
+
+			
+
+            
+
+<p>最开始我使用的是anaconda3，但是一直没有成功，并且很多库对python2的支持更好，所以最好尝试使用anaconda2.
+因为要使用mingw，但是新版的anaconda都没有自带mingw，所以下载了老版本anaconda1.9.2.</p>
+
+<h1 id="1-安装cuda:10082a9e681b37c239307c871d1bb53d">1.安装CUDA</h1>
+
+<p>我的gpu是GTX 750ti|，使用的是CUDA7，安装简单（已久忘了细节，传说中使用默认路径安装好些，笔记本上是GTX 950M，CUDA7.5）。安装好CUDA后，跑程序可能遇到cuda is installed,but unavailale的错误，这个我查的结果说是显卡驱动太低，然后我就更新为最新的显卡驱动！！
+安装完之后在cmd下执行nvcc -V查看版本成功的话，则表示小成。
+要的话，进到sample目录，用相应的vs打开解决方案，然后生成解决方案，中途可能会有无法打开”d3dx9.h”、”d3dx10.h”、”d3dx11.h”头文件，可以<a href="http://www.microsoft.com/en-us/download/details.aspx?id=6812">下载DXSDK_Jun10.exe</a>，然后安装到默认目录下；再编译工程即可；然后到bin目录跑生成的程序（deviceQuery.exe还有一些图形程序等），没问题的话则大成了。<br />
+下面是一个详细的步骤（copy来的）:<br />
+　　　1. 查看本机配置，查看显卡类型是否支持NVIDIA GPU，选中计算机&ndash;&gt; 右键属性 &ndash;&gt; 设备管理器 &ndash;&gt; 显示适配器：NVIDIA GeForce GT 610，在<a href="https://developer.nvidia.com/cuda-gpus">这里</a>可以查到相应显卡的compute capability；<br />
+　　　2. 在<a href="http://www.nvidia.cn/Download/index.aspx?lang=cn">这里</a>下载合适驱动347.88-desktop-win8-win7-winvista-64bit-international-whql.exe 并安装；<br />
+　　　3. 从<a href="https://developer.nvidia.com/cuda-toolkit">https://developer.nvidia.com/cuda-toolkit</a>   根据本机类型下载相应的最新版本CUDA7.0安装；<br />
+　　　4. 按照<a href="http://docs.nvidia.com/cuda/cuda-getting-started-guide-for-microsoft-windows/index.html#axzz3W8BU10Ol">官方文档</a>步骤，验证是否安装正确：<br />
+　　　　　(1) 打开C:\ProgramData\NVIDIACorporation\CUDA Samples\v7.0目录下的Samples_vs2010.sln工程，分别在Debug、Release x64下编译整个工程；<br />
+　　　　　(2) 编译过程中，会提示找不到”d3dx9.h”、”d3dx10.h”、”d3dx11.h”头文件，可以<a href="http://www.microsoft.com/en-us/download/details.aspx?id=6812">下载DXSDK_Jun10.exe</a>，然后安装到默认目录下；再编译工程即可；<br />
+　　　　　(3) 打开C:\ProgramData\NVIDIACorporation\CUDA Samples\v7.0\bin\win64\Release目录，打开cmd命令行，将deviceQuery.exe直接拖到cmd中，回车，会显示GPU显卡、CUDA版本等相关信息，最后一行显示：Result = PASS；<br />
+　　　　　(4) 将bandwidthTest.exe拖到cmd中，回车，会显示Device0: GeForce GT 610等相关信息，后面也会有一行显示：Result = PASS；</p>
+
+<h1 id="2-安装anaconda:10082a9e681b37c239307c871d1bb53d">2.安装anaconda</h1>
+
+<p>开始使用的是anacond192版本，最后都配置成功了，但是这个版本的ipython notebook等等东西版本太低，我就用conda update了一下，导致一切都玩完了，theano又跑不起来了。所以后来就换成了anaconda2.4.1，是anaconda2的最新版本，但是没有mingw（这时我已经知道怎么配了，所以没有也不怕，我自己安）。</p>
+
+<ol>
+<li>安装anaconda很简单，傻瓜式的<br /></li>
+<li>装mingw，运行conda install mingw即可<br /></li>
+<li>装theano，因为conda库中没有theano，所以使用pip安装，执行pip install theano即可<br /></li>
+<li>配置.theanorc.txt<br /></li>
+</ol>
+
+<p>在home目录下(我的是c:/uesrs/lisongru)创建.theanorc.txt,输入一下内容</p>
+
+<pre><code>[blas]
+ldflags =
+[gcc]
+cxxflags = -IE:\Anaconda2\MinGW    #安装的mingw目录
+[nvcc]
+fastmath = True
+flags=-LE:\Anaconda2\libs
+compiler-bindir=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin   #vs的目录,不知是否可以不要,因为下面path也配了
+flags =  -arch=sm_30   #这句没有也行,好像,未测试
+base_compiledir=path_to_a_directory_without_such_characters   #这句没有也行,好像,未测试
+[global]
+openmp = False
+floatX = float32
+device = gpu   #cpu则使用cpu
+allow_input_downcast=True
+</code></pre>
+
+<h1 id="3-配置环境变量:10082a9e681b37c239307c871d1bb53d">3.配置环境变量</h1>
+
+<p>这一步非常关键,开始我的电脑有cygwin，并且也在path中，然后运行import theano总是报错，原因是cygwin被用来编译了，但我们要用的是。。。（我也不清楚),后来删除它的path,加入vs_bin的path,就好了.
+下面是一些相关的path</p>
+
+<pre><code>VS10_VC_BIN%        #vs的bin目录,和上面的compiler-bindir一样,这必须有,没有则包找不到cl.exe...
+%CUDA_PATH%\bin     #安装cuda好像默认会有,没有自己加,有它才能在cmd中nvcc -V查看
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\libnvvp;        #cuda安装自带
+C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common      #自带
+%ANACONDA2_HOME%;%ANACONDA2_SCRIPTS%;%ANACONDA2_BIN%        #anaconda自带
+</code></pre>
+
+<h1 id="4-遇到的问题:10082a9e681b37c239307c871d1bb53d">4.遇到的问题</h1>
+
+<p>在笔记本上安装好一切后，报collect2: ld returned 1 exit status错，查的结果说是python 32位与64位冲突，那时笔记本上正好有32位的一个python，就卸载了，但还是不行。
+再查，说是少了libpython包,安装之:conda install libpython，然后就好了。。。（这里有点奇怪，在台式机上没有这个包也成功了）。<br />
+&gt; Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-nlp" href="http://fuck.songru.org//tags/nlp">nlp</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<div class="paging-label">More Reading</div>
+					
+					<span class="paging-newer">
+						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="/posts/machine-learning/theano%20pydot/">Theano 中使用pydot报错</a>
+		            </span>
+		            
+
+					
+					<span class="paging-older">
+						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/posts/linux/linuxComands/">Linux命令（目前使用过的）</a>
+		            </span>
+		            
+	            </div>
+            
+          </section>
+          
+			<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'songru';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2016. All rights reserved.</p>
+</div>
+
+    </div>
+  </div>
+	
+
+	
+
+  <script src="http://fuck.songru.org//js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(function(){
+    $('pre code').each(function(){
+        $(this).parent().addClass('codePre');
+    });
+});
+</script>
+</body>
+</html>
