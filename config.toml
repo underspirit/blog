@@ -1,6 +1,6 @@
 baseurl = "http://fuck.songru.org/"
 languageCode = "zh"
-title = "underspirit's Blog"
+title = "Leon's Blog"
 paginate = 10
 [taxonomies]
   tag = "tags"
