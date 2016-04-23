@@ -1,0 +1,24 @@
+baseurl = "http://fuck.songru.org/"
+languageCode = "zh"
+title = "underspirit's Blog"
+paginate = 10
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
+[params]	#左侧边栏的标题和描述
+    sidebartitle = "Leon's Blog"
+    sidebartagline = "Is super awesome"
+    disqusShortname = "songru"
+    fuck = "fuck"
+[[menu.main]]	#左侧边栏链接
+    name = "Blog"
+    url = "/posts"
+[[menu.social]]	#社交网落链接,icon
+    pre = "<i class='fa fa-weibo'></i>"
+    url = "http://weibo.com/songruLi"
+    identifier = "weibo"
+ 
+ #[[menu.footer]]	#底部链接
+ #   name = "Blog"
+ #   url = "/posts"

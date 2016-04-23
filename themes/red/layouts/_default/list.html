@@ -1,0 +1,96 @@
+{{ partial "header.html" . }}
+<body>
+	{{ if .Params.totop }}
+		<div id="nav-to-top">
+			<span class="decorative-marker">//</span><a href="#top">To Top</a>
+		</div>
+	{{ end }}
+
+	<div id="layout" class="pure-g">
+    {{ partial "sidebar.html" . }}
+	
+	{{ if .Params.banner }}
+	<div class="content-banner-image pure-u-1 pure-u-md-3-4" style="{{ if .Params.bannerheight }}height: {{ .Params.bannerheight }}px;{{ end }}">
+		<img src="{{ .Params.banner }}" class="pure-img" style="{{ if .Params.bannerfill }}width: 100%;{{ end }}" />
+	</div>
+	{{ end }}
+
+<div class="content pure-u-1 pure-u-md-3-4">
+	<div class="posts">
+	{{ range .Data.Pages.GroupByDate "2006" }}
+		<h1>
+			{{ .Key }}
+		</h1>
+		{{ range .Pages }}
+		<section class="post" style="
+		margin-left: 40px;
+		">
+			<header class="post-header" style="
+			">
+				<h3 class="post-title" style="
+				display: inline;
+				">
+					<a href="{{ .Permalink }}" style="
+					text-decoration: none;
+					color: #308BC9;
+					">
+						{{ .Title }}
+					</a>
+				</h3>
+
+				{{ $Site := .Site }}
+				{{ if .Params.categories }}
+					<div class="post-categories" style="vertical-align: text-bottom;display: inline;">
+					{{ range .Params.categories }}
+						<a class="post-category post-category-{{ . | urlize }}" href="{{ $Site.BaseURL}}/categories/{{ . | urlize }}">{{ . }}</a>
+					{{ end }}
+					</div>
+				{{ end }}
+				<p class="post-meta" style="
+				display: inline;
+				float: right;
+				">
+					 <span class="post-date">
+						<span class="post-date-day"><sup>{{ .Date.Format "2" }}</sup></span><span class="post-date-separator">/</span><span class="post-date-month">{{ .Date.Format "Jan" }}</span> <span class="post-date-year">{{ .Date.Format "2006" }}</span>
+					</span>
+					<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>{{.ReadingTime}} min. read</em></span>
+				</p>
+			</header>
+		</section>
+		{{ end }}
+	  {{ end }}
+	</div>
+    {{ partial "footer.html" . }}
+
+</div>
+  </div>
+	{{ if .Params.totop }}
+		<script type="text/javascript">
+			onscroll = function() {
+			  var toTopVisible = false;
+			  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+			  if (scrollTop > 1000) {
+			    if (!toTopVisible) {
+			      document.getElementById('nav-to-top').style.display = 'block';
+			    }
+			  } else {
+			    if (scrollTop < 1000 || toTopVisible) {
+			      document.getElementById('nav-to-top').style.display = 'none';
+			    }
+			  }
+			};
+		</script>
+	{{ end }}
+
+	{{ if .Params.socialsharing }}
+		<script type="text/javascript">
+			function popupShare(url) {
+				window.open(url, '_blank', 'scrollbars,resizable,height=525,width=600');
+				return false;
+			}
+		</script>
+	{{ end }}
+
+  {{ partial "bodyend.html" . }}
+</body>
+</html>

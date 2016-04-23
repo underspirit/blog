@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    【自然语言处理之一】介绍 // underspirit&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="【自然语言处理之一】介绍" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://fuck.songru.org/posts/nlp/nlp_1_introduction/" />
+
+
+  
+  <link rel="stylesheet" href="http://fuck.songru.org//css/base-min.css">
+  <link rel="stylesheet" href="http://fuck.songru.org//css/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="http://fuck.songru.org//css/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://fuck.songru.org//css/redlounge.css">
+  <link href="http://fuck.songru.org//css/font-awesome.min.css" rel="stylesheet">
+  <link href="http://fuck.songru.org//css/googlefonts_raleway.css" rel='stylesheet' type='text/css'>
+  <link href="http://fuck.songru.org//css/googlefonts_Libre.css" rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="underspirit&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="http://fuck.songru.org//css/tomorrow-night-bright.min.css">
+  
+  <script src="http://fuck.songru.org//js/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)'],['&(',')&']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {font: inherit;
+              font-size: 100%;
+              background: inherit;
+              border: inherit;
+              color: #515151;}
+</style>
+
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Leon&#39;s Blog</h1>
+    <h2 class="brand-tagline">Is super awesome</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://fuck.songru.org/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/posts/">Blog</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://weibo.com/songruLi" target="_blank"><i class='fa fa-weibo'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li><a href="#一-什么是自然语言处理-nature-language-processing:a1b5d0a3988a3fc353b3287af28cee1e">一、什么是自然语言处理（Nature Language Processing）？</a></li>
+<li><a href="#二-自然语言处理的实际应用:a1b5d0a3988a3fc353b3287af28cee1e">二、自然语言处理的实际应用</a></li>
+<li><a href="#三-自然语言处理的研究进展:a1b5d0a3988a3fc353b3287af28cee1e">三、自然语言处理的研究进展</a></li>
+<li><a href="#四-自然语言处理的难点:a1b5d0a3988a3fc353b3287af28cee1e">四、自然语言处理的难点</a></li>
+<li><a href="#五-自然语言处理的基本方法:a1b5d0a3988a3fc353b3287af28cee1e">五、自然语言处理的基本方法</a></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/posts/nlp/nlp_1_introduction/">【自然语言处理之一】介绍</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>16</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jul</span> <span class="post-date-year">2015</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+
+			
+
+			
+
+            
+
+<p>今天开始看斯坦福大学的自然语言处理课程。</p>
+
+<h1 id="一-什么是自然语言处理-nature-language-processing:a1b5d0a3988a3fc353b3287af28cee1e">一、什么是自然语言处理（Nature Language Processing）？</h1>
+
+<p>首先看什么是自然语言，自然语言是指一种自然地随文化演化的语言。各个国家地区的语言,英语、汉语、日语等等都属于自然语言，它们都是随这文化发展自然形成的，自然语言是人类交流和思维的主要工具，是人类智慧的结晶。与之相对的是“人造语言”，比如各种编程语言。</p>
+
+<p>自然语言处理的任务就是让计算机理解人类的自然语言，从而实现人与计算机之间用自然语言进行有效通信。</p>
+
+<p>自然语言处理并不是一般地研究自然语言，而在于研制能有效地实现自然语言通信的计算机系统，特别是其中的软件系统。因而它是计算机科学的一部分。</p>
+
+<h1 id="二-自然语言处理的实际应用:a1b5d0a3988a3fc353b3287af28cee1e">二、自然语言处理的实际应用</h1>
+
+<ol>
+<li><strong>机器翻译</strong><br />
+我们最常接触的自然语言处理的应用就是机器翻译，它能够将某种语言 译为你指定的目标语言。</li>
+<li><strong>回答问题</strong><br />
+比如Iphone中的Siri能够理解用户所说的话,并能做出回应。<br />
+说到回答问题，不得不提IBM创造的Watson，它是一台懂得人类语言的超级电脑。2011年2月17日,它在美国最受欢迎的智力竞猜电视节目《危险边缘》中击败该节目历史上两位最成功的选手肯-詹宁斯和布拉德-鲁特，成为《危险边缘》节目新的王者。《危险边缘》是哥伦比亚广播公司益智问答游戏节目，已经经历了数十年历史。该节目的比赛以一种独特的问答形式进行，问题设置的涵盖面非常广泛，涉及到各个领域。与一般问答节目相反，《危险边缘》以答案形式提问、提问形式作答，比如这样一个题目：
+<code>这种带刺类型的植物有大约50个种类；因此是依据它的多刺的果实来命名的。</code>
+这个题目的答案是仙人掌。显然这需要watson具有理解自然语言的能力才能对这种题目进行作答。</li>
+<li><strong>情感分析</strong><br />
+又称倾向性分析和意见挖掘，它是对带有情感色彩的主观性文本进行分析、处理、归纳和推理的过程，如从大量网页文本中分析用户对“数码相机”的“变焦、价格、大小、重量、闪光、易用性”等属性的情感倾向。</li>
+<li><strong>信息抽取</strong><br />
+其目的是将非结构化或半结构化的自然语言描述文本转化结构化的数据，如自动根据邮件内容生成Calendar。</li>
+</ol>
+
+<h1 id="三-自然语言处理的研究进展:a1b5d0a3988a3fc353b3287af28cee1e">三、自然语言处理的研究进展</h1>
+
+<p>自然语言处理也被分为许多小的研究领域，并且在某些方面已经取得了很好成果，但很多方面的研究依然很困难。</p>
+
+<ol>
+<li><strong>基本解决</strong>：词性标注、命名实体识别、Spam识别</li>
+<li><strong>取得长足进展</strong>：情感分析、共指消解、词义消歧、句法分析、机器翻译、信息抽取</li>
+<li><strong>挑战</strong>：自动问答、复述、文摘、会话机器人</li>
+</ol>
+
+<p><img src="/img/nlp_challenge.png" alt="challenge" />
+</p>
+
+<p>这里记录几个专业术语：
+英文 | 中文
+&mdash;- | &mdash;-
+Part-of-speech (POS) tagging | 词性标注
+Named entity recognition(NER) | 命名实体识别
+Sentiment analysis | 情感分析
+Coreference resolution | 指代消解
+Word sense disambiguation(WSD) | 词义消歧
+Paraphrase | 复述
+Summarization | 摘要生成
+neologisms | 新词
+idioms | 成语</p>
+
+<h1 id="四-自然语言处理的难点:a1b5d0a3988a3fc353b3287af28cee1e">四、自然语言处理的难点</h1>
+
+<p>有多方面原因导致自然语言处理变得相当困难：</p>
+
+<ol>
+<li>自然语言具有多样性（不同语种、不同地域、不同人群）。让计算机理解一种语言已经足够困难，何况世界上一共有n种语言。</li>
+<li>自然语言具有进化性。网络语言就是随着社会的发展进化而来，它和传统的正式语言又有一定的差别，出现了很多新的表达方式（网络新词等等）。</li>
+<li>自然语言具有模糊性。</li>
+<li>自然语言具有歧义性。处理歧义问题是NLP的核心问题。</li>
+</ol>
+
+<h1 id="五-自然语言处理的基本方法:a1b5d0a3988a3fc353b3287af28cee1e">五、自然语言处理的基本方法</h1>
+
+<p>在NLP领域中，目前使用较多是概率模型（probabilistic model）或称为统计模型（statistical model），或者称为“经验主义模型”，其建模过程基于大规模真实语料库，从中各级语言单位上的统计信息，并且，依据较低级语言单位上的统计信息，运行相关的统计、推理等技术计算较高级语言单位上的统计信息。与其相对的“理想主义模型”，即基于Chomsky形式语言的确定性语言模型，它建立在人脑中先天存在语法规则这一假设基础上，认为语言是人脑语言能力推导出来的，建立语言模型就是通过建立人工编辑的语言规则集来模拟这种先天的语言能力。</p>
+
+<p>本课程主要侧重于<strong>基于统计的NLP技术，如Viterbi、贝叶斯和最大熵分类器、N-gram语言模型</strong>等等。
+&gt; Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-nlp" href="http://fuck.songru.org//tags/nlp">nlp</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<div class="paging-label">More Reading</div>
+					
+					<span class="paging-newer">
+						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="/posts/nlp/nlp_2_BasicTextProcessing/">【自然语言处理之二】文本处理基础（Basic Text Processing）</a>
+		            </span>
+		            
+
+					
+	            </div>
+            
+          </section>
+          
+			<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'songru';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2016. All rights reserved.</p>
+</div>
+
+    </div>
+  </div>
+	
+
+	
+
+  <script src="http://fuck.songru.org//js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(function(){
+    $('pre code').each(function(){
+        $(this).parent().addClass('codePre');
+    });
+});
+</script>
+</body>
+</html>

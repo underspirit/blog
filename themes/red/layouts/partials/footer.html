@@ -1,0 +1,34 @@
+<div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		{{ range .Site.Menus.footer }}
+			<li><a href="{{.URL}}">{{ .Name }}</a></li>
+		{{ end }}
+		</ul>
+	</div>
+
+	<p>{{ with .Site.Params.Copyright }}{{ . | safeHTML }}{{ else }}&copy; {{.Now.Format "2006"}}. All rights reserved.{{end}}</p>
+</div>
+<!-- 添加行号的
+<script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+
+<script>
+//numbering for pre>code blocks
+
+$(function(){
+    $('pre code').each(function(){
+        var lines = $(this).text().split('\n').length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this)
+            .addClass('has-numbering')
+            .parent()
+            .append($numbering);
+        for(i=1;i<=lines;i++){
+            $numbering.append($('<li/>').text(i));
+        }
+    });
+});
+</script>
+
+-->
