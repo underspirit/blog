@@ -18,5 +18,5 @@ else
 fi
 
 # Push source and build repos.
-git push origin hugo
-git subtree push --prefix=public origin master
+git push origin master 
+git subtree push --prefix=public origin gh-pages
