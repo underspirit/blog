@@ -49,9 +49,9 @@ Droid Sans Fallback
 YaHei Consolas Hybrid
 就是求出系统字体列表与matplotlib字体列表的交集&lt;/p&gt;
 
-&lt;p&gt;2.修改matplotlibrc文件
+&lt;p&gt;2.修改matplotlibrc文件&lt;br /&gt;
 Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/matplotlibrc，然后配置后者即可
-修改&lt;code&gt;font.sans-serif&lt;/code&gt;为上面的一个输出结果即可。&lt;/p&gt;
+修改&lt;strong&gt;font.sans-serif&lt;/strong&gt;为上面的一个输出结果即可, 还需要修改&lt;strong&gt;axes.unicode_minus&lt;/strong&gt;为&lt;strong&gt;False&lt;/strong&gt;,否则图像是负号&amp;rsquo;-&amp;lsquo;会显示为方块.&lt;/p&gt;
 
 &lt;h2 id=&#34;方法二-临时性修改:c4a9591d3c6525e63df3a6e304bb9db6&#34;&gt;方法二（临时性修改）&lt;/h2&gt;
 
@@ -60,6 +60,7 @@ Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/mat
  import matplotlib.pyplot as plt
  
  mpl.rcParams[&#39;font.sans-serif&#39;] = [&#39;Droid Sans Fallback&#39;] # 指定字体名字
+ mpl.rcParams[&#39;axes.unicode_minus&#39;] = False #解决保存图像是负号&#39;-&#39;显示为方块的问题
  plt.figure()
  plt.xlabel(u&#39;性别&#39;)
  plt.ylabel(u&#39;人数&#39;)

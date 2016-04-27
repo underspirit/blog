@@ -167,7 +167,7 @@ code.has-jax {font: inherit;
 	
 	</p>
 	<article class="post-summary">
-	  原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。 方法一（持久性修改） 首先查看matplotlib支持的中文字体 # -*- coding: utf-8 -*- from matplotlib.font_manager import FontManager import subprocess fm = FontManager() mat_fonts = set(f.name for f in fm.ttflist) output = subprocess.check_output( 'fc-list :lang=zh -f &quot;%{family}\n&quot;', shell=True) # print '*' * 10, '系统可用的中文字体', '*' * 10 # print output zh_fonts = set(f.split(',', 1)[0] for f in output.split('\n')) available = mat_fonts &amp; zh_fonts print '*' * 10, '可用的字体', '*' * 10 for f in available: print
+	  原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。 方法一（持久性修改） 首先查看matplotlib支持的中文字体 # -*- coding: utf-8 -*- from matplotlib.font_manager import FontManager import subprocess fm = FontManager() mat_fonts = set(f.name for f in fm.ttflist) output = subprocess.check_output( 'fc-list :lang=zh -f &quot;%{family}\n&quot;', shell=True) # print '*' * 10, '系统可用的中文字体', '*' * 10 # print output zh_fonts = set(f.split(',', 1)[0] for f in output.split('\n')) available = mat_fonts &amp; zh_fonts print '*' * 10, '可用的字体', '*' * 10 for f in available: print f 输出为： Droid Sans Fallback YaHei Consolas Hybrid 就是求出系统字体列表与matplotlib字体列表的交集 2.修改matplotlibrc文件 Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/matplotlibrc，然后配置后者即可 修改font.sans-serif为上面的一个输出结果即可, 还需要修改axes.unicode_minus为False,否则图像是负号&rsquo;-&lsquo;会显示为方块.
 	</article>
 	<div class="read-more-link">
 	  <a href="/posts/linux/Ubuntu_Matplotlib_fix/"><span class="read-more-slashes">//</span>Read More...</a>
