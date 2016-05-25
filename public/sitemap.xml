@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://blog.songru.org/</loc>
-    <lastmod>2016-04-23T10:09:12+08:00</lastmod>
+    <lastmod>2016-05-24T21:09:12+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.songru.org/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/</loc>
+    <lastmod>2016-05-24T21:09:12+08:00</lastmod>
   </url>
   
   <url>

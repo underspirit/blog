@@ -45,7 +45,10 @@ title = "Linux命令（目前使用过的）"
 		sudo su    //登录root,以后的命令都是使用root权限
 11. 查看文件系统使用情况信息
 		
-		df
+			df -Tha    //T显示分区类型，h易读格式，a显示所有   
+			fdisk -l /dev/sda    // 查看指定磁盘分区情况
+			parted /dev/sda    // parted为分区工具，p可查看分区情况，quit退出
+			
 12. 查看文件(夹)大小
 		
 		du filename/dir    //-s易于阅读,-h显示总览

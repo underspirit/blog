@@ -6,8 +6,52 @@
     <description>Recent content on Leon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sat, 23 Apr 2016 10:09:12 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 24 May 2016 21:09:12 +0800</lastBuildDate>
     <atom:link href="http://blog.songru.org/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Opinion Mining with Deep Recurrent Neural Networks笔记</title>
+      <link>http://blog.songru.org/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/</link>
+      <pubDate>Tue, 24 May 2016 21:09:12 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/</guid>
+      <description>&lt;p&gt;本文对传统的RNN进行改进，结合BidirectionalRNN，提出了Deep bidirectional RNN。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://blog.songru.org/img/1464096878586.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;传统的RNN&lt;/strong&gt;（图a）信息传播方向是从前往后一个方向，某个时刻t的隐藏状态仅仅包含它之前词语的语义信息：&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1464097111614.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;br /&gt;
+$f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（比如softmax）。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Bidirectional RNN&lt;/strong&gt;（图b）包含前向和后向RNN两个部分，分别从相反的反向进行信息的传播，再将每个时刻的两个方向的隐藏状态联合起来计算输出值：&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1464097064201.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;可以看到，前向RNN和反向RNN的参数是互相独立的。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Deep  RNN&lt;/strong&gt;（图c）是将多个传统RNN进行叠加而来，即每一层计算隐藏状态的输入都为上一层的输出。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Deep Bidirectional  RNN&lt;/strong&gt;（图d）则是将Bidirectional RNN与Deep RNN结合起来：&lt;br /&gt;
+第$i$层（$i&amp;gt;1$）第$t$个时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i)}}$依赖于三个输入：第$i-1$层$t$时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i-1)}}$和后向隐藏状态$\overleftarrow{{h_t}^{(i-1)}}$以及第$i$层$t-1$时刻的前向隐藏状态.&lt;br /&gt;
+第$i$层（$i&amp;gt;1$）第$t$个时刻的后向隐藏状态$\overleftarrow{{h_t}^{(i)}}$的计算同理:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1464098995066.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;第1层隐藏状态机算比较特殊,也比较简单:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1464099041075.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;输出的计算有两种选择:一是使用所有时刻的隐藏状态计算输出,或者仅使用最后一个时刻的隐藏状态.这里使用第二种方案:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1464097751597.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;该文是通过堆叠（stack）RNN的方式达到Deep RNN的结构，&lt;a href=&#34;http://arxiv.org/abs/1312.6026&#34;&gt;Pascanu等&lt;/a&gt;的论文采取了另一种思路进行Deep RNN的扩展。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Ubuntu下matplotlib绘图中文乱码</title>
@@ -364,7 +408,9 @@ sudo su    //登录root,以后的命令都是使用root权限
 
 &lt;li&gt;&lt;p&gt;查看文件系统使用情况信息&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;df
+&lt;pre&gt;&lt;code&gt;    df -Tha    //T显示分区类型，h易读格式，a显示所有   
+    fdisk -l /dev/sda    // 查看指定磁盘分区情况
+    parted /dev/sda    // parted为分区工具，p可查看分区情况，quit退出
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;查看文件(夹)大小&lt;/p&gt;
