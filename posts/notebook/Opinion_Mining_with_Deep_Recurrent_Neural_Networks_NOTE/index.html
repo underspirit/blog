@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    Ubuntu下matplotlib绘图中文乱码 // Leon&#39;s Blog
+    Opinion Mining with Deep Recurrent Neural Networks笔记 // Leon&#39;s Blog
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -16,11 +16,11 @@
 <meta name="author" content="">
 <meta name="generator" content="Hugo 0.14" />
 
-  <meta property="og:title" content="Ubuntu下matplotlib绘图中文乱码" />
+  <meta property="og:title" content="Opinion Mining with Deep Recurrent Neural Networks笔记" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://blog.songru.org/posts/linux/Ubuntu_Matplotlib_fix/" />
+<meta property="og:url" content="http://blog.songru.org/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/" />
 
 
   
@@ -138,30 +138,17 @@ code.has-jax {font: inherit;
 
 		
 			
-		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
-				<small class="toc-label">Contents</small>
-		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#方法一-持久性修改:c4a9591d3c6525e63df3a6e304bb9db6">方法一（持久性修改）</a></li>
-<li><a href="#方法二-临时性修改:c4a9591d3c6525e63df3a6e304bb9db6">方法二（临时性修改）</a></li>
-</ul></li>
-</ul>
-</nav>
-		    </div>
-		    
 	    
   		<section class="post">
             <h1 class="post-title">
-              <a href="/posts/linux/Ubuntu_Matplotlib_fix/">Ubuntu下matplotlib绘图中文乱码</a>
+              <a href="/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/">Opinion Mining with Deep Recurrent Neural Networks笔记</a>
             </h1>
             <h3 class="post-subtitle">
             	
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>23</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2016</span>
+                	<span class="post-date-day"><sup>24</sup></span><span class="post-date-separator">/</span><span class="post-date-month">May</span> <span class="post-date-year">2016</span>
             	</span>
             	
             
@@ -175,73 +162,41 @@ code.has-jax {font: inherit;
 
 			
 
-            
+            <p>本文对传统的RNN进行改进，结合BidirectionalRNN，提出了Deep bidirectional RNN。</p>
 
-<p>原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。</p>
+<hr />
 
-<h2 id="方法一-持久性修改:c4a9591d3c6525e63df3a6e304bb9db6">方法一（持久性修改）</h2>
+<p><img src="/img/1464096878586.png" alt="Alt text" />
+</p>
 
-<ol>
-<li>首先查看matplotlib支持的中文字体</li>
-</ol>
+<p><strong>传统的RNN</strong>（图a）信息传播方向是从前往后一个方向，某个时刻t的隐藏状态仅仅包含它之前词语的语义信息：<br />
+<img src="/img/1464097111614.png" alt="Alt text" />
+<br />
+$f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（比如softmax）。</p>
 
-<pre><code class="language-python"># -*- coding: utf-8 -*-
-from matplotlib.font_manager import FontManager
-import subprocess
+<p><strong>Bidirectional RNN</strong>（图b）包含前向和后向RNN两个部分，分别从相反的反向进行信息的传播，再将每个时刻的两个方向的隐藏状态联合起来计算输出值：<br />
+<img src="/img/1464097064201.png" alt="Alt text" />
+</p>
 
-fm = FontManager()
-mat_fonts = set(f.name for f in fm.ttflist)
+<p>可以看到，前向RNN和反向RNN的参数是互相独立的。</p>
 
-output = subprocess.check_output(
-    'fc-list :lang=zh -f &quot;%{family}\n&quot;', shell=True)
-# print '*' * 10, '系统可用的中文字体', '*' * 10
-# print output
-zh_fonts = set(f.split(',', 1)[0] for f in output.split('\n'))
-available = mat_fonts &amp; zh_fonts
+<p><strong>Deep  RNN</strong>（图c）是将多个传统RNN进行叠加而来，即每一层计算隐藏状态的输入都为上一层的输出。</p>
 
-print '*' * 10, '可用的字体', '*' * 10
-for f in available:
-    print f
-</code></pre>
+<p><strong>Deep Bidirectional  RNN</strong>（图d）则是将Bidirectional RNN与Deep RNN结合起来：<br />
+第$i$层（$i&gt;1$）第$t$个时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i)}}$依赖于三个输入：第$i-1$层$t$时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i-1)}}$和后向隐藏状态$\overleftarrow{{h_t}^{(i-1)}}$以及第$i$层$t-1$时刻的前向隐藏状态.<br />
+第$i$层（$i&gt;1$）第$t$个时刻的后向隐藏状态$\overleftarrow{{h_t}^{(i)}}$的计算同理:<br />
+<img src="/img/1464098995066.png" alt="Alt text" />
+</p>
 
-<p>输出为：
-Droid Sans Fallback
-YaHei Consolas Hybrid
-就是求出系统字体列表与matplotlib字体列表的交集</p>
+<p>第1层隐藏状态机算比较特殊,也比较简单:<br />
+<img src="/img/1464099041075.png" alt="Alt text" />
+</p>
 
-<p>2.修改matplotlibrc文件<br />
-Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/matplotlibrc，然后配置后者即可
-修改<strong>font.sans-serif</strong>为上面的一个输出结果即可, 还需要修改<strong>axes.unicode_minus</strong>为<strong>False</strong>,否则图像是负号&rsquo;-&lsquo;会显示为方块.</p>
+<p>输出的计算有两种选择:一是使用所有时刻的隐藏状态计算输出,或者仅使用最后一个时刻的隐藏状态.这里使用第二种方案:<br />
+<img src="/img/1464097751597.png" alt="Alt text" />
+</p>
 
-<h2 id="方法二-临时性修改:c4a9591d3c6525e63df3a6e304bb9db6">方法二（临时性修改）</h2>
-
-<pre><code class="language-python"># -*- coding: utf-8 -*-
- import matplotlib as mpl
- import matplotlib.pyplot as plt
- 
- mpl.rcParams['font.sans-serif'] = ['Droid Sans Fallback'] # 指定字体名字
- mpl.rcParams['axes.unicode_minus'] = False #解决保存图像是负号'-'显示为方块的问题
- plt.figure()
- plt.xlabel(u'性别')
- plt.ylabel(u'人数')
- plt.xticks((0,1),(u'男',u'女'))
-</code></pre>
-
-<p>或者：</p>
-
-<pre><code class="language-python"># -*- coding: utf-8 -*-
- import matplotlib.pyplot as plt
- from matplotlib import font_manager
-
- zh_font = font_manager.FontProperties(fname=r'/home/lsr/Documents/simsun.ttf', size=14) # 指定字体文件
- 
- plt.figure()
- plt.xlabel(u'性别', fontproperties=zh_font) # 使用字体配置
- plt.ylabel(u'人数',fontproperties=zh_font)
- plt.xticks((0,1),(u'男',u'女')) # 没有使用字体配置，乱码
- plt.bar(left = (0,1),height = (1,0.5),width = 0.35)
- plt.show()
-</code></pre>
+<p>该文是通过堆叠（stack）RNN的方式达到Deep RNN的结构，<a href="http://arxiv.org/abs/1312.6026">Pascanu等</a>的论文采取了另一种思路进行Deep RNN的扩展。</p>
 
 	
 			
@@ -250,9 +205,7 @@ Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/mat
 				<div class="tags-list">
 					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
 					
-	                <a class="post-tag post-tag-ubuntu" href="http://blog.songru.org//tags/ubuntu">ubuntu</a>,
-	                
-	                <a class="post-tag post-tag-linux" href="http://blog.songru.org//tags/linux">linux</a>,
+	                <a class="post-tag post-tag-nlp" href="http://blog.songru.org//tags/nlp">nlp</a>,
 	                
 				</div>
 			
@@ -261,16 +214,11 @@ Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/mat
 				<div class="paging">
 					<div class="paging-label">More Reading</div>
 					
-					<span class="paging-newer">
-						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/">Opinion Mining with Deep Recurrent Neural Networks笔记</a>
-		            </span>
-		            
 
 					
 					<span class="paging-older">
 						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/">Neural Machine Translation By Jointly Learning To Align And Translate笔记</a>
+			            <a class="paging-link" href="/posts/linux/Ubuntu_Matplotlib_fix/">Ubuntu下matplotlib绘图中文乱码</a>
 		            </span>
 		            
 	            </div>
