@@ -2,33 +2,33 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Leon&#39;s Blog</title>
-    <link>http://localhost:1313/</link>
+    <link>http://blog.songru.org/</link>
     <description>Recent content on Leon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <lastBuildDate>Tue, 24 May 2016 21:09:12 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.songru.org/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Opinion Mining with Deep Recurrent Neural Networks笔记</title>
-      <link>http://localhost:1313/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/</link>
+      <link>http://blog.songru.org/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/</link>
       <pubDate>Tue, 24 May 2016 21:09:12 +0800</pubDate>
       
-      <guid>http://localhost:1313/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/</guid>
+      <guid>http://blog.songru.org/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/</guid>
       <description>&lt;p&gt;本文对传统的RNN进行改进，结合BidirectionalRNN，提出了Deep bidirectional RNN。&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/1464096878586.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;http://blog.songru.org/img/1464096878586.png&#34; alt=&#34;Alt text&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;传统的RNN&lt;/strong&gt;（图a）信息传播方向是从前往后一个方向，某个时刻t的隐藏状态仅仅包含它之前词语的语义信息：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1464097111614.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1464097111614.png&#34; alt=&#34;Alt text&#34; /&gt;
 &lt;br /&gt;
 $f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（比如softmax）。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Bidirectional RNN&lt;/strong&gt;（图b）包含前向和后向RNN两个部分，分别从相反的反向进行信息的传播，再将每个时刻的两个方向的隐藏状态联合起来计算输出值：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1464097064201.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1464097064201.png&#34; alt=&#34;Alt text&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;可以看到，前向RNN和反向RNN的参数是互相独立的。&lt;/p&gt;
@@ -38,15 +38,15 @@ $f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（�
 &lt;p&gt;&lt;strong&gt;Deep Bidirectional  RNN&lt;/strong&gt;（图d）则是将Bidirectional RNN与Deep RNN结合起来：&lt;br /&gt;
 第$i$层（$i&amp;gt;1$）第$t$个时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i)}}$依赖于三个输入：第$i-1$层$t$时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i-1)}}$和后向隐藏状态$\overleftarrow{{h_t}^{(i-1)}}$以及第$i$层$t-1$时刻的前向隐藏状态.&lt;br /&gt;
 第$i$层（$i&amp;gt;1$）第$t$个时刻的后向隐藏状态$\overleftarrow{{h_t}^{(i)}}$的计算同理:&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1464098995066.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1464098995066.png&#34; alt=&#34;Alt text&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;第1层隐藏状态机算比较特殊,也比较简单:&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1464099041075.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1464099041075.png&#34; alt=&#34;Alt text&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;输出的计算有两种选择:一是使用所有时刻的隐藏状态计算输出,或者仅使用最后一个时刻的隐藏状态.这里使用第二种方案:&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1464097751597.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1464097751597.png&#34; alt=&#34;Alt text&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;该文是通过堆叠（stack）RNN的方式达到Deep RNN的结构，&lt;a href=&#34;http://arxiv.org/abs/1312.6026&#34;&gt;Pascanu等&lt;/a&gt;的论文采取了另一种思路进行Deep RNN的扩展。&lt;/p&gt;
@@ -55,10 +55,10 @@ $f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（�
     
     <item>
       <title>Ubuntu下matplotlib绘图中文乱码</title>
-      <link>http://localhost:1313/posts/linux/Ubuntu_Matplotlib_fix/</link>
+      <link>http://blog.songru.org/posts/linux/Ubuntu_Matplotlib_fix/</link>
       <pubDate>Sat, 23 Apr 2016 10:09:12 +0800</pubDate>
       
-      <guid>http://localhost:1313/posts/linux/Ubuntu_Matplotlib_fix/</guid>
+      <guid>http://blog.songru.org/posts/linux/Ubuntu_Matplotlib_fix/</guid>
       <description>
 
 &lt;p&gt;原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。&lt;/p&gt;
@@ -131,22 +131,22 @@ Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/mat
     
     <item>
       <title>Neural Machine Translation By Jointly Learning To Align And Translate笔记</title>
-      <link>http://localhost:1313/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</link>
+      <link>http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</link>
       <pubDate>Sun, 27 Mar 2016 22:09:12 +0800</pubDate>
       
-      <guid>http://localhost:1313/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</guid>
+      <guid>http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</guid>
       <description>&lt;p&gt;本文主要创新在传统的神经机器翻译上进行改进，确切的说是改进了基本的RNN Encoder-Decoder模型,提出了Alignment model，即实现了Attention model.&lt;/p&gt;
 
 &lt;hr /&gt;
 
 &lt;p&gt;传统的encoder-decoder模型如下图所示:
-&lt;img src=&#34;http://localhost:1313/img/1458651310553.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458651310553.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 该模型通过神经网络将所有的输入信息压缩为一个固定长度的向量$w$,然后通过decoder的神经网络解码这个$w$，最后得出翻译结果.&lt;br /&gt;
 使用固定长度的向量是该模型的一个缺点,因为该向量很难将所有需要的信息编码到其中，对于长度大的句子,该模型的效果会显著下降.&lt;/p&gt;
 
 &lt;p&gt;本文作者提出的改进模型结构为:&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458651809449.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458651809449.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 主要有4个方面改进:&lt;br /&gt;
 1. &lt;strong&gt;GRU 和 Bidirectional RNN&lt;/strong&gt;&lt;br /&gt;
@@ -156,29 +156,29 @@ RNN网络的结果采用的是GRU单元，双向神经网络(Bidirectional).一�
 该模型也可以说是实现了注意力模型(Attention model).&lt;br /&gt;
 通过该模型计算得到输入时刻$j$在预测输出时刻$i$时所占的权重$\alpha _{ij}$.比如说翻译&lt;strong&gt;&amp;ldquo;我喜欢飞机&amp;rdquo;&lt;/strong&gt;到&lt;strong&gt;&amp;ldquo;I like airplane&amp;rdquo;&lt;/strong&gt;,翻译输出&lt;strong&gt;&amp;ldquo;I&amp;rdquo;&lt;/strong&gt;时，&lt;strong&gt;&amp;ldquo;我&amp;rdquo;&lt;/strong&gt;字所占的权重会比较大.&lt;br /&gt;
 权重$\alpha _{ij}$是通过一个单层的多层感知机计算得到,该模型与算法中其他部分同时训练:&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458736905308.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458736905308.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 3. &lt;strong&gt;Encoder 和 Decoder&lt;/strong&gt;&lt;br /&gt;
 Encoder的计算如下：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458737365201.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458737365201.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 $E$表示词向量的矩阵，$x_i$表示$i$时刻的词,是一个$k$维的向量(词典大小维度的向量,应该是one-hot的)，反向过程的计算与上面类似。&lt;/p&gt;
 
 &lt;p&gt;Decoder的计算如下：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458737469906.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458737469906.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 初始的隐藏状态为：$$s_0 = tanh(W_s\stackrel{\leftarrow}{h_1})$$&lt;br /&gt;
 每一步的context向量都需要通过Alignment model重新计算:&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458738176634.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738176634.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458738239955.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738239955.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 最后计算$y_i$的概率:&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458738415785.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738415785.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458738447372.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738447372.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458738462004.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738462004.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 使用了maxout（第二个公式），取相邻两个数中较大的一个。需要计算词典中所有词出现的概率，最后取最大的那一个？&lt;/p&gt;
 
@@ -188,10 +188,10 @@ $E$表示词向量的矩阵，$x_i$表示$i$时刻的词,是一个$k$维的向�
     
     <item>
       <title>Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation笔记</title>
-      <link>http://localhost:1313/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/</link>
+      <link>http://blog.songru.org/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/</link>
       <pubDate>Sun, 27 Mar 2016 21:09:12 +0800</pubDate>
       
-      <guid>http://localhost:1313/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/</guid>
+      <guid>http://blog.songru.org/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/</guid>
       <description>&lt;p&gt;本文主要创新在于提出一个新的神经网络模型RNN Encoder-Decoder，并提出GRU单元.将训练的模型作为standard phrase-based statistical machine translation system的一部分，用于计算phrase table中的每一个phrase的得分。&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -200,17 +200,17 @@ $E$表示词向量的矩阵，$x_i$表示$i$时刻的词,是一个$k$维的向�
 该模型由两个RNN组成，分别作为Encoder和Decoder，Encoder的作用是读取一个变长的序列数据，将其编码为一个固定长度的向量，再通过Decoder将这个向量解码为一个变长的序列数据.&lt;/p&gt;
 
 &lt;p&gt;Encoder为一个由GRU单元组成的RNN网络:&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458734687528.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458734687528.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 $e(x_t)$代表t时刻输入词的向量表示，初始的隐藏状态$h^{(0)}$固定为$0$，最后计算得出一个固定长度的编码结果：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458735958249.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458735958249.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 Decoder也为一个由GRU单元组成的RNN网络:
 它首先初始化隐藏状态：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458736097645.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458736097645.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 其网络的计算公式为：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/1458736032536.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458736032536.png&#34; alt=&#34;Alt text | center&#34; /&gt;
 &lt;br /&gt;
 这里每一个时刻的计算都用到了Encoder传递过来的编码向量$c$，并且它的值是不变的。&lt;br /&gt;
 最后通过Softmax计算概率（没看懂），还有maxout。。。&lt;/p&gt;
@@ -219,10 +219,10 @@ Decoder也为一个由GRU单元组成的RNN网络:
     
     <item>
       <title>Theano 中使用pydot报错</title>
-      <link>http://localhost:1313/posts/machine-learning/theano%20pydot/</link>
+      <link>http://blog.songru.org/posts/machine-learning/theano%20pydot/</link>
       <pubDate>Sun, 03 Jan 2016 10:09:12 +0800</pubDate>
       
-      <guid>http://localhost:1313/posts/machine-learning/theano%20pydot/</guid>
+      <guid>http://blog.songru.org/posts/machine-learning/theano%20pydot/</guid>
       <description>&lt;p&gt;运行:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;# 切换为使用cpu,有这句var_with_name_simple=True的时候会报错...,换成gpu就不报错...
@@ -266,10 +266,10 @@ theano.printing.pydotprint(forward_prop, var_with_name_simple=True, compact=True
     
     <item>
       <title>Window7安装theano、anaconda、CUDA</title>
-      <link>http://localhost:1313/posts/machine-learning/theano%20cuda%20install/</link>
+      <link>http://blog.songru.org/posts/machine-learning/theano%20cuda%20install/</link>
       <pubDate>Sat, 02 Jan 2016 10:09:12 +0800</pubDate>
       
-      <guid>http://localhost:1313/posts/machine-learning/theano%20cuda%20install/</guid>
+      <guid>http://blog.songru.org/posts/machine-learning/theano%20cuda%20install/</guid>
       <description>
 
 &lt;p&gt;最开始我使用的是anaconda3，但是一直没有成功，并且很多库对python2的支持更好，所以最好尝试使用anaconda2.
@@ -342,10 +342,10 @@ C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common      #自带
     
     <item>
       <title>Linux命令（目前使用过的）</title>
-      <link>http://localhost:1313/posts/linux/linuxComands/</link>
+      <link>http://blog.songru.org/posts/linux/linuxComands/</link>
       <pubDate>Tue, 22 Sep 2015 10:09:12 +0800</pubDate>
       
-      <guid>http://localhost:1313/posts/linux/linuxComands/</guid>
+      <guid>http://blog.songru.org/posts/linux/linuxComands/</guid>
       <description>&lt;ol&gt;
 &lt;li&gt;&lt;p&gt;移动文件（夹）&lt;/p&gt;
 
@@ -680,10 +680,10 @@ git subtree push --prefix=public origin master
     
     <item>
       <title>【自然语言处理之三】最小编辑距离（Minimum Edit Distance）</title>
-      <link>http://localhost:1313/posts/nlp/nlp_3_MinimumEditDistance/</link>
+      <link>http://blog.songru.org/posts/nlp/nlp_3_MinimumEditDistance/</link>
       <pubDate>Sun, 13 Sep 2015 21:09:12 +0800</pubDate>
       
-      <guid>http://localhost:1313/posts/nlp/nlp_3_MinimumEditDistance/</guid>
+      <guid>http://blog.songru.org/posts/nlp/nlp_3_MinimumEditDistance/</guid>
       <description>
 
 &lt;h1 id=&#34;一-最小编辑距离:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;一、最小编辑距离&lt;/h1&gt;
@@ -691,7 +691,7 @@ git subtree push --prefix=public origin master
 &lt;h2 id=&#34;1-1-定义:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;1.1 定义&lt;/h2&gt;
 
 &lt;p&gt;最小编辑距离（Minimum Edit Distance，MED），又称Levenshtein距离，是指两个字符串之间，由一个转成另一个所需要的最少编辑操作次数。允许的编辑操作包括：将一个字符替换成另一个字符（substitution，s），插入一个字符（insert，i）或者删除一个字符（delete，d），如下图所示：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_3_1.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_3_1.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
 &lt;/p&gt;
 
 &lt;h2 id=&#34;1-2-求解:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;1.2 求解&lt;/h2&gt;
@@ -699,11 +699,11 @@ git subtree push --prefix=public origin master
 &lt;p&gt;在大学算法设计相关课程上，想必大家都已经学习过使用动态规划算法解最小编辑距离，形式化定义如下：
 对于两个字符串X={x1,x2,x3&amp;hellip;,xn}和Y={y1,y2,y3,&amp;hellip;,ym}，x的长度是n，y的长度是m，则定义D(i,j)为子字符串X{x1,x2,&amp;hellip;,xi}于Y{y1,y2,&amp;hellip;,yj}间的最小编辑距离。我们的目标是求出D(n,m)。
 则可以推出如下关系:&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_3_3.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_3_3.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;根据这个递推关系，我们计算所有的i和j的取值填入一个矩阵中：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_3_4.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_3_4.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;最终可以求得右上角的D(n,m)。&lt;/p&gt;
@@ -713,22 +713,22 @@ git subtree push --prefix=public origin master
 &lt;p&gt;通过上面的动态规划方法虽然可以求出来两个字符串之间的最小编辑距离，但是我们并不知道源字符串被编辑的情况，即哪些字符被删除，增加或者替换了。
 我们只要能够将源字符串与目标字符串相应字符对齐，即可以得出具体的编辑情况。这里只需要对上面的动态规划方法稍加改进即可实现。
 我们只需要记住当前位置是从之前哪一个位置计算而来即可，然后从D(n,m)逐个向前回溯就能够将两个字符串对齐，如图所示：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_3_5.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_3_5.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;其递推公式为：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_3_6.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_3_6.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
 &lt;/p&gt;
 
 &lt;h2 id=&#34;1-4-加权最小编辑距离:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;1.4 加权最小编辑距离&lt;/h2&gt;
 
 &lt;p&gt;在基本的编辑距离基础上，结合实际应用，往往需要做一些变形或改进，如某些拼写错误相对其他更容易发生，同义词替换、虚词或修饰成分被删除（或插入）应该得到较小的惩罚，等等。
 下图是一个统计好的拼写错误的转移矩阵：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_3_8.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_3_8.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;加权递推公式如下：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_3_9.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_3_9.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;
 &lt;/p&gt;
 
 &lt;h2 id=&#34;1-5-最小编辑距离的应用:00940faa4e8eb28a14d8cda2941cecdb&#34;&gt;1.5 最小编辑距离的应用&lt;/h2&gt;
@@ -780,7 +780,7 @@ S2      =       GCGCAATG
 &lt;ol&gt;
 &lt;li&gt;识别平行网页对：由于平行网页通常有相同或类似的界面结构，因此平行网页在HTML结构上应该有很大近似度。首先将网页的HTML标签抽取出来，连接成一个字符串，然后用最小编辑距离考察两个字符串的近似度。实际中，此策略一般与文档长度比例、句对齐翻译模型等方法结合使用，以识别最终的平行网页对。&lt;/li&gt;
 &lt;li&gt;自动评测：首先存储机器翻译原文和不同质量级别的多个参考译文，评测时把自动翻译的译文对应到与其编辑距离最小的参考译文上，间接估算自动译文的质量，如下图所示：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_3_10.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;&lt;/li&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_3_10.jpg&#34; alt=&#34;最小编辑距离&#34; /&gt;&lt;/li&gt;
 &lt;/ol&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;字符串核函数（String Kernel）：最小编辑距离作为字符串之间的相似度计算函数，用作核函数，集成在SVM中使用。&lt;/p&gt;&lt;/li&gt;
@@ -805,10 +805,10 @@ S2      =       GCGCAATG
     
     <item>
       <title>【自然语言处理之二】文本处理基础（Basic Text Processing）</title>
-      <link>http://localhost:1313/posts/nlp/nlp_2_BasicTextProcessing/</link>
+      <link>http://blog.songru.org/posts/nlp/nlp_2_BasicTextProcessing/</link>
       <pubDate>Fri, 11 Sep 2015 10:09:12 +0800</pubDate>
       
-      <guid>http://localhost:1313/posts/nlp/nlp_2_BasicTextProcessing/</guid>
+      <guid>http://blog.songru.org/posts/nlp/nlp_2_BasicTextProcessing/</guid>
       <description>
 
 &lt;h1 id=&#34;一-文本处理基础:2e62519647c0e571a1761fc424fb31ad&#34;&gt;一、文本处理基础&lt;/h1&gt;
@@ -830,7 +830,7 @@ S2      =       GCGCAATG
     &lt;strong&gt;Type&lt;/strong&gt;：词典中的元素，即独立词条
     &lt;strong&gt;Token&lt;/strong&gt;：词典中独立词条在文本中的每次出现
 如果定义 N = number of tokens 和 V = vocabulary = set of types，|V| is the size of the vocabulary，那么根据Church and Gale (1990)的研究工作可知: |V| &amp;gt; O(N½) ，验证如下：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_2_1.jpg&#34; alt=&#34;词典规模&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_2_1.jpg&#34; alt=&#34;词典规模&#34; /&gt;
 &lt;/p&gt;
 
 &lt;h3 id=&#34;1-2-2-分词算法:2e62519647c0e571a1761fc424fb31ad&#34;&gt;1.2.2 分词算法&lt;/h3&gt;
@@ -838,7 +838,7 @@ S2      =       GCGCAATG
 &lt;p&gt;任务：统计给定文本文件（如shake.txt）中词频分布，子任务：分词，频率统计，实现如下：&lt;/p&gt;
 
 &lt;p&gt;英文分词非常简单，因为英文中每个单词之间（少数特殊写法额外考虑，We&amp;rsquo;re,isn&amp;rsquo;t&amp;hellip;)都由空格分割开来，所以分词只需要按空格将它们切分，然后对一些特殊的写法进一步处理即可。&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_2_2.jpg&#34; alt=&#34;分词算法&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_2_2.jpg&#34; alt=&#34;分词算法&#34; /&gt;
 &lt;br /&gt;
 以上实现将非字母字符作为token分隔符作为简单的分词器实现，但是，这难免存在许多不合理之处，如下面的例子：&lt;/p&gt;
 
@@ -874,7 +874,7 @@ S2      =       GCGCAATG
 
 &lt;p&gt;句子一般分为大句和小句，大句一般由“！”，“。”，“；”，“\“”、“？”等分割，可以表达完整的含义，小句一般由“，”分割，起停顿作用，需要上下文搭配表达特定的语义。
 中文断句通常使用正则表达式将文本按照有分割意义的标点符号(如句号)分开即可，而对于英文文本，由于英文句号”.“在多种场景下被使用，如缩写“Inc.”、“Dr.”、“.02%”、“4.3”等，无法通过简单的正则表达式处理，为了识别英文句子边界，课程中给出了一种基于决策树（Decision Tree）的分类方法，如下图所示：&lt;br /&gt;
-&lt;img src=&#34;http://localhost:1313/img/nlp_2_3.jpg&#34; alt=&#34;断句&#34; /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/nlp_2_3.jpg&#34; alt=&#34;断句&#34; /&gt;
 &lt;br /&gt;
 此方法的核心就是如何选取有效的特征？如句号前后的单词是否大写开头、是否为缩略词、前后是否存在数字、句号前的单词长度、句号前后的单词在语料库中作为句子边界的概率等等。当然，你也可以基于上述特征采用其他分类器解决断句问题，如罗辑回归（Logistic regression）、支持向量机（Support Vector Machine）、神经网络（Neural Nets）等。&lt;/p&gt;
 
@@ -897,10 +897,10 @@ S2      =       GCGCAATG
     
     <item>
       <title>【自然语言处理之一】介绍</title>
-      <link>http://localhost:1313/posts/nlp/nlp_1_introduction/</link>
+      <link>http://blog.songru.org/posts/nlp/nlp_1_introduction/</link>
       <pubDate>Thu, 16 Jul 2015 10:09:12 +0800</pubDate>
       
-      <guid>http://localhost:1313/posts/nlp/nlp_1_introduction/</guid>
+      <guid>http://blog.songru.org/posts/nlp/nlp_1_introduction/</guid>
       <description>
 
 &lt;p&gt;今天开始看斯坦福大学的自然语言处理课程。&lt;/p&gt;
@@ -939,7 +939,7 @@ S2      =       GCGCAATG
 &lt;li&gt;&lt;strong&gt;挑战&lt;/strong&gt;：自动问答、复述、文摘、会话机器人&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/nlp_challenge.png&#34; alt=&#34;challenge&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;http://blog.songru.org/img/nlp_challenge.png&#34; alt=&#34;challenge&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;这里记录几个专业术语：
