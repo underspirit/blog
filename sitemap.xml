@@ -2,58 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://localhost:1313/</loc>
+    <loc>http://blog.songru.org/</loc>
     <lastmod>2016-05-24T21:09:12+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/</loc>
+    <loc>http://blog.songru.org/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/</loc>
     <lastmod>2016-05-24T21:09:12+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/posts/linux/Ubuntu_Matplotlib_fix/</loc>
+    <loc>http://blog.songru.org/posts/linux/Ubuntu_Matplotlib_fix/</loc>
     <lastmod>2016-04-23T10:09:12+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</loc>
+    <loc>http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</loc>
     <lastmod>2016-03-27T22:09:12+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/</loc>
+    <loc>http://blog.songru.org/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/</loc>
     <lastmod>2016-03-27T21:09:12+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/posts/machine-learning/theano%20pydot/</loc>
+    <loc>http://blog.songru.org/posts/machine-learning/theano%20pydot/</loc>
     <lastmod>2016-01-03T10:09:12+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/posts/machine-learning/theano%20cuda%20install/</loc>
+    <loc>http://blog.songru.org/posts/machine-learning/theano%20cuda%20install/</loc>
     <lastmod>2016-01-02T10:09:12+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/posts/linux/linuxComands/</loc>
+    <loc>http://blog.songru.org/posts/linux/linuxComands/</loc>
     <lastmod>2015-09-22T10:09:12+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/posts/nlp/nlp_3_MinimumEditDistance/</loc>
+    <loc>http://blog.songru.org/posts/nlp/nlp_3_MinimumEditDistance/</loc>
     <lastmod>2015-09-13T21:09:12+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/posts/nlp/nlp_2_BasicTextProcessing/</loc>
+    <loc>http://blog.songru.org/posts/nlp/nlp_2_BasicTextProcessing/</loc>
     <lastmod>2015-09-11T10:09:12+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/posts/nlp/nlp_1_introduction/</loc>
+    <loc>http://blog.songru.org/posts/nlp/nlp_1_introduction/</loc>
     <lastmod>2015-07-16T10:09:12+08:00</lastmod>
   </url>
   
