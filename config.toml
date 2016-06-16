@@ -15,8 +15,8 @@ paginate = 10
     name = "Blog"
     url = "/posts"
 [[menu.social]]	#社交网落链接,icon
-    pre = "<i class='fa fa-weibo'></i>"
-    url = "http://weibo.com/songruLi"
+    pre = "<i class='fa fa-github' style='font-size:22px;'></i>"
+    url = "https://github.com/underspirit"
     identifier = "weibo"
  
  #[[menu.footer]]	#底部链接
