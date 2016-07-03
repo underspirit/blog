@@ -1,12 +1,12 @@
 +++
 date = "2016-05-24T21:09:12+08:00"
-tags = ["nlp"]
+tags = ["NLP"]
 title = "Opinion Mining with Deep Recurrent Neural Networks笔记"
 +++
 
 
 本文对传统的RNN进行改进，结合BidirectionalRNN，提出了Deep bidirectional RNN。
-
+<!--more-->
 ----------
 ![Alt text](/img/1464096878586.png)   
 

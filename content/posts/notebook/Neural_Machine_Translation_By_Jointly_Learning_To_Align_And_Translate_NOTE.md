@@ -1,13 +1,13 @@
 +++
 date = "2016-03-27T22:09:12+08:00"
 
-tags = ["nlp"]
+tags = ["NLP"]
 title = "Neural Machine Translation By Jointly Learning To Align And Translate笔记"
 
 +++
 
 本文主要创新在传统的神经机器翻译上进行改进，确切的说是改进了基本的RNN Encoder-Decoder模型,提出了Alignment model，即实现了Attention model.
-
+<!--more-->
 ----------
 传统的encoder-decoder模型如下图所示:
 ![Alt text | center](/img/1458651310553.png)   

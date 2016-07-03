@@ -47,10 +47,10 @@
             {{ end }}
 
 			{{ $Site := .Site }}
-			{{ if .Params.categories }}
-				<div class="post-categories">
-				{{ range .Params.categories }}
-					<a class="post-category post-category-{{ . | urlize }}" href="{{ $Site.BaseURL}}/categories/{{ . | urlize }}">{{ . }}</a>
+			{{ if .Params.tags }}
+				<div class="post-categories" style="margin-bottom: 25px;">
+				{{ range .Params.tags }}
+					<a class="post-category post-category-{{ . | urlize }}" href="{{ $Site.BaseURL}}/tags/{{ . | urlize }}">{{ . }}</a>
 				{{ end }}
 				</div>
 			{{ end }}

@@ -1,7 +1,7 @@
 +++
 date = "2016-01-03T10:09:12+08:00"
 
-tags = ["nlp"]
+tags = ["NLP"]
 title = "Theano 中使用pydot报错"
 
 +++

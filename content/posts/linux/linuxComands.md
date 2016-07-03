@@ -1,7 +1,7 @@
 +++
 date = "2015-09-22T10:09:12+08:00"
 
-tags = ["ubuntu", "linux"]
+tags = ["Ubuntu", "Linux"]
 title = "Linux命令（目前使用过的）"
 
 +++

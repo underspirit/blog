@@ -1,13 +1,13 @@
 +++
 date = "2016-03-27T21:09:12+08:00"
 
-tags = ["nlp"]
+tags = ["NLP"]
 title = "Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation笔记"
 
 +++
 
 本文主要创新在于提出一个新的神经网络模型RNN Encoder-Decoder，并提出GRU单元.将训练的模型作为standard phrase-based statistical machine translation system的一部分，用于计算phrase table中的每一个phrase的得分。
-
+<!--more-->
 ----------
 **1. RNN Encoder-Decoder**
 该模型由两个RNN组成，分别作为Encoder和Decoder，Encoder的作用是读取一个变长的序列数据，将其编码为一个固定长度的向量，再通过Decoder将这个向量解码为一个变长的序列数据.

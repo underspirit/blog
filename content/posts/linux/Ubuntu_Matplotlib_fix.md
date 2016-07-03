@@ -1,13 +1,13 @@
 +++
 date = "2016-04-23T10:09:12+08:00"
 
-tags = ["ubuntu", "linux"]
+tags = ["Ubuntu", "Linux"]
 title = "Ubuntu下matplotlib绘图中文乱码"
 
 +++
 
 原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。
-
+<!--more-->
 ## 方法一（持久性修改）
 1. 首先查看matplotlib支持的中文字体
 ```python

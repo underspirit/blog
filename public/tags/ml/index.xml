@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ml on Leon&#39;s Blog</title>
+    <link>http://blog.songru.org/tags/ml/</link>
+    <description>Recent content in Ml on Leon&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sat, 02 Jan 2016 10:09:12 +0800</lastBuildDate>
+    <atom:link href="http://blog.songru.org/tags/ml/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Window7安装theano、anaconda、CUDA</title>
+      <link>http://blog.songru.org/posts/machine-learning/theano%20cuda%20install/</link>
+      <pubDate>Sat, 02 Jan 2016 10:09:12 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/machine-learning/theano%20cuda%20install/</guid>
+      <description>
+
+&lt;p&gt;最开始我使用的是anaconda3，但是一直没有成功，并且很多库对python2的支持更好，所以最好尝试使用anaconda2.
+因为要使用mingw，但是新版的anaconda都没有自带mingw，所以下载了老版本anaconda1.9.2.&lt;/p&gt;
+
+&lt;h1 id=&#34;1-安装cuda:10082a9e681b37c239307c871d1bb53d&#34;&gt;1.安装CUDA&lt;/h1&gt;
+
+&lt;p&gt;我的gpu是GTX 750ti|，使用的是CUDA7，安装简单（已久忘了细节，传说中使用默认路径安装好些，笔记本上是GTX 950M，CUDA7.5）。安装好CUDA后，跑程序可能遇到cuda is installed,but unavailale的错误，这个我查的结果说是显卡驱动太低，然后我就更新为最新的显卡驱动！！
+安装完之后在cmd下执行nvcc -V查看版本成功的话，则表示小成。
+要的话，进到sample目录，用相应的vs打开解决方案，然后生成解决方案，中途可能会有无法打开”d3dx9.h”、”d3dx10.h”、”d3dx11.h”头文件，可以&lt;a href=&#34;http://www.microsoft.com/en-us/download/details.aspx?id=6812&#34;&gt;下载DXSDK_Jun10.exe&lt;/a&gt;，然后安装到默认目录下；再编译工程即可；然后到bin目录跑生成的程序（deviceQuery.exe还有一些图形程序等），没问题的话则大成了。&lt;br /&gt;
+下面是一个详细的步骤（copy来的）:&lt;br /&gt;
+　　　1. 查看本机配置，查看显卡类型是否支持NVIDIA GPU，选中计算机&amp;ndash;&amp;gt; 右键属性 &amp;ndash;&amp;gt; 设备管理器 &amp;ndash;&amp;gt; 显示适配器：NVIDIA GeForce GT 610，在&lt;a href=&#34;https://developer.nvidia.com/cuda-gpus&#34;&gt;这里&lt;/a&gt;可以查到相应显卡的compute capability；&lt;br /&gt;
+　　　2. 在&lt;a href=&#34;http://www.nvidia.cn/Download/index.aspx?lang=cn&#34;&gt;这里&lt;/a&gt;下载合适驱动347.88-desktop-win8-win7-winvista-64bit-international-whql.exe 并安装；&lt;br /&gt;
+　　　3. 从&lt;a href=&#34;https://developer.nvidia.com/cuda-toolkit&#34;&gt;https://developer.nvidia.com/cuda-toolkit&lt;/a&gt;   根据本机类型下载相应的最新版本CUDA7.0安装；&lt;br /&gt;
+　　　4. 按照&lt;a href=&#34;http://docs.nvidia.com/cuda/cuda-getting-started-guide-for-microsoft-windows/index.html#axzz3W8BU10Ol&#34;&gt;官方文档&lt;/a&gt;步骤，验证是否安装正确：&lt;br /&gt;
+　　　　　(1) 打开C:\ProgramData\NVIDIACorporation\CUDA Samples\v7.0目录下的Samples_vs2010.sln工程，分别在Debug、Release x64下编译整个工程；&lt;br /&gt;
+　　　　　(2) 编译过程中，会提示找不到”d3dx9.h”、”d3dx10.h”、”d3dx11.h”头文件，可以&lt;a href=&#34;http://www.microsoft.com/en-us/download/details.aspx?id=6812&#34;&gt;下载DXSDK_Jun10.exe&lt;/a&gt;，然后安装到默认目录下；再编译工程即可；&lt;br /&gt;
+　　　　　(3) 打开C:\ProgramData\NVIDIACorporation\CUDA Samples\v7.0\bin\win64\Release目录，打开cmd命令行，将deviceQuery.exe直接拖到cmd中，回车，会显示GPU显卡、CUDA版本等相关信息，最后一行显示：Result = PASS；&lt;br /&gt;
+　　　　　(4) 将bandwidthTest.exe拖到cmd中，回车，会显示Device0: GeForce GT 610等相关信息，后面也会有一行显示：Result = PASS；&lt;/p&gt;
+
+&lt;h1 id=&#34;2-安装anaconda:10082a9e681b37c239307c871d1bb53d&#34;&gt;2.安装anaconda&lt;/h1&gt;
+
+&lt;p&gt;开始使用的是anacond192版本，最后都配置成功了，但是这个版本的ipython notebook等等东西版本太低，我就用conda update了一下，导致一切都玩完了，theano又跑不起来了。所以后来就换成了anaconda2.4.1，是anaconda2的最新版本，但是没有mingw（这时我已经知道怎么配了，所以没有也不怕，我自己安）。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装anaconda很简单，傻瓜式的&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;装mingw，运行conda install mingw即可&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;装theano，因为conda库中没有theano，所以使用pip安装，执行pip install theano即可&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;配置.theanorc.txt&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;在home目录下(我的是c:/uesrs/lisongru)创建.theanorc.txt,输入一下内容&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[blas]
+ldflags =
+[gcc]
+cxxflags = -IE:\Anaconda2\MinGW    #安装的mingw目录
+[nvcc]
+fastmath = True
+flags=-LE:\Anaconda2\libs
+compiler-bindir=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin   #vs的目录,不知是否可以不要,因为下面path也配了
+flags =  -arch=sm_30   #这句没有也行,好像,未测试
+base_compiledir=path_to_a_directory_without_such_characters   #这句没有也行,好像,未测试
+[global]
+openmp = False
+floatX = float32
+device = gpu   #cpu则使用cpu
+allow_input_downcast=True
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;3-配置环境变量:10082a9e681b37c239307c871d1bb53d&#34;&gt;3.配置环境变量&lt;/h1&gt;
+
+&lt;p&gt;这一步非常关键,开始我的电脑有cygwin，并且也在path中，然后运行import theano总是报错，原因是cygwin被用来编译了，但我们要用的是。。。（我也不清楚),后来删除它的path,加入vs_bin的path,就好了.
+下面是一些相关的path&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;VS10_VC_BIN%        #vs的bin目录,和上面的compiler-bindir一样,这必须有,没有则包找不到cl.exe...
+%CUDA_PATH%\bin     #安装cuda好像默认会有,没有自己加,有它才能在cmd中nvcc -V查看
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\libnvvp;        #cuda安装自带
+C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common      #自带
+%ANACONDA2_HOME%;%ANACONDA2_SCRIPTS%;%ANACONDA2_BIN%        #anaconda自带
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;4-遇到的问题:10082a9e681b37c239307c871d1bb53d&#34;&gt;4.遇到的问题&lt;/h1&gt;
+
+&lt;p&gt;在笔记本上安装好一切后，报collect2: ld returned 1 exit status错，查的结果说是python 32位与64位冲突，那时笔记本上正好有32位的一个python，就卸载了，但还是不行。
+再查，说是少了libpython包,安装之:conda install libpython，然后就好了。。。（这里有点奇怪，在台式机上没有这个包也成功了）。&lt;br /&gt;
+&amp;gt; Written with &lt;a href=&#34;https://stackedit.io/&#34;&gt;StackEdit&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>统计学习方法读书笔记(2)-感知机</title>
+      <link>http://blog.songru.org/posts/machine-learning/statical-learning-2-Inception/</link>
+      <pubDate>Fri, 03 Jul 2015 16:32:27 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/machine-learning/statical-learning-2-Inception/</guid>
+      <description>
+
+&lt;p&gt;感知机(perceptron)是二类分类的线性分类模型,其输入为实例的特征向量,输出为实例的类别,取+1和–1二值。感知机对应于输入空间(特征空间)中将实例划分为正负两类的分离超平面,&lt;strong&gt;属于判别模型&lt;/strong&gt;。感知机学习旨在求出将训练数据进行线性划分的分离超平面,为此,导入基于误分类的损失函数,利用梯度下降法对损失函数进行极小化,求得感知机模型。&lt;/p&gt;
+
+&lt;h1 id=&#34;感知机的定义:7af17af622005836a4a55655a1236804&#34;&gt;感知机的定义&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;感知机的定义&lt;/strong&gt;:  假设输入空间(特征空间)是&lt;code&gt;$\mathcal{X} \subseteq R^n$&lt;/code&gt;,输出空间是 &lt;code&gt;$ \mathcal{Y}=\{+1,-1\}$&lt;/code&gt;。输入&lt;code&gt;$x \in \mathcal{X}$&lt;/code&gt;表示实例的特征向量,对应于输入空间(特征空间)的点;输出&lt;code&gt;$y \in \mathcal{Y}$&lt;/code&gt;表示实例的类别。由输入空间到输出空间的如下函数:
+&lt;code&gt;$$  f(x) = sign(w \cdot x + b) $$&lt;/code&gt;
+其中, &lt;code&gt;$w$&lt;/code&gt;和&lt;code&gt;$b$&lt;/code&gt;为感知机模型参数, &lt;code&gt;$w\in R^n$&lt;/code&gt;叫作权值(weight)或权值向量(weightvector),&lt;code&gt;$b \in R$&lt;/code&gt;叫作偏置(bias),&lt;code&gt;$w \cdot x$&lt;/code&gt;表示w和x的内积。sign是符号函数,即
+    &lt;code&gt;$$  sign(x)=\begin{cases}
+        +1, &amp;amp;x \geqslant 0\\
+        -1, &amp;amp; x &amp;lt; 0
+        \end{cases}  $$&lt;/code&gt;&lt;br /&gt;
+感知机是一种线性分类模型,属于判别模型。感知机模型的假设空间是定义在特征空间中的所有线性分类
+模型(linear classification    model)或线性分类器(linear  classifier),即函数集合&lt;code&gt;$\{f \mid f(x)=w \cdot x+b\}$&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;感知机有如下几何解释:线性方程 &lt;code&gt;$$w \cdot x + b =0$$&lt;/code&gt;
+对应于特征空间&lt;code&gt;$R^n$&lt;/code&gt;中的一个超平面S,其中w是超平面的法向量,b是超平面的截距。这个超平面将特征空间划分为两个部分。位于两部分的点(特征向量)分别被分为正、负两类。因此,超平面S称为分离超平面(separating hyperplane).&lt;/p&gt;
+
+&lt;h1 id=&#34;感知机学习策略:7af17af622005836a4a55655a1236804&#34;&gt;感知机学习策略&lt;/h1&gt;
+
+&lt;p&gt;为了找出一个能够将训练集正实例点和负实例点完全正确分开的分离超平面,即确定感知机模型参数&lt;code&gt;$w,b$&lt;/code&gt;,需要确定一个学习策略,即定义(经验)损失函数并将损失函数极小化。&lt;br /&gt;
+损失函数的一个自然选择是误分类点的总数。但是,这样的损失函数不是参数w,b的连续可导函数,不易优化。&lt;strong&gt;损失函数的另一个选择是误分类点到超平面S的总距离&lt;/strong&gt;,这是感知机所采用的。为此,首先写出输入空间&lt;code&gt;$R^n$&lt;/code&gt;中任一点&lt;code&gt;$x_0$&lt;/code&gt;到超平面S的距离:
+&lt;code&gt;$$ \frac{1}{\| w \|} | w \cdot x_0 + b |  $$&lt;/code&gt;
+ 这里,&lt;code&gt;$||w||$&lt;/code&gt;是w的&lt;code&gt;$L_2$&lt;/code&gt;范数。&lt;br /&gt;
+ 对于任意误分类的数据&lt;code&gt;$(x_i ,y_i )$&lt;/code&gt;来说,
+ &lt;code&gt;$$ -y_i (w \cdot x_i +b) &amp;gt; 0 $$&lt;/code&gt;
+ 成立.因此,误分类点&lt;code&gt;$x_i$&lt;/code&gt;到超平面S的距离是
+&lt;code&gt;$$ -\frac{1}{\| w \|} y_i( w \cdot x_i + b )  $$&lt;/code&gt;
+这样,假设超平面S的误分类点集合为M,那么所有误分类点到超平面S的总距离为
+&lt;code&gt;$$ -\frac{1}{\| w \|}  \sum_{x_i \in M} y_i( w \cdot x_i + b )  $$&lt;/code&gt;
+不考虑 &lt;code&gt;$ \frac{1}{\| w \|}$&lt;/code&gt;, 给定训练数据集&lt;code&gt;$T=\{ (x_1, y_1),(x_2, y_2), \cdots,(x_N, y_N) \}$&lt;/code&gt;,其中,&lt;code&gt;$x_i \in \mathcal{X}=R^n$&lt;/code&gt;, &lt;code&gt;$ y_i \in \mathcal{Y} = \{ +1, -1\}, i = 1,2,\cdots,N $&lt;/code&gt;.感知机&lt;code&gt;$sign(w\cdot x + b)$&lt;/code&gt;学习的损失函数定义为:
+&lt;code&gt;$$  L(w, b) = -\sum_{x_i \in M} y_i (w \cdot x_i +b) $$&lt;/code&gt;
+其中M为误分类点的集合,。这个损失函数就是感知机学习的经验风险函数。&lt;br /&gt;
+显然,损失函数&lt;code&gt;$L(w,b)$&lt;/code&gt;是非负的。如果没有误分类点,损失函数值是0。而且,误分类点越少,误分类点离超平面越近,损失函数值就越小。一个特定的样本点的损失函数:在误分类时是参数&lt;code&gt;$w,b$&lt;/code&gt;的线性函数,在正确分类时是0。因此,给定训练数据集T,损失函数&lt;code&gt;$L(w,b)$&lt;/code&gt;是&lt;code&gt;$w,b$&lt;/code&gt;的连续可导函数。&lt;/p&gt;
+
+&lt;h1 id=&#34;感知机学习算法:7af17af622005836a4a55655a1236804&#34;&gt;感知机学习算法&lt;/h1&gt;
+
+&lt;p&gt;感知机学习算法是误分类驱动的,具体采用随机梯度下降法(stochastic   gradient descent)。首先,任意选取一个超平面&lt;code&gt;$w_0,b_0$&lt;/code&gt;,然后用梯度下降法不断地极小化目标函数。&lt;strong&gt;极小化过程中不是一次使M中所有误分类点的梯度下降,而是一次随机选取一个误分类点使其梯度下降&lt;/strong&gt;。&lt;br /&gt;
+假设误分类点集合M是固定的,那么损失函数&lt;code&gt;$L(w,b)$&lt;/code&gt;的梯度为:
+&lt;code&gt;$$ \nabla_w L(w,b) = -\sum_{x_i \in M} y_i x_i \\ 
+\nabla_b L(w,b) = -\sum_{x_i \in M} y_i $$&lt;/code&gt;
+随机选取一个误分类点&lt;code&gt;$(x_i,y_i)$&lt;/code&gt;,对&lt;code&gt;$w,b$&lt;/code&gt;进行更新:
+&lt;code&gt;$$ w \leftarrow w + \eta y_i x_i \\
+b \leftarrow b + \eta y_i$$&lt;/code&gt;
+&lt;code&gt;$\eta(0&amp;lt;\eta\le1)$&lt;/code&gt;是学习率.&lt;/p&gt;
+
+&lt;h2 id=&#34;感知机学习算法的原始形式-算法:7af17af622005836a4a55655a1236804&#34;&gt;感知机学习算法的原始形式(算法)&lt;/h2&gt;
+
+&lt;p&gt;输入:训练数据集&lt;code&gt;$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$&lt;/code&gt;,&lt;br /&gt;
+其中,&lt;code&gt;$x_i \in \mathcal{X}=R^n$&lt;/code&gt;, &lt;code&gt;$ y_i \in \mathcal{Y} = \{ +1, -1\}, i = 1,2,\cdots,N $学习率$\eta(0&amp;lt;\eta\le1)$&lt;/code&gt;.&lt;br /&gt;
+输出:&lt;code&gt;$w,b$&lt;/code&gt;;感知机模型&lt;code&gt;$f(x)=sign(w \cdot x+b)$&lt;/code&gt;。&lt;br /&gt;
+步骤:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;选取初值&lt;code&gt;$w_0,b_0$&lt;/code&gt;&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;在训练集中选取数据&lt;code&gt;$(x_i,y_i)$&lt;/code&gt;&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;如果&lt;code&gt;$y_i(w \cdot x_i+b)≤0$&lt;/code&gt;&lt;br /&gt;
+&lt;code&gt;$$ w \leftarrow w + \eta y_i x_i \\
+b \leftarrow b + \eta y_i$$&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;转至(2),直至训练集中没有误分类点。&lt;br /&gt;
+这种学习算法直观上有如下解释:当一个实例点被误分类,即位于分离超平面的错误一侧时,则调整&lt;code&gt;$w,b$&lt;/code&gt;的值,使分离超平面向该误分类点的一侧移动,以减少该误分类点与超平面间的距离,直至超平面越过该误分类
+点使其被正确分类。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;感知机算法的收敛性:7af17af622005836a4a55655a1236804&#34;&gt;感知机算法的收敛性&lt;/h2&gt;
+
+&lt;p&gt;为了便于叙述与推导,将偏置b并入权重向量w,记作&lt;code&gt;$\hat{w} =(w^T,b)^T$&lt;/code&gt;,同样也将输入向量加以扩充,加进常数1,记作 &lt;code&gt;$\hat{x}=(x^T,1)^T$&lt;/code&gt;。这样, &lt;code&gt;$\hat{w} , \hat{x} \in R^{N+1}$&lt;/code&gt;。显然, &lt;code&gt;$\hat{w} \hat{x}=w·x+b$&lt;/code&gt;。&lt;br /&gt;
+&lt;strong&gt;定理2.1(Novikoff)&lt;/strong&gt; 设训练数据集&lt;code&gt;$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$&lt;/code&gt;是线性可分的,其中&lt;code&gt;$x_i \in \mathcal{X}=R^n$&lt;/code&gt;, &lt;code&gt;$ y_i \in \mathcal{Y} = \{ +1, -1\}, i = 1,2,\cdots,N $&lt;/code&gt;,则&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;存在满足条件&lt;code&gt;$|| \hat{w}_{opt}||=1$&lt;/code&gt;的超平面 &lt;code&gt;$\hat{w}_{opt} \cdot  \hat{x} =w_{opt}·x+b_{opt}=0$&lt;/code&gt;将训练数据集完全正确分开;且存在&lt;code&gt;$ \gamma&amp;gt;0$&lt;/code&gt;,对所有&lt;code&gt;$i=1,2,...,N$&lt;/code&gt;有
+&lt;code&gt;$$ y_i( \hat{w}_{opt} \cdot  \hat{x}_i ) = y_i( w_{opt} \cdot x_i + b_{opt}) \ge \gamma $$&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;令$R=\max \limits_{1 \le i \le N} || \hat{x}_i ||$&lt;code&gt;,则感知机算法在训练数据集上的误分类次数k满足不等式:
+&lt;/code&gt;$$ k \le \left(\frac{R} {\gamma} \right)^2  $$`&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;感知机学习算法的对偶形式:7af17af622005836a4a55655a1236804&#34;&gt;感知机学习算法的对偶形式&lt;/h2&gt;
+
+&lt;p&gt;对偶形式的基本想法是,将&lt;code&gt;$w$&lt;/code&gt;和&lt;code&gt;$b$&lt;/code&gt;表示为实例&lt;code&gt;$x_i$&lt;/code&gt;和标记&lt;code&gt;$y_i$&lt;/code&gt;的线性组合的形式,通过求解其系数而求得&lt;code&gt;$w$&lt;/code&gt;和&lt;code&gt;$b$&lt;/code&gt;。&lt;br /&gt;
+不失一般性,可假设初始值$w_0,b_0$均为0。对误分类点&lt;code&gt;$(x_i,y_i)$&lt;/code&gt;通过
+&lt;code&gt;$$ w \leftarrow w + \eta y_i x_i \\
+b \leftarrow b + \eta y_i$$&lt;/code&gt;
+逐步修改&lt;code&gt;$w,b$&lt;/code&gt;,设修改&lt;code&gt;$n_i$&lt;/code&gt;次,则&lt;code&gt;$w,b$&lt;/code&gt;关于样本&lt;code&gt;$(x_i,y_i)$&lt;/code&gt;的增量分别是&lt;code&gt;$\alpha_i y_i x_i$&lt;/code&gt;和&lt;code&gt;$\alpha_i y_i$&lt;/code&gt;,这里&lt;code&gt;$\alpha_i=n_i \eta$&lt;/code&gt;看出,最后学习到的&lt;code&gt;$w,b$&lt;/code&gt;可以分别表示为
+&lt;code&gt;$$ w = \sum_{i=1}^N \alpha_i y_i x_i \\
+     b = \sum_{i=1}^N \alpha_i y_i $$&lt;/code&gt;
+这里, &lt;code&gt;$\alpha_i \ge 0 ,i = 1,2, \cdots, N$&lt;/code&gt;,当&lt;code&gt;$\eta =1$&lt;/code&gt;时,表示第i个实例点由于误分而进行更新的次数。实例点更新次数越多,意味着它距离分离超平面越近,也就越难正确分类。换句话说,这样的实例对学习结果影响最大。&lt;/p&gt;
+
+&lt;h2 id=&#34;感知机学习算法的对偶形式-算法:7af17af622005836a4a55655a1236804&#34;&gt;感知机学习算法的对偶形式(算法)&lt;/h2&gt;
+
+&lt;p&gt;输入:训练数据集&lt;code&gt;$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$&lt;/code&gt;,&lt;br /&gt;
+其中,&lt;code&gt;$x_i \in \mathcal{X}=R^n$&lt;/code&gt;, &lt;code&gt;$ y_i \in \mathcal{Y} = \{ +1, -1\}, i = 1,2,\cdots,N $&lt;/code&gt;学习率&lt;code&gt;$\eta(0&amp;lt;\eta\le1)$&lt;/code&gt;.&lt;br /&gt;
+输出: &lt;code&gt;$\alpha, b$&lt;/code&gt;: 感知机模型&lt;code&gt;$f(x) = sign\left(  \sum_{j=1}^N \alpha_j y_j x_j \cdot x + b \right)$&lt;/code&gt;,其中&lt;code&gt;$\alpha = (\alpha_1, \alpha_2, \cdots, \alpha_N)^T$&lt;/code&gt;&lt;br /&gt;
+步骤:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;初始化&lt;code&gt;$\alpha \leftarrow 0, b \leftarrow 0$&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;在训练集中选取数据&lt;code&gt;$(x_i,y_i)$&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;如果&lt;code&gt;$ y_i \left( \sum_{j=1}^N \alpha_j y_j x_j \cdot x_i + b  \right) \le 0 $&lt;/code&gt;
+&lt;code&gt;$$ \alpha_i \leftarrow \alpha_i + \eta \\  
+b \leftarrow b + \eta y_i  $$&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;转至(2)直到没有误分类数据。&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;对偶形式中训练实例仅以内积的形式出现。为了方便,可以预先将训练集中实例间的内积计算出来并以矩
+阵的形式存储,这个矩阵就是所谓的Gram矩阵(Gram matrix)
+&lt;code&gt;$$ G=[x_i \cdot x_j]_{N \times N} $$&lt;/code&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>统计学习方法读书笔记(1)-统计学习方法概论</title>
+      <link>http://blog.songru.org/posts/machine-learning/statical-learning-1/</link>
+      <pubDate>Fri, 03 Jul 2015 15:48:57 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/machine-learning/statical-learning-1/</guid>
+      <description>
+
+&lt;p&gt;统计学习方法都是由模型、策略和算法这三个要素构成。&lt;/p&gt;
+
+&lt;h1 id=&#34;1-模型:b06856972157b699cfa45f18de0ae7a3&#34;&gt;1. 模型&lt;/h1&gt;
+
+&lt;p&gt;在监督学习过程中，模型就是所要学习的条件概率分布或决策函数。模型的假设空间(hypothesis    space)包含所有可能的条件概率分布或决策函数。例如,假设决策函数是输入变量的线性函数,那么模型的假设空间就是所有这些线性函数构成的函数集合。假设空间中的模型一般有无穷多个。&lt;br /&gt;
+假设空间用&lt;code&gt;$\mathcal{F}$&lt;/code&gt;表示。假设空间可以定义为决策函数的集合：
+&lt;code&gt;$$\mathcal{F}=\{f \mid Y=f(x)\}$$&lt;/code&gt;
+其中, &lt;code&gt;$X$&lt;/code&gt;和&lt;code&gt;$Y$&lt;/code&gt;是定义在输入空间&lt;code&gt;$\mathcal{X}$&lt;/code&gt;和输出空间&lt;code&gt;$\mathcal{Y}$&lt;/code&gt;上的变量。这时$\mathcal{F}$通常是由一个参数向量决定的函数族:&lt;br /&gt;
+&lt;code&gt;$$\mathcal{F}=\{f \mid Y=f_{\theta}(x), \theta \in R^n \}$$&lt;/code&gt;
+参数向量&lt;code&gt;$\theta$&lt;/code&gt;取值于n维欧氏空间&lt;code&gt;$R^n$&lt;/code&gt;,称为参数空间(parameter space)。假设空间也可以定义为条件概率的集合:&lt;br /&gt;
+&lt;code&gt;$$\mathcal{F}=\{P \mid P(Y \mid X) \}$$&lt;/code&gt;&lt;br /&gt;
+这时&lt;code&gt;$\mathcal{F}$&lt;/code&gt;通常是由一个参数向量决定的条件概率分布族:&lt;br /&gt;
+&lt;code&gt;$$\mathcal{F}=\{P \mid P_{\theta}(Y \mid X) , \theta \in R^n\}$$&lt;/code&gt;&lt;br /&gt;
+参数向量&lt;code&gt;$\theta$&lt;/code&gt;取值于n维欧氏空间&lt;code&gt;$R^n$&lt;/code&gt;,也称为参数空间。&lt;br /&gt;
+称由决策函数表示的模型为非概率模型,由条件概率表示的模型为概率模型。为了简便起见,当论及模型时,有时只用其中一种模型。&lt;/p&gt;
+
+&lt;h1 id=&#34;2-策略:b06856972157b699cfa45f18de0ae7a3&#34;&gt;2. 策略&lt;/h1&gt;
+
+&lt;p&gt;有了模型的假设空间,统计学习接着需要考虑的是按照什么样的准则学习或选择最优的模型。统计学习的
+目标在于从假设空间中选取最优模型。&lt;br /&gt;
+首先引入损失函数与风险函数的概念。损失函数度量模型一次预测的好坏,风险函数度量平均意义下模型
+预测的好坏。&lt;/p&gt;
+
+&lt;h2 id=&#34;损失函数和风险函数:b06856972157b699cfa45f18de0ae7a3&#34;&gt;损失函数和风险函数&lt;/h2&gt;
+
+&lt;p&gt;监督学习问题是在假设空间&lt;code&gt;$\mathcal{F}$&lt;/code&gt;中选取模型f作为决策函数,对于给定的输入X,由&lt;code&gt;$f(X)$&lt;/code&gt;给出相应的输出Y,这个输出的预测值&lt;code&gt;$f(X)$&lt;/code&gt;与真实值Y可能一致也可能不一致,用一个损失函数(loss function)或代价函数(cost
+function)来度量预测错误的程度。损失函数是&lt;code&gt;$f(X)$&lt;/code&gt;和Y的非负实值函数,记作&lt;code&gt;$L(Y,f(X))$&lt;/code&gt;。
+统计学习常用的损失函数有以下几种:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;0-1损失函数(0-1  loss function)
+&lt;code&gt;$$  L(Y, f(X))=\begin{cases}
+    1, &amp;amp;Y \neq f(X)\\
+    0, &amp;amp;Y = f(X)
+    \end{cases}  $$&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;平方损失函数(quadratic loss function)
+&lt;code&gt;$$  L(Y, f(X))=(Y - f(X))^2 $$&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;绝对值损失函数(absolute loss function)
+&lt;code&gt;$$   L(Y, f(X))= \lvert Y - f(X) \rvert $$&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;对数损失函数(logarithmic loss function)或对数似然损失函数(loglikelihood loss    function)
+&lt;code&gt;$$ L(Y, P(Y \mid X))=  - \log P(Y \mid X)$$&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;损失函数值越小,模型就越好。由于模型的输入、输出&lt;code&gt;$(X,Y)$&lt;/code&gt;是随机变量,遵循联合分布&lt;code&gt;$P(X,Y)$&lt;/code&gt;,所以损失函数的期望是&lt;br /&gt;
+&lt;code&gt;$$ R_{exp} (f) = E_p \left[  L(Y, f(X)) \right] =  \int_{X \times Y}  L(y, f(x)) P(x, y) \ dxdy  $$&lt;/code&gt;
+这是理论上模型&lt;code&gt;$f(X)$&lt;/code&gt;关于联合分布&lt;code&gt;$P(X,Y)$&lt;/code&gt;的平均意义下的损失,称为风险函数(risk    function)或期望损失
+(expected   loss)。&lt;br /&gt;
+学习的目标就是选择期望风险最小的模型。由于联合分布&lt;code&gt;$P(X,Y)$&lt;/code&gt;是未知的,&lt;code&gt;$R_{exp}(f)$&lt;/code&gt;不能直接计算。实际上,如果知道联合分布&lt;code&gt;$P(X,Y)$&lt;/code&gt;,可以从联合分布直接求出条件概率分布&lt;code&gt;$P(Y|X)$&lt;/code&gt;,也就不需要学习了。正因为不知道联合概率分布,所以才需要进行学习。这样一来,一方面根据期望风险最小学习模型要用到联合分布,另一方面联合分布又是未知的,所以监督学习就成为一个病态问题(ill-formed    problem)。&lt;br /&gt;
+给定一个训练数据集
+&lt;code&gt;$$  T = \{  (x_1, y_1), (x_2, y_2), \cdots , (x_N, y_N) \} $$&lt;/code&gt;&lt;br /&gt;
+模型$f(X)$关于训练数据集的平均损失称为经验风险(empirical risk)或经验损失(empirical   loss),记作&lt;code&gt;$R_{emp}$&lt;/code&gt;:
+&lt;code&gt;$$ R_{emp} (f) =  \frac{1}{N} \sum_{i=1}^{N} L(y_i, f(x_i)) $$&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;期望风险&lt;code&gt;$R_{exp}(f)$&lt;/code&gt;是模型关于联合分布的期望损失,经验风险&lt;code&gt;$R_{emp}(f)$&lt;/code&gt;是模型关于训练样本集的平均损失。根据大数定律,当样本容量N趋于无穷时,经验风险&lt;code&gt;$R_{emp}(f)$&lt;/code&gt;趋于期望风险&lt;code&gt;$R_{exp}(f)$&lt;/code&gt;。所以一个很自然的想法是用经验风险估计期望风险。但是,由于现实中训练样本数目有限,甚至很小,所以用经验风险估计期望风险常常并不理想,要对经验风险进行一定的矫正。这就关系到监督学习的两个基本策略:&lt;strong&gt;经验风险最小化和结构风险最小化&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;经验风险最小化与结构风险最小化:b06856972157b699cfa45f18de0ae7a3&#34;&gt;经验风险最小化与结构风险最小化&lt;/h2&gt;
+
+&lt;p&gt;经验风险最小化(empirical   risk minimization,ERM)的策略认为,经验风险最小的模型是最优的模型。根据这一策略,按照经验风险最小化求最优模型就是求解最优化问题:
+&lt;code&gt;$$ \min \limits_{f \in F} \frac{1}{N} \sum_{i=1}^N L(y_i, f(x_i)) $$&lt;/code&gt;&lt;br /&gt;
+其中，&lt;code&gt;$F$&lt;/code&gt;是假设空间。
+当样本容量足够大时,经验风险最小化能保证有很好的学习效果,在现实中被广泛采用。比如,极大似然估计(maximum likelihood estimation)就是经验风险最小化的一个例子。&lt;strong&gt;当模型是条件概率分布,损失函数是对数损失函数时,经验风险最小化就等价于极大似然估计&lt;/strong&gt;。&lt;br /&gt;
+但是,当样本容量很小时,经验风险最小化学习的效果就未必很好,会产生“过拟合(over-fitting)”现象。&lt;br /&gt;
+结构风险最小化(structural risk minimization,SRM)是为了防止过拟合而提出来的策略。&lt;strong&gt;结构风险最小化
+等价于正则化(regularization)&lt;/strong&gt;。结构风险在经验风险上加上表示模型复杂度的正则化项(regularizer)或罚项(penalty term)。在假设空间、损失函数以及训练数据集确定的情况下,结构风险的定义是
+&lt;code&gt;$$ R_{SRM} (f) = \frac{1}{N} \sum_{i=1}^N L(y_i, f(x_i)) + \lambda J(f) $$&lt;/code&gt;&lt;br /&gt;
+其中&lt;code&gt;$J(f)$&lt;/code&gt;为模型的复杂度,是定义在假设空间 上的泛函。模型f越复杂,复杂度&lt;code&gt;$J(f)$&lt;/code&gt;就越大;反之,模型f越简
+单,复杂度&lt;code&gt;$J(f)$&lt;/code&gt;就越小。也就是说,复杂度表示了对复杂模型的惩罚。 &lt;code&gt;$\lambda \ge 0$&lt;/code&gt;是系数,用以权衡经验风险和模型复杂度。&lt;strong&gt;结构风险小需要经验风险与模型复杂度同时小&lt;/strong&gt;。&lt;br /&gt;
+贝叶斯估计中的最大后验概率估计(maximum posterior probability   estimation,MAP)就是结构风险最小化的一个例子。&lt;strong&gt;当模型是条件概率分布、损失函数是对数损失函数、模型复杂度由模型的先验概率表示时,结构风险最小化就等价于最大后验概率估计&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h1 id=&#34;3-算法:b06856972157b699cfa45f18de0ae7a3&#34;&gt;3. 算法&lt;/h1&gt;
+
+&lt;p&gt;算法是指学习模型的具体计算方法。统计学习基于训练数据集,根据学习策略,从假设空间中选择最优模
+型,最后需要考虑用什么样的计算方法求解最优模型。&lt;/p&gt;
+
+&lt;h2 id=&#34;正则化:b06856972157b699cfa45f18de0ae7a3&#34;&gt;正则化&lt;/h2&gt;
+
+&lt;p&gt;模型选择的典型方法是正则化(regularization)。正则化是结构风险最小化策略的实现,是在经验风险上
+加一个正则化项(regularizer)或罚项(penalty term)。正则化项一般是模型复杂度的单调递增函数,模型越复
+杂,正则化值就越大。比如,&lt;strong&gt;正则化项可以是模型参数向量的范数&lt;/strong&gt;。正则化一般具有如下形式:
+&lt;code&gt;$$ \min \limits_{f \in F} \frac{1}{N} \sum_{i=1}^N L(y_i, f(x_i))  + \lambda J(f)$$&lt;/code&gt;&lt;br /&gt;
+其中,第1项是经验风险,第2项是正则化项.&lt;br /&gt;
+正则化项可以取不同的形式。例如&lt;strong&gt;,回归问题中,损失函数是平方损失,正则化项可以是参数向量的L2范
+数&lt;/strong&gt;:
+&lt;code&gt;$$ \frac{1}{N} \sum_{i=1}^N L(y_i, f(x_i))  + \frac{\lambda}{2} \| w \|^2  \quad (\text{L2范数之后再平方})  $$&lt;/code&gt;&lt;br /&gt;
+这里,&lt;code&gt;$\| w \|$&lt;/code&gt;表示参数向量w的L2范数。&lt;br /&gt;
+正则化项也可以是参数向量的L1范数:
+&lt;code&gt;$$ \frac{1}{N} \sum_{i=1}^N L(y_i, f(x_i))  + \frac{\lambda}{2} \| w \|_1  \quad (\text{L1范数是绝对值之和})    $$&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;正则化符合奥卡姆剃刀(Occam&amp;rsquo;s  razor)原理。奥卡姆剃刀原理应用于模型选择时变为以下想法:在所有可能选择的模型中,能够很好地解释已知数据并且十分简单才是最好的模型,也就是应该选择的模型。从贝叶斯估计的角度来看,正则化项对应于模型的先验概率。可以假设复杂的模型有较小的先验概率,简单的模型有较大的先验概率。&lt;/p&gt;
+
+&lt;h1 id=&#34;4-生成模型与判别模型:b06856972157b699cfa45f18de0ae7a3&#34;&gt;4. 生成模型与判别模型&lt;/h1&gt;
+
+&lt;p&gt;监督学习的任务就是学习一个模型,应用这一模型,对给定的输入预测相应的输出。这个模型的一般形式
+为决策函数:
+&lt;code&gt;$$ Y=f(X) $$&lt;/code&gt;
+或者条件概率分布：
+&lt;code&gt;$$ P(Y \mid X) $$&lt;/code&gt;
+监督学习方法又可以分为生成方法(generative approach)和判别方法(discriminative approach)。所学到的模型分别称为生成模型(generative    model)和判别模型(discriminative model)。&lt;br /&gt;
+&lt;strong&gt;生成方法由数据学习联合概率分布&lt;/strong&gt;&lt;code&gt;$P(X,Y)$&lt;/code&gt;,然后求出条件概率分布&lt;code&gt;$P(Y|X)$&lt;/code&gt;作为预测的模型,即生成模型:
+&lt;code&gt;$$ P(Y \mid X) = \frac{P(X, Y)} {P(X)} $$&lt;/code&gt;
+&lt;strong&gt;这样的方法之所以称为生成方法,是因为模型表示了给定输入X产生输出Y的生成关系&lt;/strong&gt;。典型的生成模型有:朴素贝叶斯法和隐马尔可夫模型.&lt;br /&gt;
+判别方法由数据直接学习决策函数&lt;code&gt;$f(X)$&lt;/code&gt;或者条件概率分布&lt;code&gt;$P(Y \mid X)$&lt;/code&gt;作为预测的模型,即判别模型。判别方法关心的是对给定的输入X,应该预测什么样的输出Y。典型的判别模型包括:k近邻法、感知机、决策树、逻辑斯谛回归模型、最大熵模型、支持向量机、提升方法和条件随机场等.&lt;br /&gt;
+&lt;strong&gt;生成方法的特点&lt;/strong&gt;:生成方法可以还原出联合概率分布&lt;code&gt;$P(X,Y)$&lt;/code&gt;,而判别方法则不能;生成方法的学习收敛速
+度更快,即当样本容量增加的时候,学到的模型可以更快地收敛于真实模型;当存在隐变量时,仍可以用生成
+方法学习,此时判别方法就不能用。&lt;br /&gt;
+&lt;strong&gt;判别方法的特点&lt;/strong&gt;:判别方法直接学习的是条件概率&lt;code&gt;$P(Y \mid X)$&lt;/code&gt;或决策函数&lt;code&gt;$f(X)$&lt;/code&gt;,直接面对预测,往往学习的准确率更高;由于直接学习&lt;code&gt;$P(Y \mid X)$&lt;/code&gt;或&lt;code&gt;$f(X)$&lt;/code&gt;,可以对数据进行各种程度上的抽象、定义特征并使用特征,因此可以简化学习问题。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
