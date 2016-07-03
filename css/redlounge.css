@@ -591,3 +591,20 @@ nav.pagination ul li.current a {
 	font-weight: bold;
 	color: #111;
 }
+
+/* bg color of selected text */
+::-moz-selection { 
+	color: #fff; 
+	text-shadow: none; 
+	background: #333; 
+}
+::-webkit-selection { 
+	color: #fff; 
+	text-shadow: none; 
+	background: #333; 
+}
+::selection { 
+	color: #fff; 
+	text-shadow: none; 
+	background: #333; 
+}

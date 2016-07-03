@@ -141,6 +141,48 @@ code.has-jax {font: inherit;
 	<header class="post-header">
 		
 		<h1 class="post-title">
+		  <a href="/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/">Sequence to Sequence Learning with Neural Networks</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jun</span> <span class="post-date-year">2016</span>
+	</span>
+	
+	
+		By <a class="post-author" >songsong</a>
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>2 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <p>该论文使用Encoder-Decoder模型, 进行end-to-end的训练来进行机器翻译. 该论文与<a href="http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/">Neural Machine Translation By Jointly Learning To Align And Translate</a>的主要区别在于:<br />
+1. 该论文中不是使用Bidirectional RNN, 而是使用了multi-layer RNN, 发现比shallow RNN效果好(可能因为deep结构包含更多的隐藏状态).<br />
+2. 该论文将输入序列进行反向, 再一次输入到Encoder的RNN中.<br />
+正常顺序输入的Encoder序列与Decoder序列之间有一个比较大的&rdquo;minimal time lag&rdquo;, 将输入序列方向之后, 虽然输入序列与输出序列对应词语之间的平均距离没有改变, 但是输入序列最前面的一些词语与输出序列的对应词语更加近了, 也就是说&rdquo;minimal time lag&rdquo;减小了.<br />
+3. 该论文没有使用attention.<br />
+4. 该论文在输出翻译句子时使用了<a href="https://en.wikipedia.org/wiki/Beam_search">beam search</a>方法, 而不是传统的greedy search方法.</p>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
 		  <a href="/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/">Opinion Mining with Deep Recurrent Neural Networks笔记</a>
 	  </h1>
 	</header>
@@ -159,13 +201,14 @@ code.has-jax {font: inherit;
 	
 	<div class="post-categories">
 		
-		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">nlp</a>
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
 		
 	</div>
 	
 	</p>
 	<article class="post-summary">
-	  本文对传统的RNN进行改进，结合BidirectionalRNN，提出了Deep bidirectional RNN。 传统的RNN（图a）信息传播方向是从前往后一个方向，某个时刻t的隐藏状态仅仅包含它之前词语的语义信息： $f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（比如softmax）。 Bidirectional RNN（图b）包含前向和后向RNN两个部分，分别从相反的反向进行信息的传播，再将每个时刻的两个方向的隐藏状态联合起来计算输出值： 可以看到，前向RNN和反向RNN的参数是互相独立的。 Deep RNN（图c）是将多个传统RNN进行叠加而来，即每一层计算隐藏状态的输入都为上一层的输出。 Deep Bidirectional RNN（图d）则是将Bidirectional RNN与Deep RNN结合起来： 第$i$层（$i&gt;1$）第$t$个时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i)}}$依赖于三个输入：第$i-1$层$t$时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i-1)}}$和后向隐藏状态$\overleftarrow{{h_t}^{(i-1)}}$以及第$i$层$t-1$时刻的前向隐藏状态. 第$i$层（$i&gt;1$）第$t$个时刻的后向隐藏状态$\overleftarrow{{h_t}^{(i)}}$的计算同理: 第1层隐藏状态机算比较特殊,也比较简单: 输出的计算有两种选择:一是使用所有时刻的隐藏状态计算输出,或者仅使用最后一个时刻的隐藏状态.这里使用第二种方案: 该文是通过堆叠（stack）RNN的方式达到Deep RNN的结构，Pascanu等的论文采取了另一种思路进行Deep RNN的扩展。
+	  <p>本文对传统的RNN进行改进，结合BidirectionalRNN，提出了Deep bidirectional RNN。</p>
+
 	</article>
 	<div class="read-more-link">
 	  <a href="/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/"><span class="read-more-slashes">//</span>Read More...</a>
@@ -195,15 +238,16 @@ code.has-jax {font: inherit;
 	
 	<div class="post-categories">
 		
-		<a class="post-category post-category-ubuntu" href="http://blog.songru.org//tags/ubuntu">ubuntu</a>
+		<a class="post-category post-category-ubuntu" href="http://blog.songru.org//tags/ubuntu">Ubuntu</a>
 		
-		<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">linux</a>
+		<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">Linux</a>
 		
 	</div>
 	
 	</p>
 	<article class="post-summary">
-	  原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。 方法一（持久性修改） 首先查看matplotlib支持的中文字体 # -*- coding: utf-8 -*- from matplotlib.font_manager import FontManager import subprocess fm = FontManager() mat_fonts = set(f.name for f in fm.ttflist) output = subprocess.check_output( 'fc-list :lang=zh -f &quot;%{family}\n&quot;', shell=True) # print '*' * 10, '系统可用的中文字体', '*' * 10 # print output zh_fonts = set(f.split(',', 1)[0] for f in output.split('\n')) available = mat_fonts &amp; zh_fonts print '*' * 10, '可用的字体', '*' * 10 for f in available: print f 输出为： Droid Sans Fallback YaHei Consolas Hybrid 就是求出系统字体列表与matplotlib字体列表的交集 2.修改matplotlibrc文件 Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/matplotlibrc，然后配置后者即可 修改font.sans-serif为上面的一个输出结果即可, 还需要修改axes.unicode_minus为False,否则图像是负号&rsquo;-&lsquo;会显示为方块.
+	  <p>原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。</p>
+
 	</article>
 	<div class="read-more-link">
 	  <a href="/posts/linux/Ubuntu_Matplotlib_fix/"><span class="read-more-slashes">//</span>Read More...</a>
@@ -233,13 +277,14 @@ code.has-jax {font: inherit;
 	
 	<div class="post-categories">
 		
-		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">nlp</a>
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
 		
 	</div>
 	
 	</p>
 	<article class="post-summary">
-	  本文主要创新在传统的神经机器翻译上进行改进，确切的说是改进了基本的RNN Encoder-Decoder模型,提出了Alignment model，即实现了Attention model. 传统的encoder-decoder模型如下图所示: 该模型通过神经网络将所有的输入信息压缩为一个固定长度的向量$w$,然后通过decoder的神经网络解码这个$w$，最后得出翻译结果. 使用固定长度的向量是该模型的一个缺点,因为该向量很难将所有需要的信息编码到其中，对于长度大的句子,该模型的效果会显著下降. 本文作者提出的改进模型结构为: 主要有4个方面改进: 1. GRU 和 Bidirectional RNN RNN网络的结果采用的是GRU单元，双向神经网络(Bidirectional).一个BiRNN由前向(forward)和后向(backward)RNN组成,前向RNN &amp;(\stackrel{\rightarrow}{\mbox{f}})&amp; 按顺序读取输入序列(从&amp;(x_f)&amp;到&amp;(x_{T_x})&amp;)，计算得出前向RNN的隐含状态序列&amp;((\vec{h_1},\cdots,\vec{h_{T_x}} ))&amp; 。反向RNN$\stackrel{\leftarrow}{\mbox{f}}$则逆序读取输入序列(从$x_{T_x}$到$x_1$)，计算得出$(\stackrel{\leftarrow}{h_1},\cdots,\stackrel{\leftarrow}{h_{T_x}})$ . 对于一个词$x_j$直接concatenating前向$\vec{h_j}$与后向$\stackrel{\leftarrow}{h_j}$，即$h_j=\left[\begin{array}{c}\stackrel{\rightarrow}{h_j} \\ \stackrel{\leftarrow}{h_j} \end{array} \right]$，计算时词向量矩阵$E$是前向与后向网络共享的，其他参数则不是. 2. 对齐模型(alignment model) 该模型也可以说是实现了注意力模型(Attention model). 通过该模型计算得到输入时刻$j$在预测输出时刻$i$时所占的权重$\alpha _{ij}$.比如说翻译&ldquo;我喜欢飞机&rdquo;到&ldquo;I like airplane&rdquo;,翻译输出&ldquo;I&rdquo;时，&ldquo;我&rdquo;字所占的权重会比较大. 权重$\alpha _{ij}$是通过一个单层的多层感知机计算得到,该模型与算法中其他部分同时训练: 3. Encoder 和 Decoder Encoder的计算如下： $E$表示词向量的矩阵，$x_i$表示$i$时刻的词,是一个$k$维的向量(词典大小维度的向量,应该是one-hot的)，反向过程的计算与上面类似。 Decoder的计算如下： 初始的隐藏状态为：$$s_0 = tanh(W_s\stackrel{\leftarrow}{h_1})$$ 每一步的context向量都需要通过Alignment model重新计算: 最后计算$y_i$的概率: 使用了maxout（第二个公式），取相邻两个数中较大的一个。需要计算词典中所有词出现的概率，最后取最大的那一个？ 具体的实现细节见论文的附录
+	  <p>本文主要创新在传统的神经机器翻译上进行改进，确切的说是改进了基本的RNN Encoder-Decoder模型,提出了Alignment model，即实现了Attention model.</p>
+
 	</article>
 	<div class="read-more-link">
 	  <a href="/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/"><span class="read-more-slashes">//</span>Read More...</a>
@@ -269,13 +314,14 @@ code.has-jax {font: inherit;
 	
 	<div class="post-categories">
 		
-		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">nlp</a>
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
 		
 	</div>
 	
 	</p>
 	<article class="post-summary">
-	  本文主要创新在于提出一个新的神经网络模型RNN Encoder-Decoder，并提出GRU单元.将训练的模型作为standard phrase-based statistical machine translation system的一部分，用于计算phrase table中的每一个phrase的得分。 1. RNN Encoder-Decoder 该模型由两个RNN组成，分别作为Encoder和Decoder，Encoder的作用是读取一个变长的序列数据，将其编码为一个固定长度的向量，再通过Decoder将这个向量解码为一个变长的序列数据. Encoder为一个由GRU单元组成的RNN网络: $e(x_t)$代表t时刻输入词的向量表示，初始的隐藏状态$h^{(0)}$固定为$0$，最后计算得出一个固定长度的编码结果： Decoder也为一个由GRU单元组成的RNN网络: 它首先初始化隐藏状态： 其网络的计算公式为： 这里每一个时刻的计算都用到了Encoder传递过来的编码向量$c$，并且它的值是不变的。 最后通过Softmax计算概率（没看懂），还有maxout。。。
+	  <p>本文主要创新在于提出一个新的神经网络模型RNN Encoder-Decoder，并提出GRU单元.将训练的模型作为standard phrase-based statistical machine translation system的一部分，用于计算phrase table中的每一个phrase的得分。</p>
+
 	</article>
 	<div class="read-more-link">
 	  <a href="/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/"><span class="read-more-slashes">//</span>Read More...</a>
@@ -305,7 +351,7 @@ code.has-jax {font: inherit;
 	
 	<div class="post-categories">
 		
-		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">nlp</a>
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
 		
 	</div>
 	
@@ -351,7 +397,9 @@ theano.printing.pydotprint(forward_prop, var_with_name_simple=True, compact=True
 	
 	<div class="post-categories">
 		
-		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">nlp</a>
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+		
+		<a class="post-category post-category-ml" href="http://blog.songru.org//tags/ml">ML</a>
 		
 	</div>
 	
@@ -389,9 +437,9 @@ theano.printing.pydotprint(forward_prop, var_with_name_simple=True, compact=True
 	
 	<div class="post-categories">
 		
-		<a class="post-category post-category-ubuntu" href="http://blog.songru.org//tags/ubuntu">ubuntu</a>
+		<a class="post-category post-category-ubuntu" href="http://blog.songru.org//tags/ubuntu">Ubuntu</a>
 		
-		<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">linux</a>
+		<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">Linux</a>
 		
 	</div>
 	
@@ -439,7 +487,7 @@ rm -r dir //删除文件夹
 	
 	<div class="post-categories">
 		
-		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">nlp</a>
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
 		
 	</div>
 	
@@ -482,7 +530,7 @@ rm -r dir //删除文件夹
 	
 	<div class="post-categories">
 		
-		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">nlp</a>
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
 		
 	</div>
 	
@@ -502,54 +550,25 @@ rm -r dir //删除文件夹
 	</div>
 </section>
 			
-				
-<section  class="post">
-	<header class="post-header">
-		
-		<h1 class="post-title">
-		  <a href="/posts/nlp/nlp_1_introduction/">【自然语言处理之一】介绍</a>
-	  </h1>
-	</header>
-	<p class="post-meta">
-	  
-	  <span class="post-date">
-		<span class="post-date-day"><sup>16</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jul</span> <span class="post-date-year">2015</span>
-	</span>
-	
-	
-		
-	
-	
-		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
-	
-	
-	<div class="post-categories">
-		
-		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">nlp</a>
-		
-	</div>
-	
-	</p>
-	<article class="post-summary">
-	  <p>今天开始看斯坦福大学的自然语言处理课程。</p>
-
-<h1 id="一-什么是自然语言处理-nature-language-processing:a1b5d0a3988a3fc353b3287af28cee1e">一、什么是自然语言处理（Nature Language Processing）？</h1>
-
-<p>首先看什么是自然语言，自然语言是指一种自然地随文化演化的语言。各个国家地区的语言,英语、汉语、日语等等都属于自然语言，它们都是随这文化发展自然形成的，自然语言是人类交流和思维的主要工具，是人类智慧的结晶。与之相对的是“人造语言”，比如各种编程语言。</p>
-
-<p>自然语言处理的任务就是让计算机理解人类的自然语言，从而实现人与计算机之间用自然语言进行有效通信。</p>
-
-<p>自然语言处理并不是一般地研究自然语言，而在于研制能有效地实现自然语言通信的计算机系统，特别是其中的软件系统。因而它是计算机科学的一部分。</p>
-
-	</article>
-	<div class="read-more-link">
-	  <a href="/posts/nlp/nlp_1_introduction/"><span class="read-more-slashes">//</span>Read More...</a>
-	</div>
-</section>
-			
         </div>
 
 		
+		
+		   <nav class="pagination">
+			<h2>Page:</h2>
+			<ul>
+			 
+			 
+			 <li class="current"><a href="/">1</a></li>
+			 
+			 <li><a href="/page/2/">2</a></li>
+			 
+			 
+			 <li><a href="/page/2/">下一页</a></li>
+			 <li><a href="/page/2/">尾页</a></li>
+			 
+			</ul>
+		   </nav>
 		
 
         <div class="footer">

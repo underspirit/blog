@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation笔记 // Leon&#39;s Blog
+    Sequence to Sequence Learning with Neural Networks // Leon&#39;s Blog
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -13,14 +13,14 @@
 
 <meta name="description" content="">
 <meta name="keywords" content="">
-<meta name="author" content="">
+<meta name="author" content="songsong">
 <meta name="generator" content="Hugo 0.14" />
 
-  <meta property="og:title" content="Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation笔记" />
+  <meta property="og:title" content="Sequence to Sequence Learning with Neural Networks" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://blog.songru.org/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/" />
+<meta property="og:url" content="http://blog.songru.org/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/" />
 
 
   
@@ -141,17 +141,24 @@ code.has-jax {font: inherit;
 	    
   		<section class="post">
             <h1 class="post-title">
-              <a href="/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/">Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation笔记</a>
+              <a href="/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/">Sequence to Sequence Learning with Neural Networks</a>
             </h1>
             <h3 class="post-subtitle">
             	
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>27</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2016</span>
+                	<span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jun</span> <span class="post-date-year">2016</span>
             	</span>
             	
             
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">songsong</a></span>
+            		
+
+
+
+
             	
             
 
@@ -168,28 +175,29 @@ code.has-jax {font: inherit;
 
 			
 
-            <p>本文主要创新在于提出一个新的神经网络模型RNN Encoder-Decoder，并提出GRU单元.将训练的模型作为standard phrase-based statistical machine translation system的一部分，用于计算phrase table中的每一个phrase的得分。</p>
+            <p>该论文使用Encoder-Decoder模型, 进行end-to-end的训练来进行机器翻译. 该论文与<a href="http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/">Neural Machine Translation By Jointly Learning To Align And Translate</a>的主要区别在于:<br />
+1. 该论文中不是使用Bidirectional RNN, 而是使用了multi-layer RNN, 发现比shallow RNN效果好(可能因为deep结构包含更多的隐藏状态).<br />
+2. 该论文将输入序列进行反向, 再一次输入到Encoder的RNN中.<br />
+正常顺序输入的Encoder序列与Decoder序列之间有一个比较大的&rdquo;minimal time lag&rdquo;, 将输入序列方向之后, 虽然输入序列与输出序列对应词语之间的平均距离没有改变, 但是输入序列最前面的一些词语与输出序列的对应词语更加近了, 也就是说&rdquo;minimal time lag&rdquo;减小了.<br />
+3. 该论文没有使用attention.<br />
+4. 该论文在输出翻译句子时使用了<a href="https://en.wikipedia.org/wiki/Beam_search">beam search</a>方法, 而不是传统的greedy search方法.</p>
 
 <hr />
 
-<p><strong>1. RNN Encoder-Decoder</strong>
-该模型由两个RNN组成，分别作为Encoder和Decoder，Encoder的作用是读取一个变长的序列数据，将其编码为一个固定长度的向量，再通过Decoder将这个向量解码为一个变长的序列数据.</p>
+<p>下面介绍一下Sequence to Sequence Learning当中的<strong>beam search</strong>:<br />
+在训练好模型之后, 预测阶段我们需要逐个词语的进行预测, 通常的做法(greedy search)是从Decoder的第一个时刻开始选取概率最大的词作为下一个时刻的输入, 这样依次预测得到最终的结果. 但是这里存在一个问题, 就是<strong>最可能的预测结果序列可能并不是从选取的最可能的那个词语开始的.</strong>为了找到概率最大的预测结果, 可以简单的采用列举所有可能的输出序列, 然后选取最大概率的一个, 但是计算的复杂度与句子长度呈指数级增长, 效率太低.</p>
 
-<p>Encoder为一个由GRU单元组成的RNN网络:<br />
-<img src="/img/1458734687528.png" alt="Alt text | center" />
-<br />
-$e(x_t)$代表t时刻输入词的向量表示，初始的隐藏状态$h^{(0)}$固定为$0$，最后计算得出一个固定长度的编码结果：<br />
-<img src="/img/1458735958249.png" alt="Alt text | center" />
-<br />
-Decoder也为一个由GRU单元组成的RNN网络:
-它首先初始化隐藏状态：<br />
-<img src="/img/1458736097645.png" alt="Alt text | center" />
-<br />
-其网络的计算公式为：<br />
-<img src="/img/1458736032536.png" alt="Alt text | center" />
-<br />
-这里每一个时刻的计算都用到了Encoder传递过来的编码向量$c$，并且它的值是不变的。<br />
-最后通过Softmax计算概率（没看懂），还有maxout。。。</p>
+<p>Beam search的思想是首先指定一个数$b$, 称$b$为beam size或beam width. 接下来要做的不是找到最有可能的第一个词, 而是第一个词中最可能的前$b$个(这$b$个候选词就成为beam); 接下来由第一个词预测第二个词, 依次使用选出的$b$个候选词进行预测, 并计算所有这些长度为2的序列的概率(一共$b*n$个这样的序列, $n$为词典大小), 从中选出概率最大的$b$个. 接下来使用前面选定的b个最大概率序列(长度为2)来计算概率最大的长度为3的前$n$个序列, 以此类推.<br />
+Beam search的计算量是greedy search的$b$倍, $b$一般不会取太大(2-5貌似).</p>
+
+<blockquote>
+<p>So the RNN estimates the joint distribution:<br />
+$p(X_1, X_2, X_3, \cdots, X_N)$ over a set of random variables<br />
+What we really want is the mode of this distribution, that is the point with the highest probability. One way to get this is through sampling from the joint distribution and taking the highest probability sample, but this is slow.<br />
+The RNN factors the joint distribution for 3 random variables in this way:<br />
+$$p(x_1, x_2, x_3) = p(x_3 \mid x_1,x_2) * p(x_2 \mid x_1) * p(x_1)$$<br />
+Beam search uses a heuristic that assumes that chains of random variables with high probability have fairly high probability conditionals. Basically you take the k highest probability solutions for $p(x_1)$, then for each of those take the k highest probability solutions for $p(x_2 \mid x_1)$. You then take the k of those with the highest value for $p(x_2 \mid x_1) * p(x_1)$ and repeat.</p>
+</blockquote>
 
 	
 			
@@ -207,16 +215,11 @@ Decoder也为一个由GRU单元组成的RNN网络:
 				<div class="paging">
 					<div class="paging-label">More Reading</div>
 					
-					<span class="paging-newer">
-						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/">Neural Machine Translation By Jointly Learning To Align And Translate笔记</a>
-		            </span>
-		            
 
 					
 					<span class="paging-older">
 						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="/posts/machine-learning/theano%20pydot/">Theano 中使用pydot报错</a>
+			            <a class="paging-link" href="/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/">Opinion Mining with Deep Recurrent Neural Networks笔记</a>
 		            </span>
 		            
 	            </div>
