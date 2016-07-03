@@ -608,3 +608,11 @@ nav.pagination ul li.current a {
 	text-shadow: none; 
 	background: #333; 
 }
+
+/* references  */
+blockquote {
+    padding: 0 0 0 15px;
+    margin: 1em 40px;
+    border-left: 5px solid #dddddd;
+}
+
