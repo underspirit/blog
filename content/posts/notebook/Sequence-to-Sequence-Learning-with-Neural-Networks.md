@@ -8,7 +8,8 @@ title = "Sequence to Sequence Learning with Neural Networks"
 +++
       
 
-该论文使用Encoder-Decoder模型, 进行end-to-end的训练来进行机器翻译. 该论文与[Neural Machine Translation By Jointly Learning To Align And Translate](http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/)的主要区别在于:    
+该论文使用Encoder-Decoder模型, 进行end-to-end的训练来进行机器翻译. 该论文与[Neural Machine Translation By Jointly Learning To Align And Translate](http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/)的主要区别在于:   
+
 1. 该论文中不是使用Bidirectional RNN, 而是使用了multi-layer RNN, 发现比shallow RNN效果好(可能因为deep结构包含更多的隐藏状态).    
 2. 该论文将输入序列进行反向, 再一次输入到Encoder的RNN中.   
 正常顺序输入的Encoder序列与Decoder序列之间有一个比较大的"minimal time lag", 将输入序列方向之后, 虽然输入序列与输出序列对应词语之间的平均距离没有改变, 但是输入序列最前面的一些词语与输出序列的对应词语更加近了, 也就是说"minimal time lag"减小了.    

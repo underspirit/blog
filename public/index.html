@@ -165,12 +165,15 @@ code.has-jax {font: inherit;
 	
 	</p>
 	<article class="post-summary">
-	  <p>该论文使用Encoder-Decoder模型, 进行end-to-end的训练来进行机器翻译. 该论文与<a href="http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/">Neural Machine Translation By Jointly Learning To Align And Translate</a>的主要区别在于:<br />
-1. 该论文中不是使用Bidirectional RNN, 而是使用了multi-layer RNN, 发现比shallow RNN效果好(可能因为deep结构包含更多的隐藏状态).<br />
-2. 该论文将输入序列进行反向, 再一次输入到Encoder的RNN中.<br />
-正常顺序输入的Encoder序列与Decoder序列之间有一个比较大的&rdquo;minimal time lag&rdquo;, 将输入序列方向之后, 虽然输入序列与输出序列对应词语之间的平均距离没有改变, 但是输入序列最前面的一些词语与输出序列的对应词语更加近了, 也就是说&rdquo;minimal time lag&rdquo;减小了.<br />
-3. 该论文没有使用attention.<br />
-4. 该论文在输出翻译句子时使用了<a href="https://en.wikipedia.org/wiki/Beam_search">beam search</a>方法, 而不是传统的greedy search方法.</p>
+	  <p>该论文使用Encoder-Decoder模型, 进行end-to-end的训练来进行机器翻译. 该论文与<a href="http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/">Neural Machine Translation By Jointly Learning To Align And Translate</a>的主要区别在于:</p>
+
+<ol>
+<li>该论文中不是使用Bidirectional RNN, 而是使用了multi-layer RNN, 发现比shallow RNN效果好(可能因为deep结构包含更多的隐藏状态).<br /></li>
+<li>该论文将输入序列进行反向, 再一次输入到Encoder的RNN中.<br />
+正常顺序输入的Encoder序列与Decoder序列之间有一个比较大的&rdquo;minimal time lag&rdquo;, 将输入序列方向之后, 虽然输入序列与输出序列对应词语之间的平均距离没有改变, 但是输入序列最前面的一些词语与输出序列的对应词语更加近了, 也就是说&rdquo;minimal time lag&rdquo;减小了.<br /></li>
+<li>该论文没有使用attention.<br /></li>
+<li>该论文在输出翻译句子时使用了<a href="https://en.wikipedia.org/wiki/Beam_search">beam search</a>方法, 而不是传统的greedy search方法.<br /></li>
+</ol>
 
 	</article>
 	<div class="read-more-link">
