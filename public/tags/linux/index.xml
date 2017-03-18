@@ -6,8 +6,33 @@
     <description>Recent content in Linux on Leon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sat, 23 Apr 2016 10:09:12 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 18 Mar 2017 09:36:53 +0800</lastBuildDate>
     <atom:link href="http://blog.songru.org/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Ubuntu 14.04 笔记本双显卡cuda 安装</title>
+      <link>http://blog.songru.org/posts/linux/NoteBook-Ubuntu-Install/</link>
+      <pubDate>Sat, 18 Mar 2017 09:36:53 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/linux/NoteBook-Ubuntu-Install/</guid>
+      <description>
+
+&lt;h1 id=&#34;ubuntu-14-04-笔记本双显卡cuda-安装:b5033d739bcdb1d7b241dd7a0f168519&#34;&gt;Ubuntu 14.04 笔记本双显卡cuda 安装&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装ubuntu系统&lt;/li&gt;
+&lt;li&gt;在系统设置 -&amp;gt;  软件和更新 -&amp;gt; 附加驱动 中如果有nvidia驱动， 则表示该系统支持cuda， 可以继续后面步骤。&lt;/li&gt;
+&lt;li&gt;下载新版的NVIDIA显卡驱动， CUDA的run file里面的驱动或者是deb中的都太老了, 不适合新版tensorflow。&lt;/li&gt;
+&lt;li&gt;安装新版的NVIDIA驱动：&lt;br /&gt;
+&lt;code&gt;sh NVIDIA-Linux-x86_64-375.26.run -no-x-check -no-nouveau-check -no-opengl-files&lt;/code&gt;
+–no-x-check 安装驱动时关闭X服务
+–no-nouveau-check 安装驱动时禁用nouveau
+–no-opengl-files 只安装驱动文件，不安装OpenGL文件&lt;/li&gt;
+&lt;li&gt;通过run文件安装cuda，选择不安装显卡驱动&lt;/li&gt;
+&lt;li&gt;成功&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
     
     <item>
       <title>Ubuntu下matplotlib绘图中文乱码</title>

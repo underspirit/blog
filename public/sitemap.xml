@@ -3,8 +3,18 @@
   
   <url>
     <loc>http://blog.songru.org/</loc>
-    <lastmod>2016-06-03T14:55:16+08:00</lastmod>
+    <lastmod>2017-03-18T09:40:10+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.songru.org/posts/linux/%E6%94%BE%E6%9D%BE%E5%9C%B0%E6%96%B9/</loc>
+    <lastmod>2017-03-18T09:40:10+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.songru.org/posts/linux/NoteBook-Ubuntu-Install/</loc>
+    <lastmod>2017-03-18T09:36:53+08:00</lastmod>
   </url>
   
   <url>
@@ -60,6 +70,21 @@
   <url>
     <loc>http://blog.songru.org/posts/nlp/nlp_1_introduction/</loc>
     <lastmod>2015-07-16T10:09:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.songru.org/posts/machine-learning/statical-learning-5-Decition-tree/</loc>
+    <lastmod>2015-07-07T10:51:18+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.songru.org/posts/machine-learning/statical-learning-4-Naive-bayes/</loc>
+    <lastmod>2015-07-07T10:34:24+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.songru.org/posts/machine-learning/statical-learning-3-K-nearest-neighbor/</loc>
+    <lastmod>2015-07-07T10:06:46+08:00</lastmod>
   </url>
   
   <url>
