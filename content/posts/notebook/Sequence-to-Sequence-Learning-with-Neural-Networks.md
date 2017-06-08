@@ -2,7 +2,8 @@
 author = "songsong"
 date = "2016-06-03T14:55:16+08:00"
 description = ""
-tags = ["NLP"]
+categories = ["Nature Language Processing"]
+tags = ["NLP","RNN", "Encoder-Decoder", "Beam search"]
 title = "Sequence to Sequence Learning with Neural Networks"
 
 +++

@@ -47,8 +47,10 @@
             {{ end }}
 
 			{{ $Site := .Site }}
+            
 			{{ if .Params.tags }}
 				<div class="post-categories" style="margin-bottom: 25px;">
+					<span class="dark-red">Keywords</span><span class="decorative-marker">：</span>
 				{{ range .Params.tags }}
 					<a class="post-category post-category-{{ . | urlize }}" href="{{ $Site.BaseURL}}/tags/{{ . | urlize }}">{{ . }}</a>
 				{{ end }}
@@ -69,14 +71,15 @@
 		    	{{ partial "socialsharing.html" . }}
 		    {{ end }}
 
-			{{ if .Params.tags }}
+			{{ if .Params.categories }}
 				<div class="tags-list">
-					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
-					{{ range .Params.tags }}
+					<span class="dark-red">Categories</span><span class="decorative-marker">：</span>
+					{{ range .Params.categories }}
 	                <a class="post-tag post-tag-{{ . | urlize }}" href="{{ $Site.BaseURL}}/tags/{{ . | urlize }}">{{ . }}</a>,
 	                {{ end }}
 				</div>
 			{{ end }}
+
 
 			{{ if not .Params.nopaging }}
 				<div class="paging">

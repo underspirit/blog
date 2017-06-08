@@ -1,7 +1,8 @@
 +++
 date = "2016-01-02T10:09:12+08:00"
 
-tags = ["NLP", 'ML']
+categories = ["Machine Learning"]
+tags = ["CUDA", "theano"]
 title = "Window7安装theano、anaconda、CUDA"
 
 +++

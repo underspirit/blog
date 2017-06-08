@@ -1,7 +1,8 @@
 +++
 date = "2017-03-18T09:54:19+08:00"
 description = ""
-tags = ["Ubuntu", "grub"]
+categories = ["Linux"]
+tags = ["Ubuntu", "Grub"]
 title = "Ubuntu修复Grub引导(备忘)"
 
 +++

@@ -1,7 +1,8 @@
 +++
 date = "2015-07-03T16:32:27+08:00"
 description = ""
-tags = ["ML"]
+categories = ["Machine Learning", "统计学习方法"]
+tags = ["感知机"]
 title = "统计学习方法读书笔记(2)-感知机"
 
 +++

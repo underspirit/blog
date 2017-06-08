@@ -1,6 +1,7 @@
 +++
 date = "2016-05-24T21:09:12+08:00"
-tags = ["NLP"]
+categories = ["Nature Language Processing"]
+tags = ["NLP", "RNN"]
 title = "Opinion Mining with Deep Recurrent Neural Networks笔记"
 +++
 

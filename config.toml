@@ -5,15 +5,23 @@ paginate = 10
 [taxonomies]
   tag = "tags"
   category = "categories"
-  series = "series"
+[indexes]
+  tag = "tags"
+  category = "categories"
 [params]	#左侧边栏的标题和描述
     sidebartitle = "Leon's Blog"
     sidebartagline = "Is super awesome"
     disqusShortname = "songru"
     fuck = "fuck"
-[[menu.main]]	#左侧边栏链接
+[[menu.main]]	# posts
     name = "Blog"
     url = "/posts"
+[[menu.main]]	# tags
+    name = "Categories"
+    url = "/categories"
+[[menu.main]]	# tags
+    name = "Tags"
+    url = "/tags"
 [[menu.social]]	#社交网落链接,icon
     pre = "<i class='fa fa-github' style='font-size:22px;'></i>"
     url = "https://github.com/underspirit"

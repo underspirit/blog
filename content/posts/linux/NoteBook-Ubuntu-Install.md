@@ -1,12 +1,13 @@
 +++
 date = "2017-03-18T09:36:53+08:00"
 description = ""
-tags = ["Linux"]
-title = "Ubuntu 14.04 笔记本双显卡cuda 安装"
+categories = ["Linux"]
+tags = ["CUDA"]
+title = "Ubuntu 14.04 笔记本双显卡CUDA 安装"
 
 +++
 
-# Ubuntu 14.04 笔记本双显卡cuda 安装
+# Ubuntu 14.04 笔记本双显卡CUDA 安装
 
 1. 安装ubuntu系统
 2. 在系统设置 ->  软件和更新 -> 附加驱动 中如果有nvidia驱动， 则表示该系统支持cuda， 可以继续后面步骤。

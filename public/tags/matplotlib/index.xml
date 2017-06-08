@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Matplotlib on Leon&#39;s Blog</title>
+    <link>http://blog.songru.org/tags/matplotlib/</link>
+    <description>Recent content in Matplotlib on Leon&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sat, 23 Apr 2016 10:09:12 +0800</lastBuildDate>
+    <atom:link href="http://blog.songru.org/tags/matplotlib/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Ubuntu下matplotlib绘图中文乱码</title>
+      <link>http://blog.songru.org/posts/linux/Ubuntu_Matplotlib_fix/</link>
+      <pubDate>Sat, 23 Apr 2016 10:09:12 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/linux/Ubuntu_Matplotlib_fix/</guid>
+      <description>
+
+&lt;p&gt;原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。&lt;/p&gt;
+
+&lt;h2 id=&#34;方法一-持久性修改:c4a9591d3c6525e63df3a6e304bb9db6&#34;&gt;方法一（持久性修改）&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;首先查看matplotlib支持的中文字体&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# -*- coding: utf-8 -*-
+from matplotlib.font_manager import FontManager
+import subprocess
+
+fm = FontManager()
+mat_fonts = set(f.name for f in fm.ttflist)
+
+output = subprocess.check_output(
+    &#39;fc-list :lang=zh -f &amp;quot;%{family}\n&amp;quot;&#39;, shell=True)
+# print &#39;*&#39; * 10, &#39;系统可用的中文字体&#39;, &#39;*&#39; * 10
+# print output
+zh_fonts = set(f.split(&#39;,&#39;, 1)[0] for f in output.split(&#39;\n&#39;))
+available = mat_fonts &amp;amp; zh_fonts
+
+print &#39;*&#39; * 10, &#39;可用的字体&#39;, &#39;*&#39; * 10
+for f in available:
+    print f
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出为：
+Droid Sans Fallback
+YaHei Consolas Hybrid
+就是求出系统字体列表与matplotlib字体列表的交集&lt;/p&gt;
+
+&lt;p&gt;2.修改matplotlibrc文件&lt;br /&gt;
+Ubuntu默认对应的是/etc/matplotlibrc，可以复制到～/.matplotlibrc/matplotlibrc，然后配置后者即可
+修改&lt;strong&gt;font.sans-serif&lt;/strong&gt;为上面的一个输出结果即可, 还需要修改&lt;strong&gt;axes.unicode_minus&lt;/strong&gt;为&lt;strong&gt;False&lt;/strong&gt;,否则图像是负号&amp;rsquo;-&amp;lsquo;会显示为方块.&lt;/p&gt;
+
+&lt;h2 id=&#34;方法二-临时性修改:c4a9591d3c6525e63df3a6e304bb9db6&#34;&gt;方法二（临时性修改）&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# -*- coding: utf-8 -*-
+ import matplotlib as mpl
+ import matplotlib.pyplot as plt
+ 
+ mpl.rcParams[&#39;font.sans-serif&#39;] = [&#39;Droid Sans Fallback&#39;] # 指定字体名字
+ mpl.rcParams[&#39;axes.unicode_minus&#39;] = False #解决保存图像是负号&#39;-&#39;显示为方块的问题
+ plt.figure()
+ plt.xlabel(u&#39;性别&#39;)
+ plt.ylabel(u&#39;人数&#39;)
+ plt.xticks((0,1),(u&#39;男&#39;,u&#39;女&#39;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# -*- coding: utf-8 -*-
+ import matplotlib.pyplot as plt
+ from matplotlib import font_manager
+
+ zh_font = font_manager.FontProperties(fname=r&#39;/home/lsr/Documents/simsun.ttf&#39;, size=14) # 指定字体文件
+ 
+ plt.figure()
+ plt.xlabel(u&#39;性别&#39;, fontproperties=zh_font) # 使用字体配置
+ plt.ylabel(u&#39;人数&#39;,fontproperties=zh_font)
+ plt.xticks((0,1),(u&#39;男&#39;,u&#39;女&#39;)) # 没有使用字体配置，乱码
+ plt.bar(left = (0,1),height = (1,0.5),width = 0.35)
+ plt.show()
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,6 +1,7 @@
 +++
 date = "2015-09-11T10:09:12+08:00"
 
+categories = ["Nature Language Processing"]
 tags = ["NLP"]
 title = "【自然语言处理之二】文本处理基础（Basic Text Processing）"
 

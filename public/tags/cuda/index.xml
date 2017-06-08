@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cuda on Leon&#39;s Blog</title>
+    <link>http://blog.songru.org/tags/cuda/</link>
+    <description>Recent content in Cuda on Leon&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sat, 18 Mar 2017 09:36:53 +0800</lastBuildDate>
+    <atom:link href="http://blog.songru.org/tags/cuda/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Ubuntu 14.04 笔记本双显卡CUDA 安装</title>
+      <link>http://blog.songru.org/posts/linux/NoteBook-Ubuntu-Install/</link>
+      <pubDate>Sat, 18 Mar 2017 09:36:53 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/linux/NoteBook-Ubuntu-Install/</guid>
+      <description>
+
+&lt;h1 id=&#34;ubuntu-14-04-笔记本双显卡cuda-安装:b5033d739bcdb1d7b241dd7a0f168519&#34;&gt;Ubuntu 14.04 笔记本双显卡CUDA 安装&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装ubuntu系统&lt;/li&gt;
+&lt;li&gt;在系统设置 -&amp;gt;  软件和更新 -&amp;gt; 附加驱动 中如果有nvidia驱动， 则表示该系统支持cuda， 可以继续后面步骤。&lt;/li&gt;
+&lt;li&gt;下载新版的NVIDIA显卡驱动， CUDA的run file里面的驱动或者是deb中的都太老了, 不适合新版tensorflow。&lt;/li&gt;
+&lt;li&gt;安装新版的NVIDIA驱动：&lt;br /&gt;
+&lt;code&gt;sh NVIDIA-Linux-x86_64-375.26.run -no-x-check -no-nouveau-check -no-opengl-files&lt;/code&gt;
+–no-x-check 安装驱动时关闭X服务
+–no-nouveau-check 安装驱动时禁用nouveau
+–no-opengl-files 只安装驱动文件，不安装OpenGL文件&lt;/li&gt;
+&lt;li&gt;通过run文件安装cuda，选择不安装显卡驱动&lt;/li&gt;
+&lt;li&gt;成功&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Window7安装theano、anaconda、CUDA</title>
+      <link>http://blog.songru.org/posts/machine-learning/theano%20cuda%20install/</link>
+      <pubDate>Sat, 02 Jan 2016 10:09:12 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/machine-learning/theano%20cuda%20install/</guid>
+      <description>
+
+&lt;p&gt;最开始我使用的是anaconda3，但是一直没有成功，并且很多库对python2的支持更好，所以最好尝试使用anaconda2.
+因为要使用mingw，但是新版的anaconda都没有自带mingw，所以下载了老版本anaconda1.9.2.&lt;/p&gt;
+
+&lt;h1 id=&#34;1-安装cuda:10082a9e681b37c239307c871d1bb53d&#34;&gt;1.安装CUDA&lt;/h1&gt;
+
+&lt;p&gt;我的gpu是GTX 750ti|，使用的是CUDA7，安装简单（已久忘了细节，传说中使用默认路径安装好些，笔记本上是GTX 950M，CUDA7.5）。安装好CUDA后，跑程序可能遇到cuda is installed,but unavailale的错误，这个我查的结果说是显卡驱动太低，然后我就更新为最新的显卡驱动！！
+安装完之后在cmd下执行nvcc -V查看版本成功的话，则表示小成。
+要的话，进到sample目录，用相应的vs打开解决方案，然后生成解决方案，中途可能会有无法打开”d3dx9.h”、”d3dx10.h”、”d3dx11.h”头文件，可以&lt;a href=&#34;http://www.microsoft.com/en-us/download/details.aspx?id=6812&#34;&gt;下载DXSDK_Jun10.exe&lt;/a&gt;，然后安装到默认目录下；再编译工程即可；然后到bin目录跑生成的程序（deviceQuery.exe还有一些图形程序等），没问题的话则大成了。&lt;br /&gt;
+下面是一个详细的步骤（copy来的）:&lt;br /&gt;
+　　　1. 查看本机配置，查看显卡类型是否支持NVIDIA GPU，选中计算机&amp;ndash;&amp;gt; 右键属性 &amp;ndash;&amp;gt; 设备管理器 &amp;ndash;&amp;gt; 显示适配器：NVIDIA GeForce GT 610，在&lt;a href=&#34;https://developer.nvidia.com/cuda-gpus&#34;&gt;这里&lt;/a&gt;可以查到相应显卡的compute capability；&lt;br /&gt;
+　　　2. 在&lt;a href=&#34;http://www.nvidia.cn/Download/index.aspx?lang=cn&#34;&gt;这里&lt;/a&gt;下载合适驱动347.88-desktop-win8-win7-winvista-64bit-international-whql.exe 并安装；&lt;br /&gt;
+　　　3. 从&lt;a href=&#34;https://developer.nvidia.com/cuda-toolkit&#34;&gt;https://developer.nvidia.com/cuda-toolkit&lt;/a&gt;   根据本机类型下载相应的最新版本CUDA7.0安装；&lt;br /&gt;
+　　　4. 按照&lt;a href=&#34;http://docs.nvidia.com/cuda/cuda-getting-started-guide-for-microsoft-windows/index.html#axzz3W8BU10Ol&#34;&gt;官方文档&lt;/a&gt;步骤，验证是否安装正确：&lt;br /&gt;
+　　　　　(1) 打开C:\ProgramData\NVIDIACorporation\CUDA Samples\v7.0目录下的Samples_vs2010.sln工程，分别在Debug、Release x64下编译整个工程；&lt;br /&gt;
+　　　　　(2) 编译过程中，会提示找不到”d3dx9.h”、”d3dx10.h”、”d3dx11.h”头文件，可以&lt;a href=&#34;http://www.microsoft.com/en-us/download/details.aspx?id=6812&#34;&gt;下载DXSDK_Jun10.exe&lt;/a&gt;，然后安装到默认目录下；再编译工程即可；&lt;br /&gt;
+　　　　　(3) 打开C:\ProgramData\NVIDIACorporation\CUDA Samples\v7.0\bin\win64\Release目录，打开cmd命令行，将deviceQuery.exe直接拖到cmd中，回车，会显示GPU显卡、CUDA版本等相关信息，最后一行显示：Result = PASS；&lt;br /&gt;
+　　　　　(4) 将bandwidthTest.exe拖到cmd中，回车，会显示Device0: GeForce GT 610等相关信息，后面也会有一行显示：Result = PASS；&lt;/p&gt;
+
+&lt;h1 id=&#34;2-安装anaconda:10082a9e681b37c239307c871d1bb53d&#34;&gt;2.安装anaconda&lt;/h1&gt;
+
+&lt;p&gt;开始使用的是anacond192版本，最后都配置成功了，但是这个版本的ipython notebook等等东西版本太低，我就用conda update了一下，导致一切都玩完了，theano又跑不起来了。所以后来就换成了anaconda2.4.1，是anaconda2的最新版本，但是没有mingw（这时我已经知道怎么配了，所以没有也不怕，我自己安）。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装anaconda很简单，傻瓜式的&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;装mingw，运行conda install mingw即可&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;装theano，因为conda库中没有theano，所以使用pip安装，执行pip install theano即可&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;配置.theanorc.txt&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;在home目录下(我的是c:/uesrs/lisongru)创建.theanorc.txt,输入一下内容&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[blas]
+ldflags =
+[gcc]
+cxxflags = -IE:\Anaconda2\MinGW    #安装的mingw目录
+[nvcc]
+fastmath = True
+flags=-LE:\Anaconda2\libs
+compiler-bindir=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin   #vs的目录,不知是否可以不要,因为下面path也配了
+flags =  -arch=sm_30   #这句没有也行,好像,未测试
+base_compiledir=path_to_a_directory_without_such_characters   #这句没有也行,好像,未测试
+[global]
+openmp = False
+floatX = float32
+device = gpu   #cpu则使用cpu
+allow_input_downcast=True
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;3-配置环境变量:10082a9e681b37c239307c871d1bb53d&#34;&gt;3.配置环境变量&lt;/h1&gt;
+
+&lt;p&gt;这一步非常关键,开始我的电脑有cygwin，并且也在path中，然后运行import theano总是报错，原因是cygwin被用来编译了，但我们要用的是。。。（我也不清楚),后来删除它的path,加入vs_bin的path,就好了.
+下面是一些相关的path&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;VS10_VC_BIN%        #vs的bin目录,和上面的compiler-bindir一样,这必须有,没有则包找不到cl.exe...
+%CUDA_PATH%\bin     #安装cuda好像默认会有,没有自己加,有它才能在cmd中nvcc -V查看
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\libnvvp;        #cuda安装自带
+C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common      #自带
+%ANACONDA2_HOME%;%ANACONDA2_SCRIPTS%;%ANACONDA2_BIN%        #anaconda自带
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;4-遇到的问题:10082a9e681b37c239307c871d1bb53d&#34;&gt;4.遇到的问题&lt;/h1&gt;
+
+&lt;p&gt;在笔记本上安装好一切后，报collect2: ld returned 1 exit status错，查的结果说是python 32位与64位冲突，那时笔记本上正好有32位的一个python，就卸载了，但还是不行。
+再查，说是少了libpython包,安装之:conda install libpython，然后就好了。。。（这里有点奇怪，在台式机上没有这个包也成功了）。&lt;br /&gt;
+&amp;gt; Written with &lt;a href=&#34;https://stackedit.io/&#34;&gt;StackEdit&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

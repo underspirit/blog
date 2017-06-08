@@ -1,7 +1,8 @@
 +++
 date = "2016-03-27T21:09:12+08:00"
 
-tags = ["NLP"]
+categories = ["Nature Language Processing"]
+tags = ["NLP", "GRU", "RNN", "Encoder-Decoder"]
 title = "Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation笔记"
 
 +++

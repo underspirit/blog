@@ -16,11 +16,12 @@
 	{{ end }}
 
 <div class="content pure-u-1 pure-u-md-3-4">
+    <h1 id="title">{{ .Title }}</h1>
 	<div class="posts">
 	{{ range .Data.Pages.GroupByDate "2006" }}
-		<h1>
+		<h2>
 			{{ .Key }}
-		</h1>
+		</h2>
 		{{ range .Pages }}
 		<section class="post" style="
 		margin-left: 40px;
@@ -39,10 +40,10 @@
 				</h3>
 
 				{{ $Site := .Site }}
-				{{ if .Params.categories }}
+				{{ if .Params.tags }}
 					<div class="post-categories" style="vertical-align: text-bottom;display: inline;">
-					{{ range .Params.categories }}
-						<a class="post-category post-category-{{ . | urlize }}" href="{{ $Site.BaseURL}}/categories/{{ . | urlize }}">{{ . }}</a>
+					{{ range .Params.tags }}
+						<a class="post-category post-category-{{ . | urlize }}" href="{{ $Site.BaseURL}}/tags/{{ . | urlize }}">{{ . }}</a>
 					{{ end }}
 					</div>
 				{{ end }}

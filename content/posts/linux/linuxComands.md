@@ -1,8 +1,9 @@
 +++
 date = "2015-09-22T10:09:12+08:00"
 
-tags = ["Ubuntu", "Linux"]
-title = "Linux命令（目前使用过的）"
+categories = ["Linux"]
+tags = ["Ubuntu", "Shell"]
+title = "Linux命令"
 
 +++
 1. 移动文件（夹）

@@ -1,7 +1,8 @@
 +++
 date = "2015-09-13T21:09:12+08:00"
 
-tags = ["NLP"]
+categories = ["Nature Language Processing"]
+tags = ["NLP", "最小编辑距离"]
 title = "【自然语言处理之三】最小编辑距离（Minimum Edit Distance）"
 
 +++

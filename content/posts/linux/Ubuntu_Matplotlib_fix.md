@@ -1,7 +1,8 @@
 +++
 date = "2016-04-23T10:09:12+08:00"
 
-tags = ["Ubuntu", "Linux"]
+categories = ["Linux"]
+tags = ["Ubuntu", "Matplotlib"]
 title = "Ubuntu下matplotlib绘图中文乱码"
 
 +++

@@ -1,7 +1,8 @@
 +++
 date = "2017-03-18T09:54:01+08:00"
 description = ""
-tags = ["Linux", "Socket"]
+categories = ["Linux"]
+tags = ["Socket"]
 title = "Linux Socket使用小结"
 
 +++

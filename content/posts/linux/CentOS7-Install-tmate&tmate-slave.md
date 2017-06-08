@@ -1,7 +1,8 @@
 +++
 date = "2017-03-18T09:48:26+08:00"
 description = ""
-tags = ["Linux"]
+categories = ["Linux"]
+tags = ["tmate", "Centos"]
 title = "Centos 7安装tmate和tmate-slave"
 
 +++

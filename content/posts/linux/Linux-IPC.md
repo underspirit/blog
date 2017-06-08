@@ -1,7 +1,8 @@
 +++
 date = "2017-03-18T09:53:43+08:00"
 description = ""
-tags = ["Linux", "IPC"]
+categories = ["Linux"]
+tags = ["IPC"]
 title = "Linux IPC总结(Posix和System V对比)"
 
 +++

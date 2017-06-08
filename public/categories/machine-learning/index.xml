@@ -1,13 +1,60 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Ml on Leon&#39;s Blog</title>
-    <link>http://blog.songru.org/tags/ml/</link>
-    <description>Recent content in Ml on Leon&#39;s Blog</description>
+    <title>Machine Learning on Leon&#39;s Blog</title>
+    <link>http://blog.songru.org/categories/machine-learning/</link>
+    <description>Recent content in Machine Learning on Leon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sat, 02 Jan 2016 10:09:12 +0800</lastBuildDate>
-    <atom:link href="http://blog.songru.org/tags/ml/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 03 Jan 2016 10:09:12 +0800</lastBuildDate>
+    <atom:link href="http://blog.songru.org/categories/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Theano 中使用pydot报错</title>
+      <link>http://blog.songru.org/posts/machine-learning/theano%20pydot/</link>
+      <pubDate>Sun, 03 Jan 2016 10:09:12 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/machine-learning/theano%20pydot/</guid>
+      <description>&lt;p&gt;运行:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# 切换为使用cpu,有这句var_with_name_simple=True的时候会报错...,换成gpu就不报错...
+theano.printing.pydotprint(forward_prop, var_with_name_simple=True, compact=True, outfile=&#39;img/nn-theano-forward_prop.png&#39;, format=&#39;png&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;报错:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pywintypes.error(2,&#39;RegOpenKeyEx&#39;,&#39;\xcf\xb5\xcd\xb3\xd5\xd2\xb2\xbb\xb5\xb...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;原因是未安装好graphviz,于是下载&lt;a href=&#34;http://www.graphviz.org/Download_windows.php&#34;&gt;安装包&lt;/a&gt;,并把安装目录的bin加入到path中(重要!)&lt;/p&gt;
+
+&lt;p&gt;后来又报错:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;RuntimeError: Failed to import pydot. You must install pydot for `pydotprint` to work.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;原因是使用的pyparsing版本太高(我的是2.0.3),使用低版本的即可:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    pip install pyparsing==1.5.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我还安装了pydot2,不知有什么用:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    pip install pydot2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我之后做了一个实验,再把pyparsing升级到2.0.3,报了一个不一样的错:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;InvocationException: Program terminated with status: -1073741819. stderr follows: []
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;将pyparsing再降级即可&amp;hellip;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Written with &lt;a href=&#34;https://stackedit.io/&#34;&gt;StackEdit&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
     
     <item>
       <title>Window7安装theano、anaconda、CUDA</title>
@@ -509,7 +556,7 @@ $$&lt;/code&gt;
     </item>
     
     <item>
-      <title>统计学习方法读书笔记(3)-K近邻算法</title>
+      <title>统计学习方法读书笔记(3)-k近邻算法</title>
       <link>http://blog.songru.org/posts/machine-learning/statical-learning-3-K-nearest-neighbor/</link>
       <pubDate>Tue, 07 Jul 2015 10:06:46 +0800</pubDate>
       

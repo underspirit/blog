@@ -1,7 +1,8 @@
 +++
 date = "2016-03-27T22:09:12+08:00"
 
-tags = ["NLP"]
+categories = ["Nature Language Processing"]
+tags = ["NLP", "Attention", "RNN", "Encoder-Decoder"]
 title = "Neural Machine Translation By Jointly Learning To Align And Translate笔记"
 
 +++

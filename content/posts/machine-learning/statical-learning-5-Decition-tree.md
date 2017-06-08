@@ -1,7 +1,8 @@
 +++
 date = "2015-07-07T10:51:18+08:00"
 description = ""
-tags = ["ML"]
+categories = ["Machine Learning", "统计学习方法"]
+tags = ["决策树", "Decition Tree"]
 title = "统计学习方法读书笔记(5)-决策树"
 
 +++

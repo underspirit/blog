@@ -233,14 +233,14 @@ sudo ./tmate-slave -p 222
     </item>
     
     <item>
-      <title>Ubuntu 14.04 笔记本双显卡cuda 安装</title>
+      <title>Ubuntu 14.04 笔记本双显卡CUDA 安装</title>
       <link>http://blog.songru.org/posts/linux/NoteBook-Ubuntu-Install/</link>
       <pubDate>Sat, 18 Mar 2017 09:36:53 +0800</pubDate>
       
       <guid>http://blog.songru.org/posts/linux/NoteBook-Ubuntu-Install/</guid>
       <description>
 
-&lt;h1 id=&#34;ubuntu-14-04-笔记本双显卡cuda-安装:b5033d739bcdb1d7b241dd7a0f168519&#34;&gt;Ubuntu 14.04 笔记本双显卡cuda 安装&lt;/h1&gt;
+&lt;h1 id=&#34;ubuntu-14-04-笔记本双显卡cuda-安装:b5033d739bcdb1d7b241dd7a0f168519&#34;&gt;Ubuntu 14.04 笔记本双显卡CUDA 安装&lt;/h1&gt;
 
 &lt;ol&gt;
 &lt;li&gt;安装ubuntu系统&lt;/li&gt;
@@ -624,7 +624,7 @@ C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common      #自带
     </item>
     
     <item>
-      <title>Linux命令（目前使用过的）</title>
+      <title>Linux命令</title>
       <link>http://blog.songru.org/posts/linux/linuxComands/</link>
       <pubDate>Tue, 22 Sep 2015 10:09:12 +0800</pubDate>
       

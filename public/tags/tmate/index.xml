@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tmate on Leon&#39;s Blog</title>
+    <link>http://blog.songru.org/tags/tmate/</link>
+    <description>Recent content in Tmate on Leon&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sat, 18 Mar 2017 09:48:26 +0800</lastBuildDate>
+    <atom:link href="http://blog.songru.org/tags/tmate/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Centos 7安装tmate和tmate-slave</title>
+      <link>http://blog.songru.org/posts/linux/CentOS7-Install-tmate&amp;tmate-slave/</link>
+      <pubDate>Sat, 18 Mar 2017 09:48:26 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/linux/CentOS7-Install-tmate&amp;tmate-slave/</guid>
+      <description>&lt;pre&gt;&lt;code&gt;yum install gcc kernel-devel make ncurses-devel
+yum install git cmake ruby zlib-devel openssl-devel libevent-devel ncurses-devel
+yum group install &amp;quot;Development Tools&amp;quot;
+yum install libssh libssh-devel
+
+# Install msgpack
+yum install msgpack msgpack-devel python-msgpack
+# If not work, then install with source
+git clone https://github.com/msgpack/msgpack-c.git
+cd msgpack-c
+cmake .
+make
+sudo make install
+
+# Install tmate
+./autogen.sh &amp;amp;&amp;amp; \
+./configure  &amp;amp;&amp;amp; \
+make         &amp;amp;&amp;amp; \
+make install
+
+# If not work, install libevent2 with source
+wget https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz
+# cd to libevent2 src
+./configure --prefix=/usr/local
+make &amp;amp;&amp;amp; make install
+
+# Install tmate-slave
+git clone https://github.com/tmate-io/tmate-slave.git &amp;amp;&amp;amp; cd tmate-slave
+./create_keys.sh # This will generate SSH keys, remember the keys fingerprints.
+./autogen.sh &amp;amp;&amp;amp; ./configure &amp;amp;&amp;amp; make
+
+# Start
+sudo ./tmate-slave -p 222
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
