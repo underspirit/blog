@@ -15,12 +15,15 @@ paginate = 10
     fuck = "fuck"
 [[menu.main]]	# posts
     name = "Posts"
+    Weight = 100
     url = "/posts"
 [[menu.main]]	# tags
     name = "Categories"
+    Weight = 110
     url = "/categories"
 [[menu.main]]	# tags
     name = "Tags"
+    Weight = 120
     url = "/tags"
 [[menu.social]]	#社交网落链接,icon
     pre = "<i class='fa fa-github' style='font-size:22px;'></i>"
