@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Attention on Leon&#39;s Blog</title>
+    <link>http://blog.songru.org/tags/attention/</link>
+    <description>Recent content in Attention on Leon&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sun, 27 Mar 2016 22:09:12 +0800</lastBuildDate>
+    <atom:link href="http://blog.songru.org/tags/attention/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Neural Machine Translation By Jointly Learning To Align And Translate笔记</title>
+      <link>http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</link>
+      <pubDate>Sun, 27 Mar 2016 22:09:12 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</guid>
+      <description>&lt;p&gt;本文主要创新在传统的神经机器翻译上进行改进，确切的说是改进了基本的RNN Encoder-Decoder模型,提出了Alignment model，即实现了Attention model.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;传统的encoder-decoder模型如下图所示:
+&lt;img src=&#34;http://blog.songru.org/img/1458651310553.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+该模型通过神经网络将所有的输入信息压缩为一个固定长度的向量$w$,然后通过decoder的神经网络解码这个$w$，最后得出翻译结果.&lt;br /&gt;
+使用固定长度的向量是该模型的一个缺点,因为该向量很难将所有需要的信息编码到其中，对于长度大的句子,该模型的效果会显著下降.&lt;/p&gt;
+
+&lt;p&gt;本文作者提出的改进模型结构为:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458651809449.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+主要有4个方面改进:&lt;br /&gt;
+1. &lt;strong&gt;GRU 和 Bidirectional RNN&lt;/strong&gt;&lt;br /&gt;
+RNN网络的结果采用的是GRU单元，双向神经网络(Bidirectional).一个BiRNN由前向(forward)和后向(backward)RNN组成,前向RNN &amp;amp;(\stackrel{\rightarrow}{\mbox{f}})&amp;amp; 按顺序读取输入序列(从&amp;amp;(x_f)&amp;amp;到&amp;amp;(x_{T_x})&amp;amp;)，计算得出前向RNN的隐含状态序列&amp;amp;((\vec{h_1},\cdots,\vec{h_{T_x}} ))&amp;amp; 。反向RNN$\stackrel{\leftarrow}{\mbox{f}}$则逆序读取输入序列(从$x_{T_x}$到$x_1$)，计算得出$(\stackrel{\leftarrow}{h_1},\cdots,\stackrel{\leftarrow}{h_{T_x}})$ .&lt;br /&gt;
+对于一个词$x_j$直接concatenating前向$\vec{h_j}$与后向$\stackrel{\leftarrow}{h_j}$，即$h_j=\left[\begin{array}{c}\stackrel{\rightarrow}{h_j}  \\  \stackrel{\leftarrow}{h_j}  \end{array} \right]$，计算时词向量矩阵$E$是前向与后向网络共享的，其他参数则不是.&lt;br /&gt;
+2. &lt;strong&gt;对齐模型(alignment model)&lt;/strong&gt;&lt;br /&gt;
+该模型也可以说是实现了注意力模型(Attention model).&lt;br /&gt;
+通过该模型计算得到输入时刻$j$在预测输出时刻$i$时所占的权重$\alpha _{ij}$.比如说翻译&lt;strong&gt;&amp;ldquo;我喜欢飞机&amp;rdquo;&lt;/strong&gt;到&lt;strong&gt;&amp;ldquo;I like airplane&amp;rdquo;&lt;/strong&gt;,翻译输出&lt;strong&gt;&amp;ldquo;I&amp;rdquo;&lt;/strong&gt;时，&lt;strong&gt;&amp;ldquo;我&amp;rdquo;&lt;/strong&gt;字所占的权重会比较大.&lt;br /&gt;
+权重$\alpha _{ij}$是通过一个单层的多层感知机计算得到,该模型与算法中其他部分同时训练:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458736905308.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+3. &lt;strong&gt;Encoder 和 Decoder&lt;/strong&gt;&lt;br /&gt;
+Encoder的计算如下：&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458737365201.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+$E$表示词向量的矩阵，$x_i$表示$i$时刻的词,是一个$k$维的向量(词典大小维度的向量,应该是one-hot的)，反向过程的计算与上面类似。&lt;/p&gt;
+
+&lt;p&gt;Decoder的计算如下：&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458737469906.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+初始的隐藏状态为：$$s_0 = tanh(W_s\stackrel{\leftarrow}{h_1})$$&lt;br /&gt;
+每一步的context向量都需要通过Alignment model重新计算:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738176634.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738239955.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+最后计算$y_i$的概率:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738415785.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738447372.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738462004.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+使用了maxout（第二个公式），取相邻两个数中较大的一个。需要计算词典中所有词出现的概率，最后取最大的那一个？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;具体的实现细节见论文的附录&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

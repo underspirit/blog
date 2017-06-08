@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Encoder Decoder on Leon&#39;s Blog</title>
+    <link>http://blog.songru.org/tags/encoder-decoder/</link>
+    <description>Recent content in Encoder Decoder on Leon&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Fri, 03 Jun 2016 14:55:16 +0800</lastBuildDate>
+    <atom:link href="http://blog.songru.org/tags/encoder-decoder/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Sequence to Sequence Learning with Neural Networks</title>
+      <link>http://blog.songru.org/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/</link>
+      <pubDate>Fri, 03 Jun 2016 14:55:16 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/</guid>
+      <description>&lt;p&gt;该论文使用Encoder-Decoder模型, 进行end-to-end的训练来进行机器翻译. 该论文与&lt;a href=&#34;http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/&#34;&gt;Neural Machine Translation By Jointly Learning To Align And Translate&lt;/a&gt;的主要区别在于:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;该论文中不是使用Bidirectional RNN, 而是使用了multi-layer RNN, 发现比shallow RNN效果好(可能因为deep结构包含更多的隐藏状态).&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;该论文将输入序列进行反向, 再一次输入到Encoder的RNN中.&lt;br /&gt;
+正常顺序输入的Encoder序列与Decoder序列之间有一个比较大的&amp;rdquo;minimal time lag&amp;rdquo;, 将输入序列方向之后, 虽然输入序列与输出序列对应词语之间的平均距离没有改变, 但是输入序列最前面的一些词语与输出序列的对应词语更加近了, 也就是说&amp;rdquo;minimal time lag&amp;rdquo;减小了.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;该论文没有使用attention.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;该论文在输出翻译句子时使用了&lt;a href=&#34;https://en.wikipedia.org/wiki/Beam_search&#34;&gt;beam search&lt;/a&gt;方法, 而不是传统的greedy search方法.&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;下面介绍一下Sequence to Sequence Learning当中的&lt;strong&gt;beam search&lt;/strong&gt;:&lt;br /&gt;
+在训练好模型之后, 预测阶段我们需要逐个词语的进行预测, 通常的做法(greedy search)是从Decoder的第一个时刻开始选取概率最大的词作为下一个时刻的输入, 这样依次预测得到最终的结果. 但是这里存在一个问题, 就是&lt;strong&gt;最可能的预测结果序列可能并不是从选取的最可能的那个词语开始的.&lt;/strong&gt;为了找到概率最大的预测结果, 可以简单的采用列举所有可能的输出序列, 然后选取最大概率的一个, 但是计算的复杂度与句子长度呈指数级增长, 效率太低.&lt;/p&gt;
+
+&lt;p&gt;Beam search的思想是首先指定一个数$b$, 称$b$为beam size或beam width. 接下来要做的不是找到最有可能的第一个词, 而是第一个词中最可能的前$b$个(这$b$个候选词就成为beam); 接下来由第一个词预测第二个词, 依次使用选出的$b$个候选词进行预测, 并计算所有这些长度为2的序列的概率(一共$b*n$个这样的序列, $n$为词典大小), 从中选出概率最大的$b$个. 接下来使用前面选定的b个最大概率序列(长度为2)来计算概率最大的长度为3的前$n$个序列, 以此类推.&lt;br /&gt;
+Beam search的计算量是greedy search的$b$倍, $b$一般不会取太大(2-5貌似).&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;So the RNN estimates the joint distribution:&lt;br /&gt;
+$p(X_1, X_2, X_3, \cdots, X_N)$ over a set of random variables&lt;br /&gt;
+What we really want is the mode of this distribution, that is the point with the highest probability. One way to get this is through sampling from the joint distribution and taking the highest probability sample, but this is slow.&lt;br /&gt;
+The RNN factors the joint distribution for 3 random variables in this way:&lt;br /&gt;
+$$p(x_1, x_2, x_3) = p(x_3 \mid x_1,x_2) * p(x_2 \mid x_1) * p(x_1)$$&lt;br /&gt;
+Beam search uses a heuristic that assumes that chains of random variables with high probability have fairly high probability conditionals. Basically you take the k highest probability solutions for $p(x_1)$, then for each of those take the k highest probability solutions for $p(x_2 \mid x_1)$. You then take the k of those with the highest value for $p(x_2 \mid x_1) * p(x_1)$ and repeat.&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Neural Machine Translation By Jointly Learning To Align And Translate笔记</title>
+      <link>http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</link>
+      <pubDate>Sun, 27 Mar 2016 22:09:12 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/</guid>
+      <description>&lt;p&gt;本文主要创新在传统的神经机器翻译上进行改进，确切的说是改进了基本的RNN Encoder-Decoder模型,提出了Alignment model，即实现了Attention model.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;传统的encoder-decoder模型如下图所示:
+&lt;img src=&#34;http://blog.songru.org/img/1458651310553.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+该模型通过神经网络将所有的输入信息压缩为一个固定长度的向量$w$,然后通过decoder的神经网络解码这个$w$，最后得出翻译结果.&lt;br /&gt;
+使用固定长度的向量是该模型的一个缺点,因为该向量很难将所有需要的信息编码到其中，对于长度大的句子,该模型的效果会显著下降.&lt;/p&gt;
+
+&lt;p&gt;本文作者提出的改进模型结构为:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458651809449.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+主要有4个方面改进:&lt;br /&gt;
+1. &lt;strong&gt;GRU 和 Bidirectional RNN&lt;/strong&gt;&lt;br /&gt;
+RNN网络的结果采用的是GRU单元，双向神经网络(Bidirectional).一个BiRNN由前向(forward)和后向(backward)RNN组成,前向RNN &amp;amp;(\stackrel{\rightarrow}{\mbox{f}})&amp;amp; 按顺序读取输入序列(从&amp;amp;(x_f)&amp;amp;到&amp;amp;(x_{T_x})&amp;amp;)，计算得出前向RNN的隐含状态序列&amp;amp;((\vec{h_1},\cdots,\vec{h_{T_x}} ))&amp;amp; 。反向RNN$\stackrel{\leftarrow}{\mbox{f}}$则逆序读取输入序列(从$x_{T_x}$到$x_1$)，计算得出$(\stackrel{\leftarrow}{h_1},\cdots,\stackrel{\leftarrow}{h_{T_x}})$ .&lt;br /&gt;
+对于一个词$x_j$直接concatenating前向$\vec{h_j}$与后向$\stackrel{\leftarrow}{h_j}$，即$h_j=\left[\begin{array}{c}\stackrel{\rightarrow}{h_j}  \\  \stackrel{\leftarrow}{h_j}  \end{array} \right]$，计算时词向量矩阵$E$是前向与后向网络共享的，其他参数则不是.&lt;br /&gt;
+2. &lt;strong&gt;对齐模型(alignment model)&lt;/strong&gt;&lt;br /&gt;
+该模型也可以说是实现了注意力模型(Attention model).&lt;br /&gt;
+通过该模型计算得到输入时刻$j$在预测输出时刻$i$时所占的权重$\alpha _{ij}$.比如说翻译&lt;strong&gt;&amp;ldquo;我喜欢飞机&amp;rdquo;&lt;/strong&gt;到&lt;strong&gt;&amp;ldquo;I like airplane&amp;rdquo;&lt;/strong&gt;,翻译输出&lt;strong&gt;&amp;ldquo;I&amp;rdquo;&lt;/strong&gt;时，&lt;strong&gt;&amp;ldquo;我&amp;rdquo;&lt;/strong&gt;字所占的权重会比较大.&lt;br /&gt;
+权重$\alpha _{ij}$是通过一个单层的多层感知机计算得到,该模型与算法中其他部分同时训练:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458736905308.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+3. &lt;strong&gt;Encoder 和 Decoder&lt;/strong&gt;&lt;br /&gt;
+Encoder的计算如下：&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458737365201.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+$E$表示词向量的矩阵，$x_i$表示$i$时刻的词,是一个$k$维的向量(词典大小维度的向量,应该是one-hot的)，反向过程的计算与上面类似。&lt;/p&gt;
+
+&lt;p&gt;Decoder的计算如下：&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458737469906.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+初始的隐藏状态为：$$s_0 = tanh(W_s\stackrel{\leftarrow}{h_1})$$&lt;br /&gt;
+每一步的context向量都需要通过Alignment model重新计算:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738176634.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738239955.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+最后计算$y_i$的概率:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738415785.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738447372.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458738462004.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+使用了maxout（第二个公式），取相邻两个数中较大的一个。需要计算词典中所有词出现的概率，最后取最大的那一个？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;具体的实现细节见论文的附录&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation笔记</title>
+      <link>http://blog.songru.org/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/</link>
+      <pubDate>Sun, 27 Mar 2016 21:09:12 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/</guid>
+      <description>&lt;p&gt;本文主要创新在于提出一个新的神经网络模型RNN Encoder-Decoder，并提出GRU单元.将训练的模型作为standard phrase-based statistical machine translation system的一部分，用于计算phrase table中的每一个phrase的得分。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;1. RNN Encoder-Decoder&lt;/strong&gt;
+该模型由两个RNN组成，分别作为Encoder和Decoder，Encoder的作用是读取一个变长的序列数据，将其编码为一个固定长度的向量，再通过Decoder将这个向量解码为一个变长的序列数据.&lt;/p&gt;
+
+&lt;p&gt;Encoder为一个由GRU单元组成的RNN网络:&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458734687528.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+$e(x_t)$代表t时刻输入词的向量表示，初始的隐藏状态$h^{(0)}$固定为$0$，最后计算得出一个固定长度的编码结果：&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458735958249.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+Decoder也为一个由GRU单元组成的RNN网络:
+它首先初始化隐藏状态：&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458736097645.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+其网络的计算公式为：&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1458736032536.png&#34; alt=&#34;Alt text | center&#34; /&gt;
+&lt;br /&gt;
+这里每一个时刻的计算都用到了Encoder传递过来的编码向量$c$，并且它的值是不变的。&lt;br /&gt;
+最后通过Softmax计算概率（没看懂），还有maxout。。。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
