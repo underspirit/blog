@@ -14,7 +14,7 @@ paginate = 10
     disqusShortname = "songru"
     fuck = "fuck"
 [[menu.main]]	# posts
-    name = "Blog"
+    name = "Posts"
     url = "/posts"
 [[menu.main]]	# tags
     name = "Categories"
