@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Socket on Leon&#39;s Blog</title>
+    <link>http://blog.songru.org/tags/socket/</link>
+    <description>Recent content in Socket on Leon&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sat, 18 Mar 2017 09:54:01 +0800</lastBuildDate>
+    <atom:link href="http://blog.songru.org/tags/socket/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Linux Socket使用小结</title>
+      <link>http://blog.songru.org/posts/linux/Linux-Socket/</link>
+      <pubDate>Sat, 18 Mar 2017 09:54:01 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/linux/Linux-Socket/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;1. 关于recv, read, write, send方法&lt;/strong&gt;
+recv较read多了一个flag参数，如果flag为0，则recv相当于read，write与send类似。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. 关于阻塞&lt;/strong&gt;
+recv方法默认会阻塞，直到有数据读取或者对方关闭了socket。返回读取到的字节数，这个数可能会小于指定要读取的大小，所以socket编程应该是需要自己协商需要读取的数据长度（比如把长度放在最开始）。
+send方法默认不会阻塞，send之后立马返回，数据应该是已经发送到了网络上。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3. 总结&lt;/strong&gt;
+socket就有点像是两个命名管道， &lt;code&gt;pipe_1[]&lt;/code&gt; 与 &lt;code&gt;pipe_2[]&lt;/code&gt;比如：
+server端读取的是&lt;code&gt;pipe_1[0]&lt;/code&gt;的数据，client端向&lt;code&gt;pipe_1[1]&lt;/code&gt;写入数据。
+client端读取的是&lt;code&gt;pipe_2[0]&lt;/code&gt;的数据，server端向&lt;code&gt;pipe_2[1]&lt;/code&gt;写入数据。
+读数据时默认会阻塞，等待另一端向管道写入数据；写数据默认不阻塞，写入的数据直接到pipe中去了，就算写入端关闭了socket，读写的还能从pipe中获取已写入的数据。&lt;/p&gt;
+
+&lt;p&gt;可以通过select函数检测文件描述符的状态，比如有数据可读时则去读之类的。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

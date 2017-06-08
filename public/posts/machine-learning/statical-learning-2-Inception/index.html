@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    统计学习方法读书笔记(2)-感知机 | Leon&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="统计学习方法读书笔记(2)-感知机" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://blog.songru.org/posts/machine-learning/statical-learning-2-Inception/" />
+
+
+  
+  <link rel="stylesheet" href="http://blog.songru.org//css/base-min.css">
+  <link rel="stylesheet" href="http://blog.songru.org//css/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="http://blog.songru.org//css/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://blog.songru.org//css/redlounge.css">
+  <link href="http://blog.songru.org//css/font-awesome.min.css" rel="stylesheet">
+  <link href="http://blog.songru.org//css/googlefonts_raleway.css" rel='stylesheet' type='text/css'>
+  <link href="http://blog.songru.org//css/googlefonts_Libre.css" rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Leon&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="http://blog.songru.org//css/tomorrow-night-bright.min.css">
+  
+  <script src="http://blog.songru.org//js/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)'],['&(',')&']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {font: inherit;
+              font-size: 100%;
+              background: inherit;
+              border: inherit;
+              color: #515151;}
+</style>
+
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Leon&#39;s Blog</h1>
+    <h2 class="brand-tagline">Is super awesome</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://blog.songru.org/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/posts/">Blog</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="https://github.com/underspirit" target="_blank"><i class='fa fa-github' style='font-size:22px;'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li><a href="#感知机的定义:7af17af622005836a4a55655a1236804">感知机的定义</a></li>
+<li><a href="#感知机学习策略:7af17af622005836a4a55655a1236804">感知机学习策略</a></li>
+<li><a href="#感知机学习算法:7af17af622005836a4a55655a1236804">感知机学习算法</a>
+<ul>
+<li><a href="#感知机学习算法的原始形式-算法:7af17af622005836a4a55655a1236804">感知机学习算法的原始形式(算法)</a></li>
+<li><a href="#感知机算法的收敛性:7af17af622005836a4a55655a1236804">感知机算法的收敛性</a></li>
+<li><a href="#感知机学习算法的对偶形式:7af17af622005836a4a55655a1236804">感知机学习算法的对偶形式</a></li>
+<li><a href="#感知机学习算法的对偶形式-算法:7af17af622005836a4a55655a1236804">感知机学习算法的对偶形式(算法)</a></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/posts/machine-learning/statical-learning-2-Inception/">统计学习方法读书笔记(2)-感知机</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jul</span> <span class="post-date-year">2015</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories" style="margin-bottom: 25px;">
+				
+					<a class="post-category post-category-ml" href="http://blog.songru.org//tags/ml">ML</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<p>感知机(perceptron)是二类分类的线性分类模型,其输入为实例的特征向量,输出为实例的类别,取+1和–1二值。感知机对应于输入空间(特征空间)中将实例划分为正负两类的分离超平面,<strong>属于判别模型</strong>。感知机学习旨在求出将训练数据进行线性划分的分离超平面,为此,导入基于误分类的损失函数,利用梯度下降法对损失函数进行极小化,求得感知机模型。</p>
+
+<h1 id="感知机的定义:7af17af622005836a4a55655a1236804">感知机的定义</h1>
+
+<p><strong>感知机的定义</strong>:  假设输入空间(特征空间)是<code>$\mathcal{X} \subseteq R^n$</code>,输出空间是 <code>$ \mathcal{Y}=\{+1,-1\}$</code>。输入<code>$x \in \mathcal{X}$</code>表示实例的特征向量,对应于输入空间(特征空间)的点;输出<code>$y \in \mathcal{Y}$</code>表示实例的类别。由输入空间到输出空间的如下函数:
+<code>$$  f(x) = sign(w \cdot x + b) $$</code>
+其中, <code>$w$</code>和<code>$b$</code>为感知机模型参数, <code>$w\in R^n$</code>叫作权值(weight)或权值向量(weightvector),<code>$b \in R$</code>叫作偏置(bias),<code>$w \cdot x$</code>表示w和x的内积。sign是符号函数,即
+    <code>$$  sign(x)=\begin{cases}
+        +1, &amp;x \geqslant 0\\
+        -1, &amp; x &lt; 0
+        \end{cases}  $$</code><br />
+感知机是一种线性分类模型,属于判别模型。感知机模型的假设空间是定义在特征空间中的所有线性分类
+模型(linear classification    model)或线性分类器(linear  classifier),即函数集合<code>$\{f \mid f(x)=w \cdot x+b\}$</code>。</p>
+
+<p>感知机有如下几何解释:线性方程 <code>$$w \cdot x + b =0$$</code>
+对应于特征空间<code>$R^n$</code>中的一个超平面S,其中w是超平面的法向量,b是超平面的截距。这个超平面将特征空间划分为两个部分。位于两部分的点(特征向量)分别被分为正、负两类。因此,超平面S称为分离超平面(separating hyperplane).</p>
+
+<h1 id="感知机学习策略:7af17af622005836a4a55655a1236804">感知机学习策略</h1>
+
+<p>为了找出一个能够将训练集正实例点和负实例点完全正确分开的分离超平面,即确定感知机模型参数<code>$w,b$</code>,需要确定一个学习策略,即定义(经验)损失函数并将损失函数极小化。<br />
+损失函数的一个自然选择是误分类点的总数。但是,这样的损失函数不是参数w,b的连续可导函数,不易优化。<strong>损失函数的另一个选择是误分类点到超平面S的总距离</strong>,这是感知机所采用的。为此,首先写出输入空间<code>$R^n$</code>中任一点<code>$x_0$</code>到超平面S的距离:
+<code>$$ \frac{1}{\| w \|} | w \cdot x_0 + b |  $$</code>
+ 这里,<code>$||w||$</code>是w的<code>$L_2$</code>范数。<br />
+ 对于任意误分类的数据<code>$(x_i ,y_i )$</code>来说,
+ <code>$$ -y_i (w \cdot x_i +b) &gt; 0 $$</code>
+ 成立.因此,误分类点<code>$x_i$</code>到超平面S的距离是
+<code>$$ -\frac{1}{\| w \|} y_i( w \cdot x_i + b )  $$</code>
+这样,假设超平面S的误分类点集合为M,那么所有误分类点到超平面S的总距离为
+<code>$$ -\frac{1}{\| w \|}  \sum_{x_i \in M} y_i( w \cdot x_i + b )  $$</code>
+不考虑 <code>$ \frac{1}{\| w \|}$</code>, 给定训练数据集<code>$T=\{ (x_1, y_1),(x_2, y_2), \cdots,(x_N, y_N) \}$</code>,其中,<code>$x_i \in \mathcal{X}=R^n$</code>, <code>$ y_i \in \mathcal{Y} = \{ +1, -1\}, i = 1,2,\cdots,N $</code>.感知机<code>$sign(w\cdot x + b)$</code>学习的损失函数定义为:
+<code>$$  L(w, b) = -\sum_{x_i \in M} y_i (w \cdot x_i +b) $$</code>
+其中M为误分类点的集合,。这个损失函数就是感知机学习的经验风险函数。<br />
+显然,损失函数<code>$L(w,b)$</code>是非负的。如果没有误分类点,损失函数值是0。而且,误分类点越少,误分类点离超平面越近,损失函数值就越小。一个特定的样本点的损失函数:在误分类时是参数<code>$w,b$</code>的线性函数,在正确分类时是0。因此,给定训练数据集T,损失函数<code>$L(w,b)$</code>是<code>$w,b$</code>的连续可导函数。</p>
+
+<h1 id="感知机学习算法:7af17af622005836a4a55655a1236804">感知机学习算法</h1>
+
+<p>感知机学习算法是误分类驱动的,具体采用随机梯度下降法(stochastic   gradient descent)。首先,任意选取一个超平面<code>$w_0,b_0$</code>,然后用梯度下降法不断地极小化目标函数。<strong>极小化过程中不是一次使M中所有误分类点的梯度下降,而是一次随机选取一个误分类点使其梯度下降</strong>。<br />
+假设误分类点集合M是固定的,那么损失函数<code>$L(w,b)$</code>的梯度为:
+<code>$$ \nabla_w L(w,b) = -\sum_{x_i \in M} y_i x_i \\ 
+\nabla_b L(w,b) = -\sum_{x_i \in M} y_i $$</code>
+随机选取一个误分类点<code>$(x_i,y_i)$</code>,对<code>$w,b$</code>进行更新:
+<code>$$ w \leftarrow w + \eta y_i x_i \\
+b \leftarrow b + \eta y_i$$</code>
+<code>$\eta(0&lt;\eta\le1)$</code>是学习率.</p>
+
+<h2 id="感知机学习算法的原始形式-算法:7af17af622005836a4a55655a1236804">感知机学习算法的原始形式(算法)</h2>
+
+<p>输入:训练数据集<code>$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$</code>,<br />
+其中,<code>$x_i \in \mathcal{X}=R^n$</code>, <code>$ y_i \in \mathcal{Y} = \{ +1, -1\}, i = 1,2,\cdots,N $学习率$\eta(0&lt;\eta\le1)$</code>.<br />
+输出:<code>$w,b$</code>;感知机模型<code>$f(x)=sign(w \cdot x+b)$</code>。<br />
+步骤:</p>
+
+<ol>
+<li>选取初值<code>$w_0,b_0$</code><br /></li>
+<li>在训练集中选取数据<code>$(x_i,y_i)$</code><br /></li>
+<li>如果<code>$y_i(w \cdot x_i+b)≤0$</code><br />
+<code>$$ w \leftarrow w + \eta y_i x_i \\
+b \leftarrow b + \eta y_i$$</code></li>
+<li>转至(2),直至训练集中没有误分类点。<br />
+这种学习算法直观上有如下解释:当一个实例点被误分类,即位于分离超平面的错误一侧时,则调整<code>$w,b$</code>的值,使分离超平面向该误分类点的一侧移动,以减少该误分类点与超平面间的距离,直至超平面越过该误分类
+点使其被正确分类。</li>
+</ol>
+
+<h2 id="感知机算法的收敛性:7af17af622005836a4a55655a1236804">感知机算法的收敛性</h2>
+
+<p>为了便于叙述与推导,将偏置b并入权重向量w,记作<code>$\hat{w} =(w^T,b)^T$</code>,同样也将输入向量加以扩充,加进常数1,记作 <code>$\hat{x}=(x^T,1)^T$</code>。这样, <code>$\hat{w} , \hat{x} \in R^{N+1}$</code>。显然, <code>$\hat{w} \hat{x}=w·x+b$</code>。<br />
+<strong>定理2.1(Novikoff)</strong> 设训练数据集<code>$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$</code>是线性可分的,其中<code>$x_i \in \mathcal{X}=R^n$</code>, <code>$ y_i \in \mathcal{Y} = \{ +1, -1\}, i = 1,2,\cdots,N $</code>,则</p>
+
+<ol>
+<li>存在满足条件<code>$|| \hat{w}_{opt}||=1$</code>的超平面 <code>$\hat{w}_{opt} \cdot  \hat{x} =w_{opt}·x+b_{opt}=0$</code>将训练数据集完全正确分开;且存在<code>$ \gamma&gt;0$</code>,对所有<code>$i=1,2,...,N$</code>有
+<code>$$ y_i( \hat{w}_{opt} \cdot  \hat{x}_i ) = y_i( w_{opt} \cdot x_i + b_{opt}) \ge \gamma $$</code></li>
+<li>令$R=\max \limits_{1 \le i \le N} || \hat{x}_i ||$<code>,则感知机算法在训练数据集上的误分类次数k满足不等式:
+</code>$$ k \le \left(\frac{R} {\gamma} \right)^2  $$`</li>
+</ol>
+
+<h2 id="感知机学习算法的对偶形式:7af17af622005836a4a55655a1236804">感知机学习算法的对偶形式</h2>
+
+<p>对偶形式的基本想法是,将<code>$w$</code>和<code>$b$</code>表示为实例<code>$x_i$</code>和标记<code>$y_i$</code>的线性组合的形式,通过求解其系数而求得<code>$w$</code>和<code>$b$</code>。<br />
+不失一般性,可假设初始值$w_0,b_0$均为0。对误分类点<code>$(x_i,y_i)$</code>通过
+<code>$$ w \leftarrow w + \eta y_i x_i \\
+b \leftarrow b + \eta y_i$$</code>
+逐步修改<code>$w,b$</code>,设修改<code>$n_i$</code>次,则<code>$w,b$</code>关于样本<code>$(x_i,y_i)$</code>的增量分别是<code>$\alpha_i y_i x_i$</code>和<code>$\alpha_i y_i$</code>,这里<code>$\alpha_i=n_i \eta$</code>看出,最后学习到的<code>$w,b$</code>可以分别表示为
+<code>$$ w = \sum_{i=1}^N \alpha_i y_i x_i \\
+     b = \sum_{i=1}^N \alpha_i y_i $$</code>
+这里, <code>$\alpha_i \ge 0 ,i = 1,2, \cdots, N$</code>,当<code>$\eta =1$</code>时,表示第i个实例点由于误分而进行更新的次数。实例点更新次数越多,意味着它距离分离超平面越近,也就越难正确分类。换句话说,这样的实例对学习结果影响最大。</p>
+
+<h2 id="感知机学习算法的对偶形式-算法:7af17af622005836a4a55655a1236804">感知机学习算法的对偶形式(算法)</h2>
+
+<p>输入:训练数据集<code>$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$</code>,<br />
+其中,<code>$x_i \in \mathcal{X}=R^n$</code>, <code>$ y_i \in \mathcal{Y} = \{ +1, -1\}, i = 1,2,\cdots,N $</code>学习率<code>$\eta(0&lt;\eta\le1)$</code>.<br />
+输出: <code>$\alpha, b$</code>: 感知机模型<code>$f(x) = sign\left(  \sum_{j=1}^N \alpha_j y_j x_j \cdot x + b \right)$</code>,其中<code>$\alpha = (\alpha_1, \alpha_2, \cdots, \alpha_N)^T$</code><br />
+步骤:</p>
+
+<ol>
+<li>初始化<code>$\alpha \leftarrow 0, b \leftarrow 0$</code></li>
+<li>在训练集中选取数据<code>$(x_i,y_i)$</code></li>
+<li>如果<code>$ y_i \left( \sum_{j=1}^N \alpha_j y_j x_j \cdot x_i + b  \right) \le 0 $</code>
+<code>$$ \alpha_i \leftarrow \alpha_i + \eta \\  
+b \leftarrow b + \eta y_i  $$</code></li>
+<li>转至(2)直到没有误分类数据。<br /></li>
+</ol>
+
+<p>对偶形式中训练实例仅以内积的形式出现。为了方便,可以预先将训练集中实例间的内积计算出来并以矩
+阵的形式存储,这个矩阵就是所谓的Gram矩阵(Gram matrix)
+<code>$$ G=[x_i \cdot x_j]_{N \times N} $$</code></p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-ml" href="http://blog.songru.org//tags/ml">ML</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<div class="paging-label">More Reading</div>
+					
+					<span class="paging-newer">
+						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="/posts/machine-learning/statical-learning-3-K-nearest-neighbor/">统计学习方法读书笔记(3)-K近邻算法</a>
+		            </span>
+		            
+
+					
+					<span class="paging-older">
+						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/posts/machine-learning/statical-learning-1/">统计学习方法读书笔记(1)-统计学习方法概论</a>
+		            </span>
+		            
+	            </div>
+            
+          </section>
+          
+			<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'songru';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2017. All rights reserved.</p>
+</div>
+
+    </div>
+  </div>
+	
+
+	
+
+  <script src="http://blog.songru.org//js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(function(){
+    $('pre code').each(function(){
+        $(this).parent().addClass('codePre');
+    });
+});
+</script>
+</body>
+</html>

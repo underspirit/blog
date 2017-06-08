@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Grub on Leon&#39;s Blog</title>
+    <link>http://blog.songru.org/tags/grub/</link>
+    <description>Recent content in Grub on Leon&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sat, 18 Mar 2017 09:54:19 +0800</lastBuildDate>
+    <atom:link href="http://blog.songru.org/tags/grub/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Ubuntu修复Grub引导(备忘)</title>
+      <link>http://blog.songru.org/posts/linux/Ubuntu-grub/</link>
+      <pubDate>Sat, 18 Mar 2017 09:54:19 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/linux/Ubuntu-grub/</guid>
+      <description>&lt;p&gt;我的系统是win7 + Ubuntu双系统, 但win7基本不用了. 由于/home目录快满了, 于是在Ubuntu中删除了win7系统下的C盘所在的分区. 但是我没有注意到我的引导程序是安装在这个分区, 导致重启之后两个系统都进不去了.&lt;/p&gt;
+
+&lt;p&gt;下面是修复步骤:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;使用Ubuntu的U盘启动盘进入试用模式, 打开命令行, 在这个模式下可以查看以及操作系统的分区.&lt;/li&gt;
+&lt;li&gt;安装testdisk软件, 用于恢复删除的分区.&lt;/li&gt;
+&lt;li&gt;使用sudo或root运行testdisk_static, 选择&lt;code&gt;create -&amp;gt; Disk /dev/sda(选择需要恢复的磁盘) -&amp;gt; Proceed -&amp;gt; Intel -&amp;gt; Analyse -&amp;gt; Backup(备份当前的分区表, 不行还可以使用它进行恢复) -&amp;gt; Quick Search&lt;/code&gt;,  之后会查找出你丢失的分区, 然后可以选择&lt;code&gt;write&lt;/code&gt;进行写入.&lt;/li&gt;
+&lt;li&gt;再找回分区时, 发现testdisk给我们多生成了一个分区, 据我的理解也没有影响, 因为我的C盘分区是磁盘的第一个分区, 以0号扇区为起点. 而引导器数据是写入在分区的第一个磁道上, 所以如果恢复后的C盘还是从0号扇区开始, 那么就相当于引导数据也恢复了.&lt;/li&gt;
+&lt;li&gt;这样就找回了误删的分区, 重启电脑出现了easybcd创建的启动项, 可以进入win7系统, 但是不能进入ubuntu, 显示一个命令行&lt;code&gt;grub rescue &amp;gt;&lt;/code&gt;.不知道什么原因.&lt;/li&gt;
+&lt;li&gt;再次用Ubuntu启动盘进入试用, &lt;code&gt;fdisk -l&lt;/code&gt;找到&lt;code&gt;/&lt;/code&gt;分区,然后使用&lt;code&gt;grub2-install /dev/sda&lt;/code&gt;安装grub(大概是这个命令&amp;hellip;.)&lt;/li&gt;
+&lt;li&gt;再次重启, 显示的是grub2的启动项, 选择Ubuntu, 这一次没有出现&lt;code&gt;grub rescue &amp;gt;&lt;/code&gt;模式, 而是进入了启动界面, 但是一直进不去系统.&lt;/li&gt;
+&lt;li&gt;从显示的信息可以看到, 应该是开机自动挂载出现了问题. 这是因为我使用testdisk恢复分区时, 虽然恢复了第一个C盘分区, 但是软件还自动修复了一些分区上的错误, 给我多加了一个分区. 这就导致各个分区的设备目录名(/dev/sda1这些)发生了变化, 所以需要更新/etc/fstab中的设备目录名.&lt;/li&gt;
+&lt;li&gt;重启, 进入Ubuntu的recovery mode, 进入root命令模式. 因为默认的根目录和home目录是使用UUID进行挂载的, 所以它们是不会变的, 只需要把其他的自定义的自动挂载项注释掉即可(或者更新).&lt;/li&gt;
+&lt;li&gt;但是发现不能编辑, 提示是read only模式, 重新挂载根目录&amp;rdquo;&lt;code&gt;mount –o remount, rw /&lt;/code&gt;&amp;rdquo;, 再编辑即可.&lt;/li&gt;
+&lt;li&gt;重启&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
