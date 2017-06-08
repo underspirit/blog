@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    Opinion Mining with Deep Recurrent Neural Networks笔记 | Leon&#39;s Blog
+    Linux Socket使用小结 | Leon&#39;s Blog
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -16,11 +16,11 @@
 <meta name="author" content="">
 <meta name="generator" content="Hugo 0.14" />
 
-  <meta property="og:title" content="Opinion Mining with Deep Recurrent Neural Networks笔记" />
+  <meta property="og:title" content="Linux Socket使用小结" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://blog.songru.org/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/" />
+<meta property="og:url" content="http://blog.songru.org/posts/linux/Linux-Socket/" />
 
 
   
@@ -141,14 +141,14 @@ code.has-jax {font: inherit;
 	    
   		<section class="post">
             <h1 class="post-title">
-              <a href="/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/">Opinion Mining with Deep Recurrent Neural Networks笔记</a>
+              <a href="/posts/linux/Linux-Socket/">Linux Socket使用小结</a>
             </h1>
             <h3 class="post-subtitle">
             	
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>24</sup></span><span class="post-date-separator">/</span><span class="post-date-month">May</span> <span class="post-date-year">2016</span>
+                	<span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2017</span>
             	</span>
             	
             
@@ -159,7 +159,9 @@ code.has-jax {font: inherit;
 			
 				<div class="post-categories" style="margin-bottom: 25px;">
 				
-					<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+					<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">Linux</a>
+				
+					<a class="post-category post-category-socket" href="http://blog.songru.org//tags/socket">Socket</a>
 				
 				</div>
 			
@@ -168,41 +170,20 @@ code.has-jax {font: inherit;
 
 			
 
-            <p>本文对传统的RNN进行改进，结合BidirectionalRNN，提出了Deep bidirectional RNN。</p>
+            <p><strong>1. 关于recv, read, write, send方法</strong>
+recv较read多了一个flag参数，如果flag为0，则recv相当于read，write与send类似。</p>
 
-<hr />
+<p><strong>2. 关于阻塞</strong>
+recv方法默认会阻塞，直到有数据读取或者对方关闭了socket。返回读取到的字节数，这个数可能会小于指定要读取的大小，所以socket编程应该是需要自己协商需要读取的数据长度（比如把长度放在最开始）。
+send方法默认不会阻塞，send之后立马返回，数据应该是已经发送到了网络上。</p>
 
-<p><img src="/img/1464096878586.png" alt="Alt text" />
-</p>
+<p><strong>3. 总结</strong>
+socket就有点像是两个命名管道， <code>pipe_1[]</code> 与 <code>pipe_2[]</code>比如：
+server端读取的是<code>pipe_1[0]</code>的数据，client端向<code>pipe_1[1]</code>写入数据。
+client端读取的是<code>pipe_2[0]</code>的数据，server端向<code>pipe_2[1]</code>写入数据。
+读数据时默认会阻塞，等待另一端向管道写入数据；写数据默认不阻塞，写入的数据直接到pipe中去了，就算写入端关闭了socket，读写的还能从pipe中获取已写入的数据。</p>
 
-<p><strong>传统的RNN</strong>（图a）信息传播方向是从前往后一个方向，某个时刻t的隐藏状态仅仅包含它之前词语的语义信息：<br />
-<img src="/img/1464097111614.png" alt="Alt text" />
-<br />
-$f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（比如softmax）。</p>
-
-<p><strong>Bidirectional RNN</strong>（图b）包含前向和后向RNN两个部分，分别从相反的反向进行信息的传播，再将每个时刻的两个方向的隐藏状态联合起来计算输出值：<br />
-<img src="/img/1464097064201.png" alt="Alt text" />
-</p>
-
-<p>可以看到，前向RNN和反向RNN的参数是互相独立的。</p>
-
-<p><strong>Deep  RNN</strong>（图c）是将多个传统RNN进行叠加而来，即每一层计算隐藏状态的输入都为上一层的输出。</p>
-
-<p><strong>Deep Bidirectional  RNN</strong>（图d）则是将Bidirectional RNN与Deep RNN结合起来：<br />
-第$i$层（$i&gt;1$）第$t$个时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i)}}$依赖于三个输入：第$i-1$层$t$时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i-1)}}$和后向隐藏状态$\overleftarrow{{h_t}^{(i-1)}}$以及第$i$层$t-1$时刻的前向隐藏状态.<br />
-第$i$层（$i&gt;1$）第$t$个时刻的后向隐藏状态$\overleftarrow{{h_t}^{(i)}}$的计算同理:<br />
-<img src="/img/1464098995066.png" alt="Alt text" />
-</p>
-
-<p>第1层隐藏状态机算比较特殊,也比较简单:<br />
-<img src="/img/1464099041075.png" alt="Alt text" />
-</p>
-
-<p>输出的计算有两种选择:一是使用所有时刻的隐藏状态计算输出,或者仅使用最后一个时刻的隐藏状态.这里使用第二种方案:<br />
-<img src="/img/1464097751597.png" alt="Alt text" />
-</p>
-
-<p>该文是通过堆叠（stack）RNN的方式达到Deep RNN的结构，<a href="http://arxiv.org/abs/1312.6026">Pascanu等</a>的论文采取了另一种思路进行Deep RNN的扩展。</p>
+<p>可以通过select函数检测文件描述符的状态，比如有数据可读时则去读之类的。</p>
 
 	
 			
@@ -211,7 +192,9 @@ $f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（�
 				<div class="tags-list">
 					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
 					
-	                <a class="post-tag post-tag-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>,
+	                <a class="post-tag post-tag-linux" href="http://blog.songru.org//tags/linux">Linux</a>,
+	                
+	                <a class="post-tag post-tag-socket" href="http://blog.songru.org//tags/socket">Socket</a>,
 	                
 				</div>
 			
@@ -222,14 +205,14 @@ $f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（�
 					
 					<span class="paging-newer">
 						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/">Sequence to Sequence Learning with Neural Networks</a>
+						<a class="paging-link" href="/posts/linux/Ubuntu-grub/">Ubuntu修复Grub引导(备忘)</a>
 		            </span>
 		            
 
 					
 					<span class="paging-older">
 						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="/posts/linux/Ubuntu_Matplotlib_fix/">Ubuntu下matplotlib绘图中文乱码</a>
+			            <a class="paging-link" href="/posts/linux/Linux-IPC/">Linux IPC总结(Posix和System V对比)</a>
 		            </span>
 		            
 	            </div>

@@ -56,7 +56,7 @@
 
   
 
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   tex2jax: {
@@ -141,6 +141,228 @@ code.has-jax {font: inherit;
 	<header class="post-header">
 		
 		<h1 class="post-title">
+		  <a href="/posts/machine-learning/theano%20pydot/">Theano 中使用pydot报错</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2016</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <p>运行:</p>
+
+<pre><code># 切换为使用cpu,有这句var_with_name_simple=True的时候会报错...,换成gpu就不报错...
+theano.printing.pydotprint(forward_prop, var_with_name_simple=True, compact=True, outfile='img/nn-theano-forward_prop.png', format='png')
+</code></pre>
+
+<p>报错:</p>
+
+<pre><code>pywintypes.error(2,'RegOpenKeyEx','\xcf\xb5\xcd\xb3\xd5\xd2\xb2\xbb\xb5\xb...
+</code></pre>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/machine-learning/theano%20pydot/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/machine-learning/theano%20cuda%20install/">Window7安装theano、anaconda、CUDA</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>2</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2016</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+		
+		<a class="post-category post-category-ml" href="http://blog.songru.org//tags/ml">ML</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <p>最开始我使用的是anaconda3，但是一直没有成功，并且很多库对python2的支持更好，所以最好尝试使用anaconda2.
+因为要使用mingw，但是新版的anaconda都没有自带mingw，所以下载了老版本anaconda1.9.2.</p>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/machine-learning/theano%20cuda%20install/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/linux/linuxComands/">Linux命令（目前使用过的）</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>22</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Sep</span> <span class="post-date-year">2015</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>4 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-ubuntu" href="http://blog.songru.org//tags/ubuntu">Ubuntu</a>
+		
+		<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">Linux</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <ol>
+<li><p>移动文件（夹）</p>
+
+<pre><code>mv originalDir/source.txt targetDir/target.txt
+</code></pre></li>
+
+<li><p>删除文件（夹）</p>
+
+<pre><code>rm dir/target.file   //删除文件
+rm -r dir //删除文件夹
+</code></pre></li>
+</ol>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/linux/linuxComands/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/nlp/nlp_3_MinimumEditDistance/">【自然语言处理之三】最小编辑距离（Minimum Edit Distance）</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>13</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Sep</span> <span class="post-date-year">2015</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <h1 id="一-最小编辑距离:00940faa4e8eb28a14d8cda2941cecdb">一、最小编辑距离</h1>
+
+<h2 id="1-1-定义:00940faa4e8eb28a14d8cda2941cecdb">1.1 定义</h2>
+
+<p>最小编辑距离（Minimum Edit Distance，MED），又称Levenshtein距离，是指两个字符串之间，由一个转成另一个所需要的最少编辑操作次数。允许的编辑操作包括：将一个字符替换成另一个字符（substitution，s），插入一个字符（insert，i）或者删除一个字符（delete，d），如下图所示：<br />
+<img src="/img/nlp_3_1.jpg" alt="最小编辑距离" />
+</p>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/nlp/nlp_3_MinimumEditDistance/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/nlp/nlp_2_BasicTextProcessing/">【自然语言处理之二】文本处理基础（Basic Text Processing）</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>11</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Sep</span> <span class="post-date-year">2015</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <h1 id="一-文本处理基础:2e62519647c0e571a1761fc424fb31ad">一、文本处理基础</h1>
+
+<h2 id="1-1-正则表达式:2e62519647c0e571a1761fc424fb31ad">1.1 正则表达式</h2>
+
+<p>自然语言处理过程中面临大量的文本处理工作，如词干提取、网页正文抽取、分词、断句、文本过滤、模式匹配等任务，而正则表达式往往是首选的文本预处理工具。
+现在主流的编程语言对正则表达式都有较好的支持，如Grep、Awk、Sed、Python、Perl、Java、C/C++(推荐re2)等。
+<em>注：课程中给出的正则表达式语法和示例在此略去</em></p>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/nlp/nlp_2_BasicTextProcessing/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
 		  <a href="/posts/nlp/nlp_1_introduction/">【自然语言处理之一】介绍</a>
 	  </h1>
 	</header>
@@ -184,6 +406,114 @@ code.has-jax {font: inherit;
 	<header class="post-header">
 		
 		<h1 class="post-title">
+		  <a href="/posts/machine-learning/statical-learning-5-Decition-tree/">统计学习方法读书笔记(5)-决策树</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>7</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jul</span> <span class="post-date-year">2015</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>6 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-ml" href="http://blog.songru.org//tags/ml">ML</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  决策树(decision tree)是一种基本的分类与回归方法。它可以认为是if-then规则的集合,也可以认为是定义在特征空间与类空间上的条件概率分布。决策树学习通常包括3个步骤:特征选择、决策树的生成和决策树的修剪。 决策树模型与学习 分类决策树模型是一种描述对实例进行分类的树形结构。决策树由结点(node)和有向边(directed edge)组成。结点有两种类型:内部结点(internal node)和叶结点(leaf node)。内部结点表示一个特征或属性,叶结点表示一个类。 用决策树分类,从根结点开始,对实例的某一特征进行测试,根据测试结果,将实例分配到其子结点;这时,每一个子结点对应着该特征的一个取值。如此递归地对实例进行测试并分配,直至达到叶结点。最后将实例分到叶结点的类中。 可以将决策树看成一个if-then规则的集合。将决策树转换成if-then规则的过程是这样的:由决策树的根结点到叶结点的每一条路径构建一条规则;路径上内部结点的特征对应着规则的条件,而叶结点的类对应着规则的结论。决策树的路径或其对应的if-then规则集合具有一个重要的性质:互斥并且完备。这就是说,每一个实例都被一条路径或一条规则所覆盖,而且只被一条路径或一条规则所覆盖。 决策树与条件概率分布 决策树还表示给定特征条件下类的条件概率分布。这一条件概率分布定义在特征空间的一个划分 (partition)上。将特征空间划分为互不相交的单元(cell)或区域(region),并在每个单元定义一个类的概率分布就构成了一个条件概率分布。决策树的一条路径对应于划分中的一个单元。决策树所表示的条件概率分布由各个单元给定条件下类的条件概率分布组成。假设X为表示特征的随机变量,Y为表示类的随机变量,那么这个条件概率分布可以表示为P(Y|X)。X取值于给定划分下单元的集合,Y取值于类的集合。各叶结点(单元)上的条件概率往往偏向某一个类,即属于某一类的概率较大。决策树分类时将该结点的实例强行分到条件概率大的那一类去。 决策树学习 决策树学习,假设给定训练数据集 $$ D = \{ (x_1, y_1), (x_2, y_2), \cdots, (x_N, y_N) \} $$ 其中$ x_i=(x_i^{(1)}, x_i^{(2)} , \cdots, x_i^{(n)} )^T $为输入实例(特征向量), $n$为特征个数, $y_i \in \{1,2, \cdots ,K\}$为类标记, $i=1,2, \cdots ,N$, $N$为样本容量.学习的目标是根据给定的训练数据集构建一个决策树模型,使它能够对实例进行正确的分类。 决策树学习是由训练数据集估计条件概率模型。基于特征空间划分的类的条件概率模型有无穷多个。我们选择的条件概率模型应该不仅对训练数据有很好的拟合,而且对未知数据有很好的预测。 决策树学习用损失函数表示这一目标。如下所述,决策树学习的损失函数通常是正则化的极大似然函数。决策树学习的策略是以损失函数为目标函数的最小化。 当损失函数确定以后,学习问题就变为在损失函数意义下选择最优决策树的问题。因为从所有可能的决策 树中选取最优决策树是NP完全问题,所以现实中决策树学习算法通常采用启发式方法,近似求解这一最优化问题。这样得到的决策树是次最优(sub-optimal)的。 决策树学习算法包含特征选择、决策树的生成与决策树的剪枝过程。由于决策树表示一个条件概率分布,所以深浅不同的决策树对应着不同复杂度的概率模型。决策树的生成对应于模型的局部选择,决策树的剪枝对应于模型的全局选择。决策树的生成只考虑局部最优,相对地,决策树的剪枝则考虑全局最优。 特征选择 特征选择在于选取对训练数据具有分类能力的特征。如果利用一个特征进行分类的结果与随机分类的结果没有很大差别,则称这个特征是没有分类能力的。 直观上,如果一个特征具有更好的分类能力,或者说,按照这一特征将训练数据集分割成子集,使得各个子集在当前条件下有最好的分类,那么就更应该选择这个特征。信息增益(information gain)就能够很好地表示这一直观的准则。 熵(entropy) 在信息论与概率统计中,熵(entropy)是表示随机变量不确定性的度量。设$X$是一个取有限个值的离散随机变量,其概率分布为 $$ P(X=x_I) = p_i, \quad i=1,2,\cdots, n $$ 则随机变量X的熵定义为 $$ H(X) = - \sum_{i=1}^n p_i \log p_i $$ 若$p_i=0$, 则定义$0\log0=0$。 通常, 对数以2为底或以e为底(自然对数),这时熵的单位分别称作比特(bit)或纳特(nat)。由定义可知,熵只依赖于$X$的分布,而与$X$的取值无关,所以也可将$X$的熵记作$H(p)$,即 $$ H(p) = - \sum_{i=1}^n p_i \log p_i $$ 熵越大,随机变量的不确定性就越大。从定义可验证 $$ 0 \le H(p) \le \log n $$ 条件熵(conditional entropy) 设有随机变量$(X,Y)$,其联合概率分布为 $$ P(X=x_i, Y=y_i) = p_{ij}, \quad i=1,2,\cdots,n ; \quad j=1,2,\cdots,m $$ 条件熵$H(Y|X)$表示在已知随机变量X的条件下随机变量Y的不确定性。随机变量X给定的条件下随机变量Y的条件熵(conditional entropy)$H(Y|X)$, 定义为在X已经给定的条件下Y的条件概率分布的熵对X的数学期望 $$ H(Y \mid X) = \sum_{i=1}^n p_i H(Y \mid X = x_i) $$ 这里, $p_i=P(X=x_i), \ i=1,2,...,n$。 当熵和条件熵中的概率由数据估计(特别是极大似然估计)得到时,所对应的熵与条件熵分别称为经验熵(empirical entropy)和经验条件熵(empirical conditional entropy)。此时,如果有0概率,令$0\log0=0$。 信息增益(information gain) 信息增益(information gain)表示得知特征X的信息而使得类Y的信息的不确定性减少的程度。 特征A对训练数据集D的信息增益$g(D,A)$,定义为集合D的经验熵$H(D)$与特征A给定条件下D的经验条件熵$H(D \mid A)$之差,即 $$ g(D, A) = H(D) - H(D \mid A) $$ 熵$H(Y)$与条件熵$H(Y \mid X)$之差又称为互信息(mutual information)。决策树学习中的信息增益等价于训练数据集中类与特征的互信息。 给定训练数据集D和特征A,经验熵$H(D)$表示对数据集D进行分类的不确定性。而经验条件熵$H(D \mid A)$表示在特征A给定的条件下对数据集D进行分类的不确定性。那么它们的差,即信息增益,就表示由于特征A而使得对数据集D的分类的不确定性减少的程度。显然,对于数据集D而言,信息增益依赖于特征,不同的特征往往具有不同的信息增益。信息增益大的特征具有更强的分类能力。 根据信息增益准则的特征选择方法是:对训练数据集(或子集)D,计算其每个特征的信息增益,并比较它们的大小,选择信息增益最大的特征。 设训练数据集为D, $|D|$ 表示其样本容量,即样本个数。设有K个类$C_k,k=1,2, \cdots ,K$, $|C_k|$为属于类$C_k$的样本个数 。设特征A有n个不同的取值$\{a_1,a_2, \cdots, a_n\}$, 根据特征A的取值将D划分为n个子集$D_1,D_2, \cdots ,D_n$, $|D_i|$为$D_i$的样本个数 。记子集$D_i$中属于类$C_k$的样本的集合为$D_{ik}$, 即$D_{ik} = D_i \cap C_k$, $|D_{ik}|$为$D_{ik}$的样本个数。于是信息增益的算法如下: 输入:训练数据集D和特征A; 输出:特征A对训练数据集D的信息增益$g(D,A)$。 步骤: 计算数据集D的经验熵$H(D)$ $$ H(D) = - \sum_{k=1}^K \frac{\lvert C_k \rvert} { \lvert D \rvert} \log \frac{\lvert C_k \rvert} { \lvert D \rvert} $$ 计算特征A对数据集D的经验条件熵$H(D \mid A)$ $$ \begin{align*} H(D \mid A) &amp;= \sum_{i=1}^n \frac{\lvert D_i\rvert} { \lvert D \rvert} H(D_i) \\ &amp;= \sum_{i=1}^n \frac{\lvert D_i\rvert} { \lvert D \rvert} \sum_{k=1}^K \frac{\lvert D_{ik}\rvert} { \lvert D_i \rvert} \log \frac{\lvert D_{ik}\rvert} { \lvert D_i \rvert} \end{align*} $$ 计算信息增益 $$ g(D,A) = H(D) - H(D \mid A) $$ 信息增益比 以信息增益作为划分训练数据集的特征, 存在偏向于选择取值较多的特征的问题。使用信息增益比(information gain ratio)可以对这一问题进行校正。这是特征选择的另一准则。 特征A对训练数据集D的信息增益比$g_R(D,A)$定义为其信息增益$g(D,A)$与训练数据集D的关于特征$A$的值的熵$H_A(D)$之比: $$ g_R(D, A) = \frac {g(D, A)} {H_A(D)} $$ 这里的分母应该是 $$ H_A(D) = - \sum_{i=1}^n \frac{\lvert D_i \rvert} { \lvert D \rvert} \log \frac{ \lvert D_i \rvert }{ \lvert D \rvert} $$ 分子不再是$C_i$了.
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/machine-learning/statical-learning-5-Decition-tree/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/machine-learning/statical-learning-4-Naive-bayes/">统计学习方法读书笔记(4)-朴素贝叶斯算法</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>7</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jul</span> <span class="post-date-year">2015</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>3 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-ml" href="http://blog.songru.org//tags/ml">ML</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  朴素贝叶斯(naïve Bayes)法是基于贝叶斯定理与特征条件独立假设的分类方法。对于给定的训练数据集,首先基于特征条件独立假设学习输入/输出的联合概率分布;然后基于此模型,对给定的输入x,利用贝叶斯定理求出后验概率最大的输出y。 定义: 设输入空间$\mathcal{X}⊆R^n$为n维向量的集合,输出空间为类标记集合$ \mathcal{Y} = \{c_1,c_2, \cdots ,c_K\}$。输入为特征向量$x \in \mathcal{X}$,输出为类标记(class label)$y \in \mathcal{Y}$。$X$是定义在输入空间$\mathcal{X}$上的随机向量,$Y$是定义在输出空间$\mathcal{Y}$上的随机变量. $P(X,Y)$是$X$和$Y$的联合概率分布。 训练数据集$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$,由$P(X,Y)$独立同分布产生。 其中$x_i = (x_i^{(1)}, x_i^{(2)}, \cdots , x_i^{(n)})^T$, $x_i^{(j)}$是第i个样本的第j个特征, $x_i^{(j)} \in \{a_{j1},a_{j2}, \cdots ,a_{jS_j} \}$, $a_{jl}$是第j个特征可能取的第l个值, $j=1,2, \cdots ,n$ , $l=1,2, \cdots ,S_j $, $y_i \in \{c_1,c_2, \cdots ,c_K\} $; 朴素贝叶斯法通过训练数据集学习联合概率分布$P(X,Y)$, 再根据贝叶斯公式 $$ P(Y \mid X) = \frac{P(X, Y)}{P(X)} = \frac {P(X \mid Y) P(Y) } {\sum \limits_Y P(X \mid Y) P(Y)}$$ 求出后验概率。 朴素贝叶斯法分类时,对给定的输入x,通过学习到的模型计算后验概率分布$P(Y=c_k|X=x)$,将后验概率最大的类作为x的类输出。后验概率计算根据贝叶斯公式进行:
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/machine-learning/statical-learning-4-Naive-bayes/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/machine-learning/statical-learning-3-K-nearest-neighbor/">统计学习方法读书笔记(3)-K近邻算法</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>7</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jul</span> <span class="post-date-year">2015</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>2 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-ml" href="http://blog.songru.org//tags/ml">ML</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  k近邻法的输入为实例的特征向量,对应于特征空间的点;输出为实例的类别,可以取多类。k近邻法假设给定一个训练数据集,其中的实例类别已定。分类时,对新的实例,根据其k个最近邻的训练实例的类别,通过多数表决等方式进行预测。因此,k近邻法不具有显式的学习过程。k近邻法实际上利用训练数据集对特征向量空间进行划分,并作为其分类的“模型”。k值的选择、距离度量及分类决策规则是k近邻法的三个基本要素。 定义 输入:训练数据集$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$, 其中,$x_i \in \mathcal{X}=R^n$, $ y_i \in \mathcal{Y} = \{ c_1, c_2, \cdots, c_K\}, i = 1,2,\cdots,N $, 实例特征向量$x$; 输出:实例$x$所属的类$y$。 步骤: 根据给定的距离度量,在训练集T中找出与x最邻近的k个点,涵盖这k个点的x的邻域记作$N_k(x)$; 在$N_k(x)$中根据分类决策规则(如多数表决)决定x的类别y: $$ y = \arg \max \limits_{c_j} \sum_{x_i \in N_k(x)} I(y_i = c_j), \ i=1,2,\cdots,N;\ j = 1,2,\cdots,K $$ $I$为指示函数,即当$y_i=c_j$时$I$为1,否则$I$为0。 距离度量 特征空间中两个实例点的距离是两个实例点相似程度的反映。k近邻模型的特征空间一般是n维实数向量空间$R^n$。使用的距离是欧氏距离,但也可以是其他距离,如更一般的$L_p$距离(Lp distance)或Minkowski距离(Minkowski distance)。 设特征空间x是n维实数向量空间$R^n$, $x_i, x_j \in \mathcal{X}$, $ \ x_i = (x_i^{(1)}, x_i^{(2)}, \cdots , x_i^{(n)})^T $, $ x_j = (x_j^{(1)}, x_j^{(2)}, \cdots , x_j^{(n)})^T$, $x_i, x_j$的$L_p$距离定义为: $$ L_p(x_i, x_j) = \left( \sum_{l=1}^n \left| x_i^{(l)} - x_j^{(l)} \right|^p \right)^{\frac{1}{p}} $$ 这里$p≥1$。当$p=2$时,称为欧氏距离(Euclidean distance),即 $$ L_2(x_i, x_j) = \left( \sum_{l=1}^n \left| x_i^{(l)} - x_j^{(l)} \right|^2 \right)^{\frac{1}{2}} $$ 当p=1时,称为曼哈顿距离(Manhattan distance),即 $$ L_1(x_i, x_j) = \sum_{l=1}^n \left| x_i^{(l)} - x_j^{(l)} \right| $$ 当$p=\infty $时,它是各个坐标距离的最大值,即 $$ L_1(x_i, x_j) = \max \limits_{l} \left| x_i^{(l)} - x_j^{(l)} \right| $$ 下图给出了二维空间中p取不同值时,与原点的$L_p$距离为1(Lp=1)的点的图形。 k值的选择 k值的选择会对k近邻法的结果产生重大影响。 如果选择较小的k值,就相当于用较小的邻域中的训练实例进行预测,“学习”的近似误差(approximation error)会减小,只有与输入实例较近的(相似的)训练实例才会对预测结果起作用。但缺点是“学习”的估计误差(estimation error)会增大,预测结果会对近邻的实例点非常敏感。如果邻近的实例点恰巧是噪声,预测就会出错。换句话说,k值的减小就意味着整体模型变得复杂,容易发生过拟合。 如果选择较大的k值,就相当于用较大邻域中的训练实例进行预测。其优点是可以减少学习的估计误差。但缺点是学习的近似误差会增大。这时与输入实例较远的(不相似的)训练实例也会对预测起作用,使预测发生错误。k值的增大就意味着整体的模型变得简单。 如果k=N,那么无论输入实例是什么,都将简单地预测它属于在训练实例中最多的类。这时,模型过于简单,完全忽略训练实例中的大量有用信息,是不可取的。 在应用中,k值一般取一个比较小的数值。通常采用交叉验证法来选取最优的k值。 分类决策规则 k近邻法中的分类决策规则往往是多数表决,即由输入实例的k个邻近的训练实例中的多数类决定输入实例的类。 多数表决规则(majority voting rule)有如下解释:如果分类的损失函数为0-1损失函数,分类函数为 $$ f: R^n \rightarrow \{ c_1, c_2, \cdots, c_K \} $$ 误分类的概率是 $$ P(Y \ne f(X)) = 1- P(Y = f(X)) $$ 对给定的实例$x \in \mathcal{X}$,其最近邻的k个训练实例点构成集合$N_k(x)$。如果涵盖$N_k(x)$的区域的类别是$c_j$,那么误分类率是 $$ \frac{1}{k} \sum_{x_i \in N_k(x)} I(y_i \ne c_j) = 1 - \frac{1}{k} \sum_{x_i \in N_k(x)} I(y_i = c_j) $$ 要使误分类率最小即经验风险最小,就要使$ \sum_{x_i \in N_k(x)} I(y_i = c_j) $最大,所以多数表决规则等价于经验风险最小化。 k近邻法的实现:kd树 k近邻法最简单的实现方法是线性扫描(linear scan)。这时要计算输入实例与每一个训练实例的距离。当训练集很大时,计算非常耗时,这种方法是不可行的。为了提高k近邻搜索的效率,可以考虑使用特殊的结构存储训练数据,以减少计算距离的次数。 kd(K-Dimentional)树是一种对k维空间中的实例点进行存储以便对其进行快速检索的树形数据结构。kd树是二叉树,表示对k维空间的一个划分(partition),构造kd树相当于不断地用垂直于坐标轴的超平面将k维空间切分,构成一系列的k维超矩形区域。kd树的每个结点对应于一个k维超矩形区域。 构造kd树的算法: 输入:k维空间数据集$T = \{ x_1, x_2, \cdots, x_N \}$, 其中$ \ x_i = (x_i^{(1)}, x_i^{(2)}, \cdots , x_i^{(k)})^T $, $i = 1, 2, \cdots, N$; 输出: kd树.
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/machine-learning/statical-learning-3-K-nearest-neighbor/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
 		  <a href="/posts/machine-learning/statical-learning-2-Inception/">统计学习方法读书笔记(2)-感知机</a>
 	  </h1>
 	</header>
@@ -216,43 +546,6 @@ code.has-jax {font: inherit;
 	</div>
 </section>
 			
-				
-<section  class="post">
-	<header class="post-header">
-		
-		<h1 class="post-title">
-		  <a href="/posts/machine-learning/statical-learning-1/">统计学习方法读书笔记(1)-统计学习方法概论</a>
-	  </h1>
-	</header>
-	<p class="post-meta">
-	  
-	  <span class="post-date">
-		<span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jul</span> <span class="post-date-year">2015</span>
-	</span>
-	
-	
-		
-	
-	
-		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>2 min. read</em></span>
-	
-	
-	<div class="post-categories">
-		
-		<a class="post-category post-category-ml" href="http://blog.songru.org//tags/ml">ML</a>
-		
-	</div>
-	
-	</p>
-	<article class="post-summary">
-	  <p>统计学习方法都是由模型、策略和算法这三个要素构成。</p>
-
-	</article>
-	<div class="read-more-link">
-	  <a href="/posts/machine-learning/statical-learning-1/"><span class="read-more-slashes">//</span>Read More...</a>
-	</div>
-</section>
-			
         </div>
 
 		
@@ -269,6 +562,11 @@ code.has-jax {font: inherit;
 			 
 			 <li class="current"><a href="/page/2/">2</a></li>
 			 
+			 <li><a href="/page/3/">3</a></li>
+			 
+			 
+			 <li><a href="/page/3/">下一页</a></li>
+			 <li><a href="/page/3/">尾页</a></li>
 			 
 			</ul>
 		   </nav>
@@ -282,7 +580,7 @@ code.has-jax {font: inherit;
 		</ul>
 	</div>
 
-	<p>&copy; 2016. All rights reserved.</p>
+	<p>&copy; 2017. All rights reserved.</p>
 </div>
 
         </div>

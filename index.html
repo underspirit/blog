@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Leon&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="Leon&#39;s Blog" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://blog.songru.org/" />
+
+
+  
+  <link rel="stylesheet" href="http://blog.songru.org//css/base-min.css">
+  <link rel="stylesheet" href="http://blog.songru.org//css/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="http://blog.songru.org//css/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://blog.songru.org//css/redlounge.css">
+  <link href="http://blog.songru.org//css/font-awesome.min.css" rel="stylesheet">
+  <link href="http://blog.songru.org//css/googlefonts_raleway.css" rel='stylesheet' type='text/css'>
+  <link href="http://blog.songru.org//css/googlefonts_Libre.css" rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="http://blog.songru.org/index.xml" rel="alternate" type="application/rss+xml" title="Leon&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="http://blog.songru.org//css/tomorrow-night-bright.min.css">
+  
+  <script src="http://blog.songru.org//js/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)'],['&(',')&']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {font: inherit;
+              font-size: 100%;
+              background: inherit;
+              border: inherit;
+              color: #515151;}
+</style>
+
+
+  
+</head>
+
+<body>
+    <div id="layout" class="pure-g">
+        <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Leon&#39;s Blog</h1>
+    <h2 class="brand-tagline">Is super awesome</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://blog.songru.org/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/posts/">Blog</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="https://github.com/underspirit" target="_blank"><i class='fa fa-github' style='font-size:22px;'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+
+        <div class="content pure-u-1 pure-u-md-3-4">
+            <a name="top"></a>
+            
+
+          <div class="posts">
+            
+
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/linux/Ubuntu-grub/">Ubuntu修复Grub引导(备忘)</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2017</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-ubuntu" href="http://blog.songru.org//tags/ubuntu">Ubuntu</a>
+		
+		<a class="post-category post-category-grub" href="http://blog.songru.org//tags/grub">grub</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  我的系统是win7 + Ubuntu双系统, 但win7基本不用了. 由于/home目录快满了, 于是在Ubuntu中删除了win7系统下的C盘所在的分区. 但是我没有注意到我的引导程序是安装在这个分区, 导致重启之后两个系统都进不去了. 下面是修复步骤: 使用Ubuntu的U盘启动盘进入试用模式, 打开命令行, 在这个模式下可以查看以及操作系统的分区. 安装testdisk软件, 用于恢复删除的分区. 使用sudo或root运行testdisk_static, 选择create -&gt; Disk /dev/sda(选择需要恢复的磁盘) -&gt; Proceed -&gt; Intel -&gt; Analyse -&gt; Backup(备份当前的分区表, 不行还可以使用它进行恢复) -&gt; Quick Search, 之后会查找出你丢失的分区, 然后可以选择write进行写入. 再找回分区时, 发现testdisk给我们多生成了一个分区, 据我的理解也没有影响, 因为我的C盘分区是磁盘的第一个分区, 以0号扇区为起点. 而引导器数据是写入在分区的第一个磁道上, 所以如果恢复后的C盘还是从0号扇区开始, 那么就相当于引导数据也恢复了. 这样就找回了误删的分区, 重启电脑出现了easybcd创建的启动项, 可以进入win7系统, 但是不能进入ubuntu, 显示一个命令行grub rescue &gt;.不知道什么原因. 再次用Ubuntu启动盘进入试用, fdisk -l找到/分区,然后使用grub2-install /dev/sda安装grub(大概是这个命令&hellip;.) 再次重启, 显示的是grub2的启动项, 选择Ubuntu, 这一次没有出现grub rescue &gt;模式, 而是进入了启动界面, 但是一直进不去系统. 从显示的信息可以看到, 应该是开机自动挂载出现了问题. 这是因为我使用testdisk恢复分区时, 虽然恢复了第一个C盘分区, 但是软件还自动修复了一些分区上的错误, 给我多加了一个分区. 这就导致各个分区的设备目录名(/dev/sda1这些)发生了变化, 所以需要更新/etc/fstab中的设备目录名. 重启, 进入Ubuntu的recovery mode, 进入root命令模式.
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/linux/Ubuntu-grub/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/linux/Linux-Socket/">Linux Socket使用小结</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2017</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">Linux</a>
+		
+		<a class="post-category post-category-socket" href="http://blog.songru.org//tags/socket">Socket</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  1. 关于recv, read, write, send方法 recv较read多了一个flag参数，如果flag为0，则recv相当于read，write与send类似。 2. 关于阻塞 recv方法默认会阻塞，直到有数据读取或者对方关闭了socket。返回读取到的字节数，这个数可能会小于指定要读取的大小，所以socket编程应该是需要自己协商需要读取的数据长度（比如把长度放在最开始）。 send方法默认不会阻塞，send之后立马返回，数据应该是已经发送到了网络上。 3. 总结 socket就有点像是两个命名管道， pipe_1[] 与 pipe_2[]比如： server端读取的是pipe_1[0]的数据，client端向pipe_1[1]写入数据。 client端读取的是pipe_2[0]的数据，server端向pipe_2[1]写入数据。 读数据时默认会阻塞，等待另一端向管道写入数据；写数据默认不阻塞，写入的数据直接到pipe中去了，就算写入端关闭了socket，读写的还能从pipe中获取已写入的数据。 可以通过select函数检测文件描述符的状态，比如有数据可读时则去读之类的。
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/linux/Linux-Socket/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/linux/Linux-IPC/">Linux IPC总结(Posix和System V对比)</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2017</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">Linux</a>
+		
+		<a class="post-category post-category-ipc" href="http://blog.songru.org//tags/ipc">IPC</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  1. 管道(Pipe) 1.1 匿名管道(Unnamed Pipe) 1.1.1 popen #include &lt;stdio.h&gt; FILE* popen (const char *command, const char *open_mode); int pclose(FILE *stream_to_close); popen()函数通过创建一个管道，调用fork()产生一个子进程，执行一个shell以运行命令来开启一个进程。这个管道必须由pclose()函数关闭，而不是fclose()函数。pclose()函数关闭标准I/O流，等待命令执行结束，然后返回shell的终止状态。如果shell不能被执行，则pclose()返回的终止状态与shell已执行exit一样。 type参数只能是读或者写中的一种，得到的返回值（标准I/O流）也具有和type相应的只读或只写类型。如果type是&rdquo;r&rdquo;则文件指针连接到command的标准输出；如果type是&rdquo;w&rdquo;则文件指针连接到command的标准输入。 #include &lt;unistd.h&gt; #include &lt;stdlib.h&gt; #include &lt;stdio.h&gt; #include &lt;string.h&gt; int main() { FILE *read_fp = NULL; FILE *write_fp = NULL; char buffer[BUFSIZ + 1]; printf(&quot;BUFSIZ: %d\n&quot;, BUFSIZ); int chars_read = 0; //初始化缓冲区 memset(buffer, '\0', sizeof(buffer)); //打开ls和grep进程 read_fp = popen(&quot;ls -l /home/lsr&quot;, &quot;r&quot;); write_fp = popen(&quot;grep rwxrwxr-x&quot;, &quot;w&quot;); //两个进程都打开成功 if(read_fp &amp;&amp; write_fp) { //读取一个数据块 chars_read = fread(buffer, sizeof(char), BUFSIZ, read_fp); while(chars_read &gt; 0) { //设置结尾字符 buffer[chars_read] = '\0'; //把数据写入grep进程 fwrite(buffer, sizeof(char), chars_read, write_fp); //还有数据可读，循环读取数据，直到读完所有数据 chars_read = fread(buffer, sizeof(char), BUFSIZ, read_fp); } //关闭文件流 pclose(read_fp); pclose(write_fp); exit(EXIT_SUCCESS); } exit(EXIT_FAILURE); 1.1.2 pipe #include &lt;unistd.h&gt; int pipe(int file_descriptor[2]); pipe函数跟popen函数的一个重大区别是，popen函数是基于文件流（FILE）工作的，而pipe是基于文件描述符工作的，所以在使用pipe后，数据必须要用底层的read和write调用来读取和发送。 pipe函数会创建两个文件描述符, 并且不要用file_descriptor[0]写数据，也不要用file_descriptor[1]读数据，其行为未定义的，但在有些系统上可能会返回-表示调用失败。数据只能从file_descriptor[0]中读取，数据也只能写入到file_descriptor[1], 不能倒过来。 它的一个缺点，就是通信的进程，它们的关系一定是父子进程的关系，这就使得它的使用受到了一点的限制，但是我们可以使用命名管道来解决这个问题。 1.2 命名管道(Named Pipe) 命名管道也被称为FIFO文件，它是一种特殊类型的文件，它在文件系统中以文件名的形式存在，但是它的行为却和之前所讲的没有名字的管道（匿名管道）类似。 #include &lt;sys/types.h&gt; #include &lt;sys/stat.h&gt; int mkfifo(const char *filename, mode_t mode); int mknod(const char *filename, mode_t mode | S_IFIFO, (dev_t)0); 这两个函数都能创建一个FIFO文件，注意是创建一个真实存在于文件系统中的文件，filename指定了文件名，而mode则指定了文件的读写权限。 mknod是比较老的函数，而使用mkfifo函数更加简单和规范，所以建议在可能的情况下，尽量使用mkfifo而不是mknod。 在Linux系统的shell下, 也可以使用mkfifo或者mknod命令创建管道文件, 然后通过流重定向echo hello &gt; myfifo可以向管道写入, 通过cat mypipe可以读取管道数据.
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/linux/Linux-IPC/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/linux/CentOS7-Install-tmate&amp;tmate-slave/">Centos 7安装tmate和tmate-slave</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2017</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">Linux</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  yum install gcc kernel-devel make ncurses-devel yum install git cmake ruby zlib-devel openssl-devel libevent-devel ncurses-devel yum group install &quot;Development Tools&quot; yum install libssh libssh-devel # Install msgpack yum install msgpack msgpack-devel python-msgpack # If not work, then install with source git clone https://github.com/msgpack/msgpack-c.git cd msgpack-c cmake . make sudo make install # Install tmate ./autogen.sh &amp;&amp; \ ./configure &amp;&amp; \ make &amp;&amp; \ make install # If not work, install libevent2 with source wget https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz # cd to libevent2 src ./configure --prefix=/usr/local make &amp;&amp; make install # Install tmate-slave git clone https://github.com/tmate-io/tmate-slave.git &amp;&amp; cd tmate-slave ./create_keys.sh # This will generate SSH keys, remember the keys fingerprints.
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/linux/CentOS7-Install-tmate&amp;tmate-slave/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/linux/NoteBook-Ubuntu-Install/">Ubuntu 14.04 笔记本双显卡cuda 安装</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2017</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">Linux</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  Ubuntu 14.04 笔记本双显卡cuda 安装 安装ubuntu系统 在系统设置 -&gt; 软件和更新 -&gt; 附加驱动 中如果有nvidia驱动， 则表示该系统支持cuda， 可以继续后面步骤。 下载新版的NVIDIA显卡驱动， CUDA的run file里面的驱动或者是deb中的都太老了, 不适合新版tensorflow。 安装新版的NVIDIA驱动： sh NVIDIA-Linux-x86_64-375.26.run -no-x-check -no-nouveau-check -no-opengl-files –no-x-check 安装驱动时关闭X服务 –no-nouveau-check 安装驱动时禁用nouveau –no-opengl-files 只安装驱动文件，不安装OpenGL文件 通过run文件安装cuda，选择不安装显卡驱动 成功
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/linux/NoteBook-Ubuntu-Install/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/">Sequence to Sequence Learning with Neural Networks</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jun</span> <span class="post-date-year">2016</span>
+	</span>
+	
+	
+		By <a class="post-author" >songsong</a>
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>2 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <p>该论文使用Encoder-Decoder模型, 进行end-to-end的训练来进行机器翻译. 该论文与<a href="http://blog.songru.org/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/">Neural Machine Translation By Jointly Learning To Align And Translate</a>的主要区别在于:</p>
+
+<ol>
+<li>该论文中不是使用Bidirectional RNN, 而是使用了multi-layer RNN, 发现比shallow RNN效果好(可能因为deep结构包含更多的隐藏状态).<br /></li>
+<li>该论文将输入序列进行反向, 再一次输入到Encoder的RNN中.<br />
+正常顺序输入的Encoder序列与Decoder序列之间有一个比较大的&rdquo;minimal time lag&rdquo;, 将输入序列方向之后, 虽然输入序列与输出序列对应词语之间的平均距离没有改变, 但是输入序列最前面的一些词语与输出序列的对应词语更加近了, 也就是说&rdquo;minimal time lag&rdquo;减小了.<br /></li>
+<li>该论文没有使用attention.<br /></li>
+<li>该论文在输出翻译句子时使用了<a href="https://en.wikipedia.org/wiki/Beam_search">beam search</a>方法, 而不是传统的greedy search方法.<br /></li>
+</ol>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/">Opinion Mining with Deep Recurrent Neural Networks笔记</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>24</sup></span><span class="post-date-separator">/</span><span class="post-date-month">May</span> <span class="post-date-year">2016</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <p>本文对传统的RNN进行改进，结合BidirectionalRNN，提出了Deep bidirectional RNN。</p>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/linux/Ubuntu_Matplotlib_fix/">Ubuntu下matplotlib绘图中文乱码</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>23</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2016</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-ubuntu" href="http://blog.songru.org//tags/ubuntu">Ubuntu</a>
+		
+		<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">Linux</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <p>原因：在Ubuntu下安装了各种中文字体，但是修改matplotlibrc文件后，均提示找不到该字体，猜测可能matplotlib字体列表与系统字体列表不同。</p>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/linux/Ubuntu_Matplotlib_fix/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/">Neural Machine Translation By Jointly Learning To Align And Translate笔记</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>27</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2016</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <p>本文主要创新在传统的神经机器翻译上进行改进，确切的说是改进了基本的RNN Encoder-Decoder模型,提出了Alignment model，即实现了Attention model.</p>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/notebook/Neural_Machine_Translation_By_Jointly_Learning_To_Align_And_Translate_NOTE/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+				
+<section  class="post">
+	<header class="post-header">
+		
+		<h1 class="post-title">
+		  <a href="/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/">Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation笔记</a>
+	  </h1>
+	</header>
+	<p class="post-meta">
+	  
+	  <span class="post-date">
+		<span class="post-date-day"><sup>27</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2016</span>
+	</span>
+	
+	
+		
+	
+	
+		<span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+	
+	
+	<div class="post-categories">
+		
+		<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+		
+	</div>
+	
+	</p>
+	<article class="post-summary">
+	  <p>本文主要创新在于提出一个新的神经网络模型RNN Encoder-Decoder，并提出GRU单元.将训练的模型作为standard phrase-based statistical machine translation system的一部分，用于计算phrase table中的每一个phrase的得分。</p>
+
+	</article>
+	<div class="read-more-link">
+	  <a href="/posts/notebook/Learning_Phrase_Representations_using_RNN_Encoder%E2%80%93Decoder_for_Statistical_Machine_Translation_NOTE/"><span class="read-more-slashes">//</span>Read More...</a>
+	</div>
+</section>
+			
+        </div>
+
+		
+		
+		   <nav class="pagination">
+			<h2>Page:</h2>
+			<ul>
+			 
+			 
+			 <li class="current"><a href="/">1</a></li>
+			 
+			 <li><a href="/page/2/">2</a></li>
+			 
+			 <li><a href="/page/3/">3</a></li>
+			 
+			 
+			 <li><a href="/page/2/">下一页</a></li>
+			 <li><a href="/page/3/">尾页</a></li>
+			 
+			</ul>
+		   </nav>
+		
+
+        <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2017. All rights reserved.</p>
+</div>
+
+        </div>
+    </div>
+    <script src="http://blog.songru.org//js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(function(){
+    $('pre code').each(function(){
+        $(this).parent().addClass('codePre');
+    });
+});
+</script>
+</body>
+</html>

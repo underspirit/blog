@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    统计学习方法读书笔记(3)-K近邻算法 | Leon&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="统计学习方法读书笔记(3)-K近邻算法" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://blog.songru.org/posts/machine-learning/statical-learning-3-K-nearest-neighbor/" />
+
+
+  
+  <link rel="stylesheet" href="http://blog.songru.org//css/base-min.css">
+  <link rel="stylesheet" href="http://blog.songru.org//css/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="http://blog.songru.org//css/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://blog.songru.org//css/redlounge.css">
+  <link href="http://blog.songru.org//css/font-awesome.min.css" rel="stylesheet">
+  <link href="http://blog.songru.org//css/googlefonts_raleway.css" rel='stylesheet' type='text/css'>
+  <link href="http://blog.songru.org//css/googlefonts_Libre.css" rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Leon&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="http://blog.songru.org//css/tomorrow-night-bright.min.css">
+  
+  <script src="http://blog.songru.org//js/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)'],['&(',')&']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {font: inherit;
+              font-size: 100%;
+              background: inherit;
+              border: inherit;
+              color: #515151;}
+</style>
+
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Leon&#39;s Blog</h1>
+    <h2 class="brand-tagline">Is super awesome</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://blog.songru.org/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/posts/">Blog</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="https://github.com/underspirit" target="_blank"><i class='fa fa-github' style='font-size:22px;'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li><a href="#定义:4741110ed03a73f9f74fff72a777ae97">定义</a></li>
+<li><a href="#距离度量:4741110ed03a73f9f74fff72a777ae97">距离度量</a></li>
+<li><a href="#k值的选择:4741110ed03a73f9f74fff72a777ae97">k值的选择</a></li>
+<li><a href="#分类决策规则:4741110ed03a73f9f74fff72a777ae97">分类决策规则</a></li>
+<li><a href="#k近邻法的实现-kd树:4741110ed03a73f9f74fff72a777ae97">k近邻法的实现:kd树</a>
+<ul>
+<li><a href="#构造kd树的算法:4741110ed03a73f9f74fff72a777ae97">构造kd树的算法:</a></li>
+<li><a href="#搜索kd树:4741110ed03a73f9f74fff72a777ae97">搜索kd树</a></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/posts/machine-learning/statical-learning-3-K-nearest-neighbor/">统计学习方法读书笔记(3)-K近邻算法</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>7</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jul</span> <span class="post-date-year">2015</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories" style="margin-bottom: 25px;">
+				
+					<a class="post-category post-category-ml" href="http://blog.songru.org//tags/ml">ML</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<p>k近邻法的输入为实例的特征向量,对应于特征空间的点;输出为实例的类别,可以取多类。k近邻法假设给定一个训练数据集,其中的实例类别已定。分类时,对新的实例,根据其k个最近邻的训练实例的类别,通过<strong>多数表决</strong>等方式进行预测。因此,<strong>k近邻法不具有显式的学习过程</strong>。k近邻法实际上利用训练数据集对特征向量空间进行划分,并作为其分类的“模型”。<strong>k值的选择、距离度量及分类决策规则</strong>是k近邻法的三个基本要素。</p>
+
+<h1 id="定义:4741110ed03a73f9f74fff72a777ae97">定义</h1>
+
+<p>输入:训练数据集<code>$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$</code>, 其中,<code>$x_i \in \mathcal{X}=R^n$</code>, <code>$ y_i \in \mathcal{Y} = \{ c_1, c_2, \cdots, c_K\}, i = 1,2,\cdots,N $</code>, 实例特征向量<code>$x$</code>;<br />
+输出:实例<code>$x$</code>所属的类<code>$y$</code>。<br />
+步骤:</p>
+
+<ol>
+<li>根据给定的距离度量,在训练集T中找出与x最邻近的k个点,涵盖这k个点的x的邻域记作<code>$N_k(x)$</code>;</li>
+<li>在<code>$N_k(x)$</code>中根据分类决策规则(如多数表决)决定x的类别y:
+<code>$$  y = \arg \max \limits_{c_j} \sum_{x_i \in N_k(x)} I(y_i = c_j), \ i=1,2,\cdots,N;\ j = 1,2,\cdots,K $$</code>
+<code>$I$</code>为指示函数,即当<code>$y_i=c_j$</code>时<code>$I$</code>为1,否则<code>$I$</code>为0。<br /></li>
+</ol>
+
+<h1 id="距离度量:4741110ed03a73f9f74fff72a777ae97">距离度量</h1>
+
+<p>特征空间中两个实例点的距离是两个实例点相似程度的反映。k近邻模型的特征空间一般是n维实数向量空间<code>$R^n$</code>。使用的距离是欧氏距离,但也可以是其他距离,如更一般的<code>$L_p$</code>距离(Lp  distance)或Minkowski距离(Minkowski distance)。<br />
+设特征空间x是n维实数向量空间<code>$R^n$</code>, <code>$x_i, x_j \in \mathcal{X}$</code>, <code>$ \ x_i = (x_i^{(1)}, x_i^{(2)}, \cdots , x_i^{(n)})^T $</code>, <code>$ x_j = (x_j^{(1)}, x_j^{(2)}, \cdots , x_j^{(n)})^T$</code>, <code>$x_i, x_j$</code>的<code>$L_p$</code>距离定义为:
+<code>$$  L_p(x_i, x_j) = \left(  \sum_{l=1}^n \left| x_i^{(l)} - x_j^{(l)} \right|^p   \right)^{\frac{1}{p}} $$</code></p>
+
+<p>这里<code>$p≥1$</code>。当<code>$p=2$</code>时,称为欧氏距离(Euclidean    distance),即
+<code>$$  L_2(x_i, x_j) = \left(  \sum_{l=1}^n \left| x_i^{(l)} - x_j^{(l)} \right|^2   \right)^{\frac{1}{2}} $$</code></p>
+
+<p>当p=1时,称为曼哈顿距离(Manhattan distance),即
+<code>$$  L_1(x_i, x_j) =  \sum_{l=1}^n \left| x_i^{(l)} - x_j^{(l)} \right|  $$</code></p>
+
+<p>当<code>$p=\infty $</code>时,它是各个坐标距离的最大值,即
+<code>$$  L_1(x_i, x_j) =  \max \limits_{l} \left| x_i^{(l)} - x_j^{(l)} \right|  $$</code></p>
+
+<p>下图给出了二维空间中p取不同值时,与原点的<code>$L_p$</code>距离为1(Lp=1)的点的图形。</p>
+
+<p><img src="/img//1467015385097.png" alt="Alt text" />
+</p>
+
+<h1 id="k值的选择:4741110ed03a73f9f74fff72a777ae97">k值的选择</h1>
+
+<p>k值的选择会对k近邻法的结果产生重大影响。</p>
+
+<ol>
+<li>如果选择较小的k值,就相当于用较小的邻域中的训练实例进行预测,“学习”的近似误差(approximation error)会减小,只有与输入实例较近的(相似的)训练实例才会对预测结果起作用。但缺点是“学习”的估计误差(estimation error)会增大,预测结果会对近邻的实例点非常敏感。如果邻近的实例点恰巧是噪声,预测就会出错。<strong>换句话说,k值的减小就意味着整体模型变得复杂,容易发生过拟合</strong>。<br /></li>
+<li>如果选择较大的k值,就相当于用较大邻域中的训练实例进行预测。其优点是可以减少学习的估计误差。但缺点是学习的近似误差会增大。这时与输入实例较远的(不相似的)训练实例也会对预测起作用,使预测发生错误。k值的增大就意味着整体的模型变得简单。<br /></li>
+<li>如果k=N,那么无论输入实例是什么,都将简单地预测它属于在训练实例中最多的类。这时,模型过于简单,完全忽略训练实例中的大量有用信息,是不可取的。<br /></li>
+</ol>
+
+<p>在应用中,k值一般取一个比较小的数值。<strong>通常采用交叉验证法来选取最优的k值</strong>。</p>
+
+<h1 id="分类决策规则:4741110ed03a73f9f74fff72a777ae97">分类决策规则</h1>
+
+<p>k近邻法中的分类决策规则往往是多数表决,即由输入实例的k个邻近的训练实例中的多数类决定输入实例的类。<br />
+多数表决规则(majority voting rule)有如下解释:如果分类的损失函数为0-1损失函数,分类函数为
+<code>$$ f: R^n \rightarrow \{ c_1, c_2, \cdots, c_K \} $$</code>
+误分类的概率是
+<code>$$ P(Y \ne f(X)) = 1- P(Y = f(X)) $$</code></p>
+
+<p>对给定的实例<code>$x \in \mathcal{X}$</code>,其最近邻的k个训练实例点构成集合<code>$N_k(x)$</code>。如果涵盖<code>$N_k(x)$</code>的区域的类别是<code>$c_j$</code>,那么误分类率是
+<code>$$ \frac{1}{k} \sum_{x_i \in N_k(x)} I(y_i \ne c_j) = 1 - \frac{1}{k} \sum_{x_i \in N_k(x)} I(y_i = c_j)  $$</code>
+要使误分类率最小即经验风险最小,就要使<code>$ \sum_{x_i \in N_k(x)} I(y_i = c_j)  $</code>最大,<strong>所以多数表决规则等价于经验风险最小化</strong>。</p>
+
+<h1 id="k近邻法的实现-kd树:4741110ed03a73f9f74fff72a777ae97">k近邻法的实现:kd树</h1>
+
+<p>k近邻法最简单的实现方法是线性扫描(linear    scan)。这时要计算输入实例与每一个训练实例的距离。当训练集很大时,计算非常耗时,这种方法是不可行的。为了提高k近邻搜索的效率,可以考虑使用特殊的结构存储训练数据,以减少计算距离的次数。<br />
+kd(K-Dimentional)树是一种对k维空间中的实例点进行存储以便对其进行快速检索的树形数据结构。kd树是二叉树,表示对k维空间的一个划分(partition),构造kd树相当于不断地用垂直于坐标轴的超平面将k维空间切分,构成一系列的k维超矩形区域。kd树的每个结点对应于一个k维超矩形区域。</p>
+
+<h2 id="构造kd树的算法:4741110ed03a73f9f74fff72a777ae97">构造kd树的算法:</h2>
+
+<p>输入:k维空间数据集<code>$T = \{  x_1, x_2, \cdots, x_N \}$</code>, 其中<code>$ \ x_i = (x_i^{(1)}, x_i^{(2)}, \cdots , x_i^{(k)})^T $</code>, <code>$i = 1, 2, \cdots, N$</code>;<br />
+输出: kd树.</p>
+
+<p>步骤:</p>
+
+<ol>
+<li>开始:构造根结点,根结点对应于包含T的k维空间的超矩形区域。<br />
+选择<code>$x^{(1)}$</code>为坐标轴,以T中所有实例的<code>$x^{(1)}$</code>坐标的<strong>中位数飞</strong>为切分点,将根结点对应的超矩形区域切分为两个子区域。切分由通过切分点并与坐标轴<code>$x^{(1)}$</code>垂直的超平面实现。<br />
+由根结点生成深度为1的左、右子结点:左子结点对应坐标<code>$x^{(1)}$小</code>于切分点的子区域,右子结点对应于坐标<code>$x^{(1)}$</code>大于切分点的子区域。<br />
+将落在切分超平面上的实例点保存在根结点。<br /></li>
+<li>重复:对深度为<code>$j$</code>的结点,选择<code>$x^{(l)}$</code>为切分的坐标轴,<code>$l=j(modk)+1$</code>,以该结点的区域中所有实例的<code>$x^{(l)}$</code>坐标的中位数为切分点,将该结点对应的超矩形区域切分为两个子区域。切分由通过切分点并与坐标轴<code>$x^{(l)}$</code>垂直的超平面实现。<br />
+由该结点生成深度为j+1的左、右子结点:左子结点对应坐标<code>$x^{(l)}$</code>小于切分点的子区域,右子结点对应坐标<code>$x^{(l)}$</code>大于切分点的子区域。<br /></li>
+<li>将落在切分超平面上的实例点保存在该结点。<br /></li>
+<li>直到两个子区域没有实例存在时停止。从而形成kd树的区域划分。</li>
+</ol>
+
+<p>通常,依次选择坐标轴对空间切分或者选取所有坐标轴中方差最大的进行切分, 选择训练实例点在选定坐标轴上的中位数(median)为切分点.</p>
+
+<h2 id="搜索kd树:4741110ed03a73f9f74fff72a777ae97">搜索kd树</h2>
+
+<p>以最近邻搜索为例:</p>
+
+<p>输入:已构造的kd树;目标点<code>$x$</code>;<br />
+输出:<code>$x$</code>的最近邻。</p>
+
+<ol>
+<li>在kd树中找出包含目标点<code>$x$</code>的叶结点:从根结点出发,递归地向下访问kd树。若目标点x当前维的坐标小于切分点的坐标,则移动到左子结点,否则移动到右子结点。直到子结点为叶结点为止。<br /></li>
+<li>以此叶结点为“当前最近点”。<br /></li>
+<li>递归地向上回退,在每个结点进行以下操作:<br />
+a. 如果该结点保存的实例点比当前最近点距离目标点更近,则以该实例点为“当前最近点”。<br />
+b. 当前最近点一定存在于该结点一个子结点对应的区域。检查该子结点的父结点的另一子结点对应的区域是否有更近的点。具体地,检查另一子结点对应的区域是否与以目标点为球心、以目标点与“当前最近点”间的距离为半径的超球体<strong>相交</strong>。<br />
+如果相交,可能在另一个子结点对应的区域内存在距目标点更近的点,移动到另一个子结点。接着,递归地进行最近邻搜索;<br />
+如果不相交,向上回退。</li>
+<li>当回退到根结点时,搜索结束。最后的“当前最近点”即为x的最近邻点。<br /></li>
+</ol>
+
+<p>如果实例点是随机分布的,kd树搜索的平均计算复杂度是<code>$O(logN)$</code>,这里N是训练实例数。kd树更适用于训练实例数远大于空间维数时的k近邻搜索。<strong>当空间维数接近训练实例数时,它的效率会迅速下降,几乎接近线性扫描</strong>。</p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-ml" href="http://blog.songru.org//tags/ml">ML</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<div class="paging-label">More Reading</div>
+					
+					<span class="paging-newer">
+						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="/posts/machine-learning/statical-learning-4-Naive-bayes/">统计学习方法读书笔记(4)-朴素贝叶斯算法</a>
+		            </span>
+		            
+
+					
+					<span class="paging-older">
+						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/posts/machine-learning/statical-learning-2-Inception/">统计学习方法读书笔记(2)-感知机</a>
+		            </span>
+		            
+	            </div>
+            
+          </section>
+          
+			<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'songru';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2017. All rights reserved.</p>
+</div>
+
+    </div>
+  </div>
+	
+
+	
+
+  <script src="http://blog.songru.org//js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(function(){
+    $('pre code').each(function(){
+        $(this).parent().addClass('codePre');
+    });
+});
+</script>
+</body>
+</html>

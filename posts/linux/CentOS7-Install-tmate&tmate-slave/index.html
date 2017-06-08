@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    Opinion Mining with Deep Recurrent Neural Networks笔记 | Leon&#39;s Blog
+    Centos 7安装tmate和tmate-slave | Leon&#39;s Blog
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -16,11 +16,11 @@
 <meta name="author" content="">
 <meta name="generator" content="Hugo 0.14" />
 
-  <meta property="og:title" content="Opinion Mining with Deep Recurrent Neural Networks笔记" />
+  <meta property="og:title" content="Centos 7安装tmate和tmate-slave" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://blog.songru.org/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/" />
+<meta property="og:url" content="http://blog.songru.org/posts/linux/CentOS7-Install-tmate&amp;tmate-slave/" />
 
 
   
@@ -141,14 +141,14 @@ code.has-jax {font: inherit;
 	    
   		<section class="post">
             <h1 class="post-title">
-              <a href="/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/">Opinion Mining with Deep Recurrent Neural Networks笔记</a>
+              <a href="/posts/linux/CentOS7-Install-tmate&amp;tmate-slave/">Centos 7安装tmate和tmate-slave</a>
             </h1>
             <h3 class="post-subtitle">
             	
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>24</sup></span><span class="post-date-separator">/</span><span class="post-date-month">May</span> <span class="post-date-year">2016</span>
+                	<span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2017</span>
             	</span>
             	
             
@@ -159,7 +159,7 @@ code.has-jax {font: inherit;
 			
 				<div class="post-categories" style="margin-bottom: 25px;">
 				
-					<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+					<a class="post-category post-category-linux" href="http://blog.songru.org//tags/linux">Linux</a>
 				
 				</div>
 			
@@ -168,41 +168,40 @@ code.has-jax {font: inherit;
 
 			
 
-            <p>本文对传统的RNN进行改进，结合BidirectionalRNN，提出了Deep bidirectional RNN。</p>
+            <pre><code>yum install gcc kernel-devel make ncurses-devel
+yum install git cmake ruby zlib-devel openssl-devel libevent-devel ncurses-devel
+yum group install &quot;Development Tools&quot;
+yum install libssh libssh-devel
 
-<hr />
+# Install msgpack
+yum install msgpack msgpack-devel python-msgpack
+# If not work, then install with source
+git clone https://github.com/msgpack/msgpack-c.git
+cd msgpack-c
+cmake .
+make
+sudo make install
 
-<p><img src="/img/1464096878586.png" alt="Alt text" />
-</p>
+# Install tmate
+./autogen.sh &amp;&amp; \
+./configure  &amp;&amp; \
+make         &amp;&amp; \
+make install
 
-<p><strong>传统的RNN</strong>（图a）信息传播方向是从前往后一个方向，某个时刻t的隐藏状态仅仅包含它之前词语的语义信息：<br />
-<img src="/img/1464097111614.png" alt="Alt text" />
-<br />
-$f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（比如softmax）。</p>
+# If not work, install libevent2 with source
+wget https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz
+# cd to libevent2 src
+./configure --prefix=/usr/local
+make &amp;&amp; make install
 
-<p><strong>Bidirectional RNN</strong>（图b）包含前向和后向RNN两个部分，分别从相反的反向进行信息的传播，再将每个时刻的两个方向的隐藏状态联合起来计算输出值：<br />
-<img src="/img/1464097064201.png" alt="Alt text" />
-</p>
+# Install tmate-slave
+git clone https://github.com/tmate-io/tmate-slave.git &amp;&amp; cd tmate-slave
+./create_keys.sh # This will generate SSH keys, remember the keys fingerprints.
+./autogen.sh &amp;&amp; ./configure &amp;&amp; make
 
-<p>可以看到，前向RNN和反向RNN的参数是互相独立的。</p>
-
-<p><strong>Deep  RNN</strong>（图c）是将多个传统RNN进行叠加而来，即每一层计算隐藏状态的输入都为上一层的输出。</p>
-
-<p><strong>Deep Bidirectional  RNN</strong>（图d）则是将Bidirectional RNN与Deep RNN结合起来：<br />
-第$i$层（$i&gt;1$）第$t$个时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i)}}$依赖于三个输入：第$i-1$层$t$时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i-1)}}$和后向隐藏状态$\overleftarrow{{h_t}^{(i-1)}}$以及第$i$层$t-1$时刻的前向隐藏状态.<br />
-第$i$层（$i&gt;1$）第$t$个时刻的后向隐藏状态$\overleftarrow{{h_t}^{(i)}}$的计算同理:<br />
-<img src="/img/1464098995066.png" alt="Alt text" />
-</p>
-
-<p>第1层隐藏状态机算比较特殊,也比较简单:<br />
-<img src="/img/1464099041075.png" alt="Alt text" />
-</p>
-
-<p>输出的计算有两种选择:一是使用所有时刻的隐藏状态计算输出,或者仅使用最后一个时刻的隐藏状态.这里使用第二种方案:<br />
-<img src="/img/1464097751597.png" alt="Alt text" />
-</p>
-
-<p>该文是通过堆叠（stack）RNN的方式达到Deep RNN的结构，<a href="http://arxiv.org/abs/1312.6026">Pascanu等</a>的论文采取了另一种思路进行Deep RNN的扩展。</p>
+# Start
+sudo ./tmate-slave -p 222
+</code></pre>
 
 	
 			
@@ -211,7 +210,7 @@ $f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（�
 				<div class="tags-list">
 					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
 					
-	                <a class="post-tag post-tag-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>,
+	                <a class="post-tag post-tag-linux" href="http://blog.songru.org//tags/linux">Linux</a>,
 	                
 				</div>
 			
@@ -222,14 +221,14 @@ $f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（�
 					
 					<span class="paging-newer">
 						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/">Sequence to Sequence Learning with Neural Networks</a>
+						<a class="paging-link" href="/posts/linux/Linux-IPC/">Linux IPC总结(Posix和System V对比)</a>
 		            </span>
 		            
 
 					
 					<span class="paging-older">
 						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="/posts/linux/Ubuntu_Matplotlib_fix/">Ubuntu下matplotlib绘图中文乱码</a>
+			            <a class="paging-link" href="/posts/linux/NoteBook-Ubuntu-Install/">Ubuntu 14.04 笔记本双显卡cuda 安装</a>
 		            </span>
 		            
 	            </div>

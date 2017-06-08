@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    统计学习方法读书笔记(4)-朴素贝叶斯算法 | Leon&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="统计学习方法读书笔记(4)-朴素贝叶斯算法" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://blog.songru.org/posts/machine-learning/statical-learning-4-Naive-bayes/" />
+
+
+  
+  <link rel="stylesheet" href="http://blog.songru.org//css/base-min.css">
+  <link rel="stylesheet" href="http://blog.songru.org//css/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="http://blog.songru.org//css/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://blog.songru.org//css/redlounge.css">
+  <link href="http://blog.songru.org//css/font-awesome.min.css" rel="stylesheet">
+  <link href="http://blog.songru.org//css/googlefonts_raleway.css" rel='stylesheet' type='text/css'>
+  <link href="http://blog.songru.org//css/googlefonts_Libre.css" rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Leon&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="http://blog.songru.org//css/tomorrow-night-bright.min.css">
+  
+  <script src="http://blog.songru.org//js/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)'],['&(',')&']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {font: inherit;
+              font-size: 100%;
+              background: inherit;
+              border: inherit;
+              color: #515151;}
+</style>
+
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Leon&#39;s Blog</h1>
+    <h2 class="brand-tagline">Is super awesome</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://blog.songru.org/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/posts/">Blog</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="https://github.com/underspirit" target="_blank"><i class='fa fa-github' style='font-size:22px;'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li><a href="#定义:099c9edb24a218621028d97385cd3c12">定义:</a></li>
+<li><a href="#求解方法-极大似然估计方法:099c9edb24a218621028d97385cd3c12">求解方法, 极大似然估计方法:</a></li>
+<li><a href="#贝叶斯估计-平滑:099c9edb24a218621028d97385cd3c12">贝叶斯估计(平滑)</a></li>
+<li><a href="#后验概率最大化的含义-不是很懂:099c9edb24a218621028d97385cd3c12">后验概率最大化的含义(不是很懂)</a></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/posts/machine-learning/statical-learning-4-Naive-bayes/">统计学习方法读书笔记(4)-朴素贝叶斯算法</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>7</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jul</span> <span class="post-date-year">2015</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories" style="margin-bottom: 25px;">
+				
+					<a class="post-category post-category-ml" href="http://blog.songru.org//tags/ml">ML</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<p>朴素贝叶斯(naïve Bayes)法是基于<strong>贝叶斯定理与特征条件独立假设</strong>的分类方法。对于给定的训练数据集,首先基于特征条件独立假设学习输入/输出的<strong>联合概率分布</strong>;然后基于此模型,对给定的输入x,利用贝叶斯定理求出后验概率最大的输出y。</p>
+
+<h1 id="定义:099c9edb24a218621028d97385cd3c12">定义:</h1>
+
+<p>设输入空间<code>$\mathcal{X}⊆R^n$</code>为n维向量的集合,输出空间为类标记集合<code>$ \mathcal{Y} = \{c_1,c_2, \cdots ,c_K\}$</code>。输入为特征向量<code>$x \in \mathcal{X}$</code>,输出为类标记(class label)<code>$y \in \mathcal{Y}$</code>。<code>$X$</code>是定义在输入空间<code>$\mathcal{X}$</code>上的随机向量,<code>$Y$</code>是定义在输出空间<code>$\mathcal{Y}$</code>上的随机变量. <code>$P(X,Y)$</code>是<code>$X$</code>和<code>$Y$</code>的联合概率分布。</p>
+
+<p>训练数据集<code>$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$</code>,由<code>$P(X,Y)$</code>独立同分布产生。<br />
+其中<code>$x_i = (x_i^{(1)}, x_i^{(2)}, \cdots , x_i^{(n)})^T$</code>, <code>$x_i^{(j)}$</code>是第i个样本的第j个特征, <code>$x_i^{(j)} \in \{a_{j1},a_{j2}, \cdots ,a_{jS_j} \}$</code>, <code>$a_{jl}$</code>是第j个特征可能取的第l个值, <code>$j=1,2, \cdots ,n$</code> , <code>$l=1,2, \cdots ,S_j $</code>, <code>$y_i \in \{c_1,c_2, \cdots ,c_K\} $</code>;</p>
+
+<p>朴素贝叶斯法通过训练数据集学习联合概率分布<code>$P(X,Y)$</code>, 再根据贝叶斯公式
+<code>$$ P(Y \mid X) = \frac{P(X, Y)}{P(X)}  = \frac {P(X \mid Y) P(Y) }  {\sum \limits_Y P(X \mid Y) P(Y)}$$</code>
+求出后验概率。</p>
+
+<p>朴素贝叶斯法分类时,对给定的输入x,通过学习到的模型计算后验概率分布<code>$P(Y=c_k|X=x)$</code>,将后验概率最大的类作为x的类输出。后验概率计算根据贝叶斯公式进行:
+<code>$$ 
+\begin{align}
+P(Y=c_K \mid X = x) &amp;= \frac{P(X = x, Y = c_k)}{P(X = x)}  \\ 
+&amp;= \frac {P(X = x \mid Y = c_k) P(Y = c_k) }  {\sum_{k=1}^K P(X = x \mid Y = c_k) P(Y = c_k)}
+\end{align}
+$$</code></p>
+
+<p>具体地,需要学习以下先验概率分布<code>$P(Y=c_k)$</code>及条件概率分布<code>$P(X = x \mid Y = c_k)$</code>。</p>
+
+<h1 id="求解方法-极大似然估计方法:099c9edb24a218621028d97385cd3c12">求解方法, 极大似然估计方法:</h1>
+
+<p>先验概率分布
+<code>$$ P(Y=c_K) = \frac{\sum_{i=1}^{N} I(y_i = c_k)} {N} , \quad k=1,2,\cdots,K $$</code></p>
+
+<p>条件概率分布:
+<code>$$  P(X=x \mid Y = c_k) = P(X^{(1)} = x_{(1)}, \cdots, X^{(n)} = x_{(n)} \mid Y=c_k) \quad  k=1,2,\cdots,K $$</code>
+首先朴素贝叶斯法对条件概率分布作了<strong>条件独立性的假设</strong>。由于这是一个较强的假设,朴素贝叶斯法也由此得名。具体地,条件独立性假设是
+<code>$$
+\begin{align}  
+  P(X=x \mid Y=c_k)  &amp;= P(X^{(1)} = x_{(1)}, \cdots, X^{(n)} = x_{(n)} \mid Y=c_k)    \\  
+             &amp;= \prod_{j=1} ^n P( X^{(j)} = x^{(j)} \mid Y = c_k )  \\
+  P(X^{(j)} = a_{jl} \mid Y = c_k) &amp;=  \frac {\sum_{i=1}^N I(x_i^{(j)} = a_{jl}, y_i = c_k) } {\sum_{i=1}^N I(y_i = c_k)}
+\end{align} 
+$$</code>
+<strong>条件独立假设等于是说用于分类的特征在类确定的条件下都是条件独立的</strong>。这一假设使朴素贝叶斯法变得简单,但有时会牺牲一定的分类准确率。</p>
+
+<p>最终后验概率为:
+<code>$$ P(Y = c_k \mid X = x)  =  \frac{P(Y = c_k) \prod_{j=1}^n P(X^{(j)} = x^{(j)} \mid Y = c_k)}  { \sum_{k=1}^K \left( P(Y = c_k) \prod_{j=1}^n P(X^{(j)} = x^{(j)} \mid Y = c_k) \right) }  \quad \text{(K为类别个数, n为特征个数)}$$</code></p>
+
+<p>朴素贝叶斯分类器可表示为
+<code>$$ y = f(x) = \arg \max_{c_k} \frac{P(Y = c_k) \prod_{j=1}^n P(X^{(j)} = x^{(j)} \mid Y = c_k)}  { \sum_{k=1}^K \left( P(Y = c_k) \prod_{j=1}^n P(X^{(j)} = x^{(j)} \mid Y = c_k) \right) } $$</code></p>
+
+<p>其中分母对所有$c_k$都是相同的,所以
+<code>$$ y = f(x) = \arg \max_{c_k} P(Y = c_k) \prod_{j=1}^n P(X^{(j)} = x^{(j)} \mid Y = c_k) $$</code>
+朴素贝叶斯法实际上学习到生成数据的机制,所以<strong>属于生成模型</strong>。</p>
+
+<h1 id="贝叶斯估计-平滑:099c9edb24a218621028d97385cd3c12">贝叶斯估计(平滑)</h1>
+
+<p>用极大似然估计可能会出现所要估计的概率值为0的情况。这时会影响到后验概率的计算结果,使分类产生偏差。解决这一问题的方法是采用贝叶斯估计。具体地,条件概率的贝叶斯估计是
+<code>$$  P(X^{(j)} = a_{jl} \mid Y = c_k) =  \frac {\sum_{i=1}^N I(x_i^{(j)} = a_{jl}, y_i = c_k) + \lambda} {\sum_{i=1}^N I(y_i = c_k) + S_j \lambda}  $$</code></p>
+
+<p>式中<code>$ \lambda ≥0$</code>。等价于在随机变量各个取值的频数上赋予一个正数<code>$ \lambda&gt;0$</code>。当<code>$ \lambda=0$</code>时就是极大似然估计。常取<code>$ \lambda = 1$</code>, 这时称为拉普拉斯平滑(Laplace smoothing)。</p>
+
+<h1 id="后验概率最大化的含义-不是很懂:099c9edb24a218621028d97385cd3c12">后验概率最大化的含义(不是很懂)</h1>
+
+<p>朴素贝叶斯法将实例分到后验概率最大的类中。这<strong>等价于期望风险最小化</strong>。假设选择0-1损失函数:
+<code>$$ L(Y, f(X)) = \begin{cases}
+                1, &amp; Y \ne f(X) \\
+                0, &amp; Y = f(X)
+                \end{cases}
+$$</code>
+式中<code>$f(X)$</code>是分类决策函数。这时,期望风险函数为
+<code>$$ R_{exp}(f) = E [L(Y, f(X))] $$</code>
+期望是对联合分布$P(X,Y)$取的。由此取条件期望
+<code>$$ R_{exp}(f) = E_X \sum_{k=1}^K[ L(c_k, f(X)) ] P(c_k \mid X)$$</code>
+为了使期望风险最小化,只需对<code>$X=x$</code>逐个极小化,由此得到:
+<code>$$
+\begin{align}  
+  f(x) &amp;= \arg \max_{y \in \mathcal{Y}} \sum_{k=1}^K L(c_k, y) P(c_k \mid X = x)  \\
+  &amp;= \arg \max_{y \in \mathcal{Y}} \sum_{k=1}^K P(y \ne  c_k \mid X =x ) \\
+  &amp;= \arg \min_{y \in \mathcal{Y}} (1 - P(y = c_k \mid X =x)) \\
+  &amp;= \arg \max_{y \in \mathcal{Y}} P(y = c_k \mid X = x)
+\end{align} 
+$$</code>
+这样一来,根据期望风险最小化准则就得到了后验概率最大化准则:
+<code>$$ f(x) = \arg \max_{c_k} P( y = c_k \mid X = x)  $$</code>
+即朴素贝叶斯法所采用的原理。</p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-ml" href="http://blog.songru.org//tags/ml">ML</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<div class="paging-label">More Reading</div>
+					
+					<span class="paging-newer">
+						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="/posts/machine-learning/statical-learning-5-Decition-tree/">统计学习方法读书笔记(5)-决策树</a>
+		            </span>
+		            
+
+					
+					<span class="paging-older">
+						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/posts/machine-learning/statical-learning-3-K-nearest-neighbor/">统计学习方法读书笔记(3)-K近邻算法</a>
+		            </span>
+		            
+	            </div>
+            
+          </section>
+          
+			<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'songru';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2017. All rights reserved.</p>
+</div>
+
+    </div>
+  </div>
+	
+
+	
+
+  <script src="http://blog.songru.org//js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(function(){
+    $('pre code').each(function(){
+        $(this).parent().addClass('codePre');
+    });
+});
+</script>
+</body>
+</html>

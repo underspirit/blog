@@ -234,9 +234,9 @@ $$&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
 在离散属性上只需要计算1次信息增益率，而在连续属性上却需要计算N-1次，计算量是相当大的。可以如下减少计算量: 对于连续属性先进行排序，&lt;strong&gt;只在决策属性(即类别)发生改变的地方进行切分&lt;/strong&gt;。&lt;br /&gt;
 如果利用增益率来选择连续值属性的分界点，会导致一些副作用。分界点将样本分成两个部分，这两个部分的样本个数之比也会影响增益率。根据增益率公式，我们可以发现，当分界点能够把样本分成数量相等的两个子集时（我们称此时的分界点为等分分界点），增益率的抑制会被最大化(此时分母$H(D)$增大, 增益率减小)，因此等分分界点被过分抑制了。子集样本个数能够影响分界点，显然不合理。&lt;strong&gt;因此在决定分界点是还是采用增益这个指标，而选择属性的时候才使用增益率这个指标。这个改进能够很好得抑制连续值属性的倾向。&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;设训练数据集为D, $|D|$ 表示其样本容量,即样本个数。设有K个类$C&lt;em&gt;k,k=1,2, \cdots ,K$, $|C_k|$为属于类$C_k$的样本个数 。设特征A有n个不同的取值${a_1,a_2, \cdots, a_n}$, 根据特征A的取值将D划分为n个子集$D_1,D_2, \cdots ,D_n$, $|D_i|$为$D_i$的样本个数 。记子集$D_i$中属于类$C_k$的样本的集合为$D&lt;/em&gt;{ik}$, 即$D&lt;em&gt;{ik} = D_i \cap C_k$, $|D&lt;/em&gt;{ik}|$为$D_{ik}$的样本个数。于是信息增益的算法如下:&lt;br /&gt;
+&lt;p&gt;设训练数据集为D, $|D|$ 表示其样本容量,即样本个数。设有K个类&lt;code&gt;$C_k,k=1,2, \cdots ,K$&lt;/code&gt;, &lt;code&gt;$|C_k|$&lt;/code&gt;为属于类&lt;code&gt;$C_k$&lt;/code&gt;的样本个数 。设特征A有n个不同的取值&lt;code&gt;$\{a_1,a_2, \cdots, a_n\}$&lt;/code&gt;, 根据特征A的取值将D划分为n个子集&lt;code&gt;$D_1,D_2, \cdots ,D_n$&lt;/code&gt;, &lt;code&gt;$|D_i|$&lt;/code&gt;为&lt;code&gt;$D_i$&lt;/code&gt;的样本个数 。记子集&lt;code&gt;$D_i$&lt;/code&gt;中属于类&lt;code&gt;$C_k$&lt;/code&gt;的样本的集合为&lt;code&gt;$D_{ik}$&lt;/code&gt;, 即&lt;code&gt;$D_{ik} = D_i \cap C_k$&lt;/code&gt;, &lt;code&gt;$|D_{ik}|$&lt;/code&gt;为&lt;code&gt;$D_{ik}$&lt;/code&gt;的样本个数。于是信息增益的算法如下:&lt;br /&gt;
 输入:训练数据集D和特征A;
-输出:特征A对训练数据集D的信息增益$g(D,A)$。&lt;/p&gt;
+输出:特征A对训练数据集D的信息增益&lt;code&gt;$g(D,A)$&lt;/code&gt;。&lt;/p&gt;
 
 &lt;h4 id=&#34;属性缺失值的处理:0b17248df6960d4fcec23e1367068474&#34;&gt;属性缺失值的处理&lt;/h4&gt;
 
@@ -245,50 +245,51 @@ $$&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
 1. 如何在属性值缺失的情况下进行划分属性的选择?
 2. 给定划分属性, 若样本在该属性上的值缺失, 如何对样本进行划分?&lt;/p&gt;
 
-&lt;p&gt;给定训练集$D$和属性$A$, 特征A有V个不同的取值${a&lt;em&gt;1,a_2, \cdots, a_V}$, 令$ \tilde{D} $表示$D$中在属性$A$上没有缺失值的样本子集. 对问题(1), 根据$ \tilde{D} $来判断属性$A$的优劣. 令$  \tilde{D&lt;/em&gt;{v}}  $为$ \tilde{D} $中在属性$A$上取值为$a&lt;em&gt;v$的样本子集,  $  \tilde{D^{k}}  $为$ \tilde{D} $中在属于第$k$类的样本子集. $ \tilde{D}&lt;/em&gt;{ik} $表示在属性$A$上取值为$a&lt;em&gt;v$的, 且属于第$k$类的样本子集, 则有 $  \tilde{D} =  \bigcup _{k=1} ^K \tilde{D^k}$, $  \tilde{D} =  \bigcup _{v=1} ^V \tilde{D_v}$. 假设我们为每个样本$x$ 赋予一个权重$w_x$(一般初始化为1), 并定义
-$$
-\rho = \frac{ \sum&lt;/em&gt;{x \in  \tilde{D}} w&lt;em&gt;x } { \sum&lt;/em&gt;{x \in  D} w&lt;em&gt;x  }  , \
-\tilde{p}_k = \frac{ \sum&lt;/em&gt;{x \in  \tilde{D&lt;em&gt;k}} w_x } { \sum&lt;/em&gt;{x \in  D} w&lt;em&gt;x  }  , \
-\tilde{r}_v = \frac{ \sum&lt;/em&gt;{x \in  \tilde{D^v}} w&lt;em&gt;x } { \sum&lt;/em&gt;{x \in  D} w&lt;em&gt;x  }  , \
-$$&lt;br /&gt;
-对属性$A$, $\rho$表示无缺失值样本所占比例, $\tilde{p}_k$表示无缺失值样本中第$k$类所占比例, $\tilde{r}_v$表示无缺失值样本中在属性$A$上取值$a_v$的样本所占比例.&lt;br /&gt;
+&lt;p&gt;给定训练集&lt;code&gt;$D$&lt;/code&gt;和属性&lt;code&gt;$A$&lt;/code&gt;, 特征A有V个不同的取值&lt;code&gt;$\{a_1,a_2, \cdots, a_V\}$&lt;/code&gt;, 令&lt;code&gt;$ \tilde{D} $&lt;/code&gt;表示&lt;code&gt;$D$&lt;/code&gt;中在属性&lt;code&gt;$A$&lt;/code&gt;上没有缺失值的样本子集. 对问题(1), 根据&lt;code&gt;$ \tilde{D} $&lt;/code&gt;来判断属性&lt;code&gt;$A$&lt;/code&gt;的优劣. 令&lt;code&gt;$  \tilde{D_{v}}  $&lt;/code&gt;为&lt;code&gt;$ \tilde{D} $&lt;/code&gt;中在属性&lt;code&gt;$A$&lt;/code&gt;上取值为&lt;code&gt;$a_v$&lt;/code&gt;的样本子集,  &lt;code&gt;$  \tilde{D^{k}}  $&lt;/code&gt;为&lt;code&gt;$ \tilde{D} $&lt;/code&gt;中在属于第&lt;code&gt;$k$&lt;/code&gt;类的样本子集. &lt;code&gt;$ \tilde{D}_{ik} $&lt;/code&gt;表示在属性&lt;code&gt;$A$&lt;/code&gt;上取值为&lt;code&gt;$a_v$&lt;/code&gt;的, 且属于第&lt;code&gt;$k$&lt;/code&gt;类的样本子集, 则有 &lt;code&gt;$  \tilde{D} =  \bigcup _{k=1} ^K \tilde{D^k}$&lt;/code&gt;, &lt;code&gt;$  \tilde{D} =
+\bigcup _{v=1} ^V \tilde{D_v}$&lt;/code&gt;. 假设我们为每个样本&lt;code&gt;$x$&lt;/code&gt; 赋予一个权重&lt;code&gt;$w_x$&lt;/code&gt;(一般初始化为1), 并定义
+&lt;code&gt;$$
+\rho = \frac{ \sum_{x \in  \tilde{D}} w_x } { \sum_{x \in  D} w_x  }  , \\
+\tilde{p}_k = \frac{ \sum_{x \in  \tilde{D_k}} w_x } { \sum_{x \in  D} w_x  }  , \\
+\tilde{r}_v = \frac{ \sum_{x \in  \tilde{D^v}} w_x } { \sum_{x \in  D} w_x  }  , \\
+$$&lt;/code&gt;&lt;br /&gt;
+对属性&lt;code&gt;$A$&lt;/code&gt;, &lt;code&gt;$\rho$&lt;/code&gt;表示无缺失值样本所占比例, &lt;code&gt;$\tilde{p}_k$&lt;/code&gt;表示无缺失值样本中第&lt;code&gt;$k$&lt;/code&gt;类所占比例, &lt;code&gt;$\tilde{r}_v$&lt;/code&gt;表示无缺失值样本中在属性&lt;code&gt;$A$&lt;/code&gt;上取值&lt;code&gt;$a_v$&lt;/code&gt;的样本所占比例.&lt;br /&gt;
 基于上述定义, 将信息增益推广为:
- $$  g(D, A) = \rho \ g(\tilde{D}, A) = \rho \ \left(H(\tilde{D}) - H(\tilde{D} \mid A) \right)$$
-$$
+ &lt;code&gt;$$  g(D, A) = \rho \ g(\tilde{D}, A) = \rho \ \left(H(\tilde{D}) - H(\tilde{D} \mid A) \right)$$&lt;/code&gt;
+&lt;code&gt;$$ 
 \begin{align*}
-H(\tilde{D} \mid A) &amp;amp;= \sum&lt;/em&gt;{i=1}^V \frac{\lvert \tilde{D}&lt;em&gt;i\rvert} { \lvert \tilde{D} \rvert}  H(\tilde{D}_i)   \
-&amp;amp;=  \sum&lt;/em&gt;{i=1}^V \frac{\lvert \tilde{D}&lt;em&gt;i\rvert} { \lvert \tilde{D} \rvert}  \sum&lt;/em&gt;{k=1}^K  \frac{\lvert \tilde{D}&lt;em&gt;{ik}\rvert} { \lvert \tilde{D}_i \rvert}  \log \frac{\lvert \tilde{D}&lt;/em&gt;{ik}\rvert} { \lvert \tilde{D}_i \rvert}
+H(\tilde{D} \mid A) &amp;amp;= \sum_{i=1}^V \frac{\lvert \tilde{D}_i\rvert} { \lvert \tilde{D} \rvert}  H(\tilde{D}_i)   \\ 
+&amp;amp;=  \sum_{i=1}^V \frac{\lvert \tilde{D}_i\rvert} { \lvert \tilde{D} \rvert}  \sum_{k=1}^K  \frac{\lvert \tilde{D}_{ik}\rvert} { \lvert \tilde{D}_i \rvert}  \log \frac{\lvert \tilde{D}_{ik}\rvert} { \lvert \tilde{D}_i \rvert} 
 \end{align*}
-$$&lt;br /&gt;
-对问题(2), 若样本$x$在划分属性$A$上的取值已知, 则将$x$划入与其取值对应的子结点, 且样本权值在子节点中保持为$w_x$. 若样本$x$在划分属性是的取值未知, 则将$x$同时划分到所有子节点, 且样本取值在与属性值$a_v$对应的子节点中调整为$\tilde{r}_v  \cdot w_x$; 直观的看, 就是让同一样本以不同的概率划入不同的子节点中取.&lt;/p&gt;
+$$&lt;/code&gt;&lt;br /&gt;
+对问题(2), 若样本&lt;code&gt;$x$&lt;/code&gt;在划分属性&lt;code&gt;$A$&lt;/code&gt;上的取值已知, 则将&lt;code&gt;$x$&lt;/code&gt;划入与其取值对应的子结点, 且样本权值在子节点中保持为&lt;code&gt;$w_x$&lt;/code&gt;. 若样本&lt;code&gt;$x$&lt;/code&gt;在划分属性是的取值未知, 则将&lt;code&gt;$x$&lt;/code&gt;同时划分到所有子节点, 且样本取值在与属性值&lt;code&gt;$a_v$&lt;/code&gt;对应的子节点中调整为&lt;code&gt;$\tilde{r}_v  \cdot w_x$&lt;/code&gt;; 直观的看, 就是让同一样本以不同的概率划入不同的子节点中取.&lt;/p&gt;
 
 &lt;h4 id=&#34;决策树的剪枝-后剪枝:0b17248df6960d4fcec23e1367068474&#34;&gt;决策树的剪枝(后剪枝)&lt;/h4&gt;
 
 &lt;p&gt;决策树生成算法递归地产生决策树,直到不能继续下去为止。这样产生的树往往出现&lt;strong&gt;过拟合&lt;/strong&gt;现象。解决这个问题的办法是考虑决策树的复杂度,对已生成的决策树进行简化。&lt;br /&gt;
 将已生成的树进行简化的过程称为&lt;strong&gt;剪枝(pruning)&lt;/strong&gt;。具体地,剪枝从已生成的树上裁掉一些子树或叶结点,并将其根结点或父结点作为新的叶结点,从而简化分类树模型。&lt;/p&gt;
 
-&lt;p&gt;决策树的剪枝往往通过&lt;strong&gt;极小化决策树整体的损失函数&lt;/strong&gt;(loss function)或代价函数(cost function)来实现。设树T的叶结点个数为$|T|$, $t$是树$T$的叶结点, 该叶结点有$N&lt;em&gt;t$个样本点, 其中k类的样本点有$N&lt;/em&gt;{tk}$个, $k=1,2, \cdots ,K$, $H&lt;em&gt;t(T)$为叶结点t上的经验熵, $\alpha≥0$为参数,则决策树学习的损失函数可以定义为
-$$ C&lt;/em&gt;{\alpha} (T) = \sum&lt;em&gt;{t=1}^{|T|} N_t H_t(T) + \alpha \lvert T \rvert  $$
+&lt;p&gt;决策树的剪枝往往通过&lt;strong&gt;极小化决策树整体的损失函数&lt;/strong&gt;(loss function)或代价函数(cost function)来实现。设树T的叶结点个数为&lt;code&gt;$|T|$&lt;/code&gt;, &lt;code&gt;$t$&lt;/code&gt;是树&lt;code&gt;$T$&lt;/code&gt;的叶结点, 该叶结点有&lt;code&gt;$N_t$&lt;/code&gt;个样本点, 其中k类的样本点有&lt;code&gt;$N_{tk}$&lt;/code&gt;个, &lt;code&gt;$k=1,2, \cdots ,K$&lt;/code&gt;, &lt;code&gt;$H_t(T)$&lt;/code&gt;为叶结点t上的经验熵, &lt;code&gt;$\alpha≥0$&lt;/code&gt;为参数,则决策树学习的损失函数可以定义为
+&lt;code&gt;$$ C_{\alpha} (T) = \sum_{t=1}^{|T|} N_t H_t(T) + \alpha \lvert T \rvert  $$&lt;/code&gt;
 其中经验熵为
-$$ H_t(T) = - \sum&lt;/em&gt;{k=1}^K \frac{N&lt;em&gt;{tk}} {N_t} \log  \frac{N&lt;/em&gt;{tk}} {N&lt;em&gt;t} $$
+&lt;code&gt;$$ H_t(T) = - \sum_{k=1}^K \frac{N_{tk}} {N_t} \log  \frac{N_{tk}} {N_t} $$&lt;/code&gt;
 在损失函数中,将式右端的第1项记作
-$$ C(T) =  \sum&lt;/em&gt;{t=1}^{|T|} N&lt;em&gt;t H_t(T) = - \sum&lt;/em&gt;{t=1}^{|T|} \sum&lt;em&gt;{k=1}^K N&lt;/em&gt;{tk} \log \frac{N&lt;em&gt;{tk}} {N_t}   $$
+&lt;code&gt;$$ C(T) =  \sum_{t=1}^{|T|} N_t H_t(T) = - \sum_{t=1}^{|T|} \sum_{k=1}^K N_{tk} \log \frac{N_{tk}} {N_t}   $$&lt;/code&gt;
 这时有:
-$$ C&lt;/em&gt;{\alpha} (T) = C(T) + \alpha  \lvert T \rvert  $$
-$C(T)$表示模型对训练数据的预测误差, 即模型与训练数据的拟合程度, $|T|$表示模型复杂度(正则项), 参数$\alpha≥0$控制两者之间的影响。较大的$\alpha$促使选择较简单的模型(树), 较小的$\alpha$促使选择较复杂的模型(树)。$\alpha=0$意味着只考虑模型与训练数据的拟合程度, 不考虑模型的复杂度。&lt;br /&gt;
-剪枝,就是当$\alpha$确定时,选择损失函数最小的模型,即损失函数最小的子树。可以看出,决策树生成只考虑了通过提高信息增益(或信息增益比)对训练数据进行更好的拟合。而决策树剪枝通过优化损失函数还考虑了减小模型复杂度。&lt;strong&gt;决策树生成学习局部的模型,而决策树剪枝学习整体的模型。&lt;/strong&gt;&lt;/p&gt;
+&lt;code&gt;$$ C_{\alpha} (T) = C(T) + \alpha  \lvert T \rvert  $$&lt;/code&gt;
+&lt;code&gt;$C(T)$&lt;/code&gt;表示模型对训练数据的预测误差, 即模型与训练数据的拟合程度, &lt;code&gt;$|T|$&lt;/code&gt;表示模型复杂度(正则项), 参数&lt;code&gt;$\alpha≥0$&lt;/code&gt;控制两者之间的影响。较大的&lt;code&gt;$\alpha$&lt;/code&gt;促使选择较简单的模型(树), 较小的&lt;code&gt;$\alpha$&lt;/code&gt;促使选择较复杂的模型(树)。&lt;code&gt;$\alpha=0$&lt;/code&gt;意味着只考虑模型与训练数据的拟合程度, 不考虑模型的复杂度。&lt;br /&gt;
+剪枝,就是当&lt;code&gt;$\alpha$&lt;/code&gt;确定时,选择损失函数最小的模型,即损失函数最小的子树。可以看出,决策树生成只考虑了通过提高信息增益(或信息增益比)对训练数据进行更好的拟合。而决策树剪枝通过优化损失函数还考虑了减小模型复杂度。&lt;strong&gt;决策树生成学习局部的模型,而决策树剪枝学习整体的模型。&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;损失函数的极小化等价于正则化的极大似然估计&lt;/strong&gt;。所以,利用损失函数最小原则进行剪枝就是用正则化的极大似然估计进行模型选择。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;树的剪枝算法(最小误差剪枝)&lt;/strong&gt;&lt;br /&gt;
-输入: 生成算法产生的整个树$T$, 参数$\alpha$;
-输出: 修剪后的子树$T&lt;em&gt;{\alpha}$。
+输入: 生成算法产生的整个树&lt;code&gt;$T$&lt;/code&gt;, 参数&lt;code&gt;$\alpha$&lt;/code&gt;;
+输出: 修剪后的子树&lt;code&gt;$T_{\alpha}$&lt;/code&gt;。
 1. 计算每个结点的经验熵。
 2. 递归地从树的叶结点向上回缩。
-设一组叶结点回缩到其父结点之前与之后的整体树分别为$T_B$与$T_A$, 其对应的损失函数值分别$C&lt;/em&gt;{\alpha}(T&lt;em&gt;B)$与$C&lt;/em&gt;{\alpha}(T&lt;em&gt;A)$, 如果
-$$ C&lt;/em&gt;{\alpha}(T&lt;em&gt;B) \ge C&lt;/em&gt;{\alpha}(T&lt;em&gt;A) $$
+设一组叶结点回缩到其父结点之前与之后的整体树分别为&lt;code&gt;$T_B$&lt;/code&gt;与&lt;code&gt;$T_A$&lt;/code&gt;, 其对应的损失函数值分别&lt;code&gt;$C_{\alpha}(T_B)$&lt;/code&gt;与&lt;code&gt;$C_{\alpha}(T_A)$&lt;/code&gt;, 如果
+&lt;code&gt;$$ C_{\alpha}(T_B) \ge C_{\alpha}(T_A) $$&lt;/code&gt;
 则进行剪枝,即将父结点变为新的叶结点。&lt;br /&gt;
-3. 返回(2), 直至不能继续为止, 得到损失函数最小的子树$T&lt;/em&gt;{\alpha}$。&lt;br /&gt;
+3. 返回(2), 直至不能继续为止, 得到损失函数最小的子树&lt;code&gt;$T_{\alpha}$&lt;/code&gt;。&lt;br /&gt;
 上式只需考虑两个树的损失函数的差,其计算可以在局部进行。所以,决策树的剪枝算法可以由一种动态规划的算法实现。&lt;/p&gt;
 
 &lt;h4 id=&#34;决策树的剪枝-预剪枝:0b17248df6960d4fcec23e1367068474&#34;&gt;决策树的剪枝(预剪枝)&lt;/h4&gt;
@@ -314,32 +315,32 @@ $$ C&lt;/em&gt;{\alpha}(T&lt;em&gt;B) \ge C&lt;/em&gt;{\alpha}(T&lt;em&gt;A) $$
 
 &lt;h4 id=&#34;回归树的生成:0b17248df6960d4fcec23e1367068474&#34;&gt;回归树的生成&lt;/h4&gt;
 
-&lt;p&gt;假设$X$与$Y$分别为输入和输出变量, 并且$Y$是&lt;strong&gt;连续变量&lt;/strong&gt;,给定训练数据集考虑如何生成回归树.
-$$ D = {  (x&lt;em&gt;1, y_1), (x_2, y_2), \cdots, (x_N, y_N)  } $$&lt;br /&gt;
-&lt;strong&gt;一个回归树对应着输入空间(即特征空间)的一个划分以及在划分的单元上的输出值&lt;/strong&gt;。假设已将输入空间划分为$M$个单元$R_1,R2, \cdots ,R_M$, 并且在每个单元$R_m$上有一个固定的输出值$c_m$,于是回归树模型可表示为
-$$ f(x) = \sum&lt;/em&gt;{m=1}^M c&lt;em&gt;m I(x \in R_m) $$&lt;br /&gt;
-当输入空间的划分确定时,可以用&lt;strong&gt;平方误差&lt;/strong&gt;$ \sum&lt;/em&gt;{x&lt;em&gt;i \in R_m} (y_i - f(x_i))^2 $来表示回归树对于训练数据的预测误差, 用&lt;strong&gt;平方误差最小的准则求解每个单元上的最优输出值&lt;/strong&gt;。易知,单元$R_m$上的$c_m$的最优值$\hat{c}_m$是$R_m$上的所有输入实例$x_i$对应的输出$y_i$的均值,即
-$$ \hat{c}_m = avg (y_i \mid x_i \in R_m) $$&lt;br /&gt;
-采用启发式的方法样对输入空间进行划分, 选择第$j$个变量$x^{(j)}$和它取的值$s$作为切分变量(splitting variable)和切分点(splitting  point), 并定义两个区域:
-$$ R_1(j, s) = { x \mid x^{(j)} \le s }  \quad  和   \quad R_2(j, s) = { x \mid x^{(j)} &amp;gt; s }  $$
+&lt;p&gt;假设&lt;code&gt;$X$&lt;/code&gt;与&lt;code&gt;$Y$&lt;/code&gt;分别为输入和输出变量, 并且&lt;code&gt;$Y$&lt;/code&gt;是&lt;strong&gt;连续变量&lt;/strong&gt;,给定训练数据集考虑如何生成回归树.
+&lt;code&gt;$$ D = \{  (x_1, y_1), (x_2, y_2), \cdots, (x_N, y_N)  \} $$&lt;/code&gt;&lt;br /&gt;
+&lt;strong&gt;一个回归树对应着输入空间(即特征空间)的一个划分以及在划分的单元上的输出值&lt;/strong&gt;。假设已将输入空间划分为&lt;code&gt;$M$&lt;/code&gt;个单元&lt;code&gt;$R_1,R2, \cdots ,R_M$&lt;/code&gt;, 并且在每个单元&lt;code&gt;$R_m$&lt;/code&gt;上有一个固定的输出值&lt;code&gt;$c_m$&lt;/code&gt;,于是回归树模型可表示为
+&lt;code&gt;$$ f(x) = \sum_{m=1}^M c_m I(x \in R_m) $$&lt;/code&gt;&lt;br /&gt;
+当输入空间的划分确定时,可以用&lt;strong&gt;平方误差&lt;/strong&gt;&lt;code&gt;$ \sum_{x_i \in R_m} (y_i - f(x_i))^2 $&lt;/code&gt;来表示回归树对于训练数据的预测误差, 用&lt;strong&gt;平方误差最小的准则求解每个单元上的最优输出值&lt;/strong&gt;。易知,单元&lt;code&gt;$R_m$&lt;/code&gt;上的&lt;code&gt;$c_m$&lt;/code&gt;的最优值&lt;code&gt;$\hat{c}_m$&lt;/code&gt;是&lt;code&gt;$R_m$&lt;/code&gt;上的所有输入实例&lt;code&gt;$x_i$&lt;/code&gt;对应的输出&lt;code&gt;$y_i$&lt;/code&gt;的均值,即
+&lt;code&gt;$$ \hat{c}_m = avg (y_i \mid x_i \in R_m) $$&lt;/code&gt;&lt;br /&gt;
+采用启发式的方法样对输入空间进行划分, 选择第&lt;code&gt;$j$&lt;/code&gt;个变量&lt;code&gt;$x^{(j)}$&lt;/code&gt;和它取的值&lt;code&gt;$s$&lt;/code&gt;作为切分变量(splitting variable)和切分点(splitting    point), 并定义两个区域:
+&lt;code&gt;$$ R_1(j, s) = \{ x \mid x^{(j)} \le s \}  \quad  和   \quad R_2(j, s) = \{ x \mid x^{(j)} &amp;gt; s \}  $$&lt;/code&gt;
 然后寻找最优切分变量j和最优切分点s。具体地,求解&lt;br /&gt;
-$$  \min \limits&lt;/em&gt;{j, s} \left[ \min \limits&lt;em&gt;{c_1} \sum&lt;/em&gt;{x&lt;em&gt;i \in R_1(j, s)} (y_i - c_1)^2 + \min \limits&lt;/em&gt;{c&lt;em&gt;2} \sum&lt;/em&gt;{x&lt;em&gt;i \in R_2(j, s)} (y_i - c_2)^2  \right] $$&lt;br /&gt;
-对固定输入变量$j$可以找到最优切分点$s$。
-$$  \hat{c}_1 = avg( y_i \mid x_i \in R_1(j, s) )  \quad 和 \quad   \hat{c}_2 = avg( y_i \mid x_i \in R_2(j, s) )$$&lt;br /&gt;
-遍历所有输入变量, 找到最优的切分变量$j$, 构成一个对$(j,s)$。依此将输入空间划分为两个区域。接着,对每个区域重复上述划分过程, 直到满足停止条件为止。这样就生成一棵回归树。这样的回归树通常称为&lt;strong&gt;最小二乘回归树(least   squares regression tree)&lt;/strong&gt;,现将算法叙述如下:&lt;br /&gt;
-输入: 训练数据集$D$;&lt;br /&gt;
-输出: 回归树$f(x)$。&lt;br /&gt;
+&lt;code&gt;$$  \min \limits_{j, s} \left[ \min \limits_{c_1} \sum_{x_i \in R_1(j, s)} (y_i - c_1)^2 + \min \limits_{c_2} \sum_{x_i \in R_2(j, s)} (y_i - c_2)^2  \right] $$&lt;/code&gt;&lt;br /&gt;
+对固定输入变量&lt;code&gt;$j$&lt;/code&gt;可以找到最优切分点&lt;code&gt;$s$&lt;/code&gt;。
+&lt;code&gt;$$  \hat{c}_1 = avg( y_i \mid x_i \in R_1(j, s) )  \quad 和 \quad   \hat{c}_2 = avg( y_i \mid x_i \in R_2(j, s) )$$&lt;/code&gt;&lt;br /&gt;
+遍历所有输入变量, 找到最优的切分变量&lt;code&gt;$j$&lt;/code&gt;, 构成一个对&lt;code&gt;$(j,s)$&lt;/code&gt;。依此将输入空间划分为两个区域。接着,对每个区域重复上述划分过程, 直到满足停止条件为止。这样就生成一棵回归树。这样的回归树通常称为&lt;strong&gt;最小二乘回归树(least   squares regression tree)&lt;/strong&gt;,现将算法叙述如下:&lt;br /&gt;
+输入: 训练数据集&lt;code&gt;$D$&lt;/code&gt;;&lt;br /&gt;
+输出: 回归树&lt;code&gt;$f(x)$&lt;/code&gt;。&lt;br /&gt;
 在训练数据集所在的输入空间中, 递归地将每个区域划分为两个子区域并决定每个子区域上的输出值,构建二叉决策树:&lt;br /&gt;
-1. 选择最优切分变量$j$与切分点$s$, 求解&lt;br /&gt;
-$$  \min \limits&lt;/em&gt;{j, s} \left[ \min \limits&lt;em&gt;{c_1} \sum&lt;/em&gt;{x&lt;em&gt;i \in R_1(j, s)} (y_i - c_1)^2 + \min \limits&lt;/em&gt;{c&lt;em&gt;2} \sum&lt;/em&gt;{x&lt;em&gt;i \in R_2(j, s)} (y_i - c_2)^2  \right] $$&lt;br /&gt;
-遍历变量$j$, 对固定的切分变量$j$扫描切分点$s$, 选择使上式达到最小值的对$(j,s)$。&lt;br /&gt;
-2. 用选定的对$(j,s)$划分区域并决定相应的输出值:&lt;br /&gt;
-$$ R_1(j, s) = { x \mid x^{(j)} \le s }  \  ,   \quad R_2(j, s) = { x \mid x^{(j)} &amp;gt; s }   \
-\hat{c}_m = \frac{1} {N_m} \sum&lt;/em&gt;{x&lt;em&gt;i \in R_m(j, s)} y_i \ , \quad x \in R_m, \ m=1,2
-$$&lt;br /&gt;
+1. 选择最优切分变量&lt;code&gt;$j$&lt;/code&gt;与切分点&lt;code&gt;$s$&lt;/code&gt;, 求解&lt;br /&gt;
+&lt;code&gt;$$  \min \limits_{j, s} \left[ \min \limits_{c_1} \sum_{x_i \in R_1(j, s)} (y_i - c_1)^2 + \min \limits_{c_2} \sum_{x_i \in R_2(j, s)} (y_i - c_2)^2  \right] $$&lt;/code&gt;&lt;br /&gt;
+遍历变量&lt;code&gt;$j$&lt;/code&gt;, 对固定的切分变量$j$扫描切分点&lt;code&gt;$s$&lt;/code&gt;, 选择使上式达到最小值的对&lt;code&gt;$(j,s)$&lt;/code&gt;。&lt;br /&gt;
+2. 用选定的对&lt;code&gt;$(j,s)$&lt;/code&gt;划分区域并决定相应的输出值:&lt;br /&gt;
+&lt;code&gt;$$ R_1(j, s) = \{ x \mid x^{(j)} \le s \}  \  ,   \quad R_2(j, s) = \{ x \mid x^{(j)} &amp;gt; s \}   \\
+\hat{c}_m = \frac{1} {N_m} \sum_{x_i \in R_m(j, s)} y_i \ , \quad x \in R_m, \ m=1,2
+$$&lt;/code&gt;&lt;br /&gt;
 3. 继续对两个子区域调用步骤(1),(2),直至满足停止条件。&lt;br /&gt;
-4. 将输入空间划分为$M$个区域$R_1,R_2, \cdots, R_m$,生成决策树:&lt;br /&gt;
-$$ f(x) = \sum&lt;/em&gt;{m=1}^M \hat{c}_m I(x \in R_m) $$&lt;/p&gt;
+4. 将输入空间划分为&lt;code&gt;$M$&lt;/code&gt;个区域&lt;code&gt;$R_1,R_2, \cdots, R_m$&lt;/code&gt;,生成决策树:&lt;br /&gt;
+&lt;code&gt;$$ f(x) = \sum_{m=1}^M \hat{c}_m I(x \in R_m) $$&lt;/code&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;分类树的生成:0b17248df6960d4fcec23e1367068474&#34;&gt;分类树的生成&lt;/h4&gt;
 
@@ -347,71 +348,71 @@ $$ f(x) = \sum&lt;/em&gt;{m=1}^M \hat{c}_m I(x \in R_m) $$&lt;/p&gt;
 
 &lt;h4 id=&#34;基尼指数:0b17248df6960d4fcec23e1367068474&#34;&gt;基尼指数&lt;/h4&gt;
 
-&lt;p&gt;分类问题中,假设有$K$个类, 样本点属于第$k$类的概率为$p$ , 则概率分布的基尼指数$k$定义为&lt;br /&gt;
-$$ Gini(p) = 1 -  \sum_{k=1}^K \left(  \frac{ \lvert C_k \rvert  } { \lvert  D \rvert  }  \right) $$&lt;br /&gt;
-这里$C_k$是$D$中属于第$k$类的样本子集, $K$是类的个数.&lt;br /&gt;
-如果样本集合$D$根据特征$A$是否取某一可能值$a$被分割成$D_1$和$D_2$两部分,即&lt;br /&gt;
-$$ D_1 = {  (x, y) \in D \mid A(x) = a } \ , \quad D_2 = D - D_1  $$&lt;br /&gt;
-则在特征A的条件下, 集合$D$的基尼指数定义为&lt;br /&gt;
-$$  Gini(D, A) =  \frac{ \lvert D_1 \rvert  } { \lvert  D \rvert  } Gini(D_1) + \frac{ \lvert D_2 \rvert  } { \lvert  D \rvert  } Gini(D_2)$$&lt;br /&gt;
-基尼指数$Gini(D)$表示集合$D$的不确定性, 基尼指数$Gini(D,A)$表示经$A=a$分割后集合$D$的不确定性。&lt;strong&gt;基尼指数值越大,样本集合的不确定性也就越大,这一点与熵相似。&lt;/strong&gt;&lt;br /&gt;
-二类分类问题中基尼指数$Gini(p)$、熵(单位比特)之半$\frac{1}{2}H(p)$和分类误差率的关系&lt;br /&gt;
-&lt;img src=&#34;./1467279391154.png&#34; alt=&#34;Alt text&#34; /&gt;
+&lt;p&gt;分类问题中,假设有&lt;code&gt;$K$&lt;/code&gt;个类, 样本点属于第&lt;code&gt;$k$&lt;/code&gt;类的概率为&lt;code&gt;$p$&lt;/code&gt; , 则概率分布的基尼指数&lt;code&gt;$k$&lt;/code&gt;定义为&lt;br /&gt;
+&lt;code&gt;$$ Gini(p) = 1 -  \sum_{k=1}^K \left(  \frac{ \lvert C_k \rvert  } { \lvert  D \rvert  }  \right) $$&lt;/code&gt;&lt;br /&gt;
+这里&lt;code&gt;$C_k$&lt;/code&gt;是&lt;code&gt;$D$&lt;/code&gt;中属于第&lt;code&gt;$k$&lt;/code&gt;类的样本子集, &lt;code&gt;$K$&lt;/code&gt;是类的个数.&lt;br /&gt;
+如果样本集合&lt;code&gt;$D$&lt;/code&gt;根据特征&lt;code&gt;$A$&lt;/code&gt;是否取某一可能值&lt;code&gt;$a$&lt;/code&gt;被分割成&lt;code&gt;$D_1$&lt;/code&gt;和&lt;code&gt;$D_2$&lt;/code&gt;两部分,即&lt;br /&gt;
+&lt;code&gt;$$ D_1 = \{  (x, y) \in D \mid A(x) = a \} \ , \quad D_2 = D - D_1  $$&lt;/code&gt;&lt;br /&gt;
+则在特征A的条件下, 集合&lt;code&gt;$D$&lt;/code&gt;的基尼指数定义为&lt;br /&gt;
+&lt;code&gt;$$  Gini(D, A) =  \frac{ \lvert D_1 \rvert  } { \lvert  D \rvert  } Gini(D_1) + \frac{ \lvert D_2 \rvert  } { \lvert  D \rvert  } Gini(D_2)$$&lt;/code&gt;&lt;br /&gt;
+基尼指数&lt;code&gt;$Gini(D)$&lt;/code&gt;表示集合&lt;code&gt;$D$&lt;/code&gt;的不确定性, 基尼指数&lt;code&gt;$Gini(D,A)$&lt;/code&gt;表示经&lt;code&gt;$A=a$&lt;/code&gt;分割后集合&lt;code&gt;$D$&lt;/code&gt;的不确定性。&lt;strong&gt;基尼指数值越大,样本集合的不确定性也就越大,这一点与熵相似。&lt;/strong&gt;&lt;br /&gt;
+二类分类问题中基尼指数&lt;code&gt;$Gini(p)$&lt;/code&gt;、熵(单位比特)之半&lt;code&gt;$\frac{1}{2}H(p)$&lt;/code&gt;和分类误差率的关系&lt;br /&gt;
+&lt;img src=&#34;http://blog.songru.org/img/1467279391154.png&#34; alt=&#34;Alt text&#34; /&gt;
 &lt;br /&gt;
 基尼指数和熵之半的曲线很接近,都可以近似地代表分类误差率。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;CART生成算法&lt;/strong&gt;
-输入: 训练数据集$D$, 停止计算的条件;&lt;br /&gt;
+输入: 训练数据集&lt;code&gt;$D$&lt;/code&gt;, 停止计算的条件;&lt;br /&gt;
 输出: CART决策树。&lt;br /&gt;
 根据训练数据集,从根结点开始,递归地对每个结点进行以下操作,构建二叉决策树:&lt;br /&gt;
-1. 设结点的训练数据集为$D$, 计算现有特征对该数据集的基尼指数。此时,对每一个特征$A$,对其可能取的每个值$a$, 根据样本点对$A=a$的测试为“是”或“否”将$D$分割成$D_1$和$D_2$两部分, 计算$A=a$时的基尼指数$Gini(D, A)$。&lt;br /&gt;
-2. 在所有可能的特征$A$以及它们所有可能的切分点$a$中, &lt;strong&gt;选择基尼指数最小的特征及其对应的切分点&lt;/strong&gt;作为最优特征与最优切分点. 依最优特征与最优切分点,从现结点生成两个子结点,将训练数据集依特征分配到两个子结点中去。&lt;br /&gt;
+1. 设结点的训练数据集为&lt;code&gt;$D$&lt;/code&gt;, 计算现有特征对该数据集的基尼指数。此时,对每一个特征&lt;code&gt;$A$&lt;/code&gt;,对其可能取的每个值&lt;code&gt;$a$&lt;/code&gt;, 根据样本点对&lt;code&gt;$A=a$&lt;/code&gt;的测试为“是”或“否”将&lt;code&gt;$D$&lt;/code&gt;分割成&lt;code&gt;$D_1$&lt;/code&gt;和&lt;code&gt;$D_2$&lt;/code&gt;两部分, 计算&lt;code&gt;$A=a$&lt;/code&gt;时的基尼指数&lt;code&gt;$Gini(D, A)$&lt;/code&gt;。&lt;br /&gt;
+2. 在所有可能的特征&lt;code&gt;$A$&lt;/code&gt;以及它们所有可能的切分点&lt;code&gt;$a$&lt;/code&gt;中, &lt;strong&gt;选择基尼指数最小的特征及其对应的切分点&lt;/strong&gt;作为最优特征与最优切分点. 依最优特征与最优切分点,从现结点生成两个子结点,将训练数据集依特征分配到两个子结点中去。&lt;br /&gt;
 3. 对两个子结点递归地调用(1),(2),直至满足停止条件。
 4. 生成CART决策树。&lt;br /&gt;
 &lt;strong&gt;算法停止计算的条件&lt;/strong&gt;是结点中的样本个数小于预定阈值, 或样本集的基尼指数小于预定阈值(样本基本属于同一类),或者没有更多特征。&lt;/p&gt;
 
 &lt;h4 id=&#34;cart剪枝:0b17248df6960d4fcec23e1367068474&#34;&gt;CART剪枝&lt;/h4&gt;
 
-&lt;p&gt;CART剪枝算法由两步组成:首先从生成算法产生的决策树$T_0$底端开始不断剪枝, 直到$T_0$的根结点,形成一个子树序列${T_0,T_1, \cdots ,T_n}$; 然后通过交叉验证法在独立的验证数据集上对子树序列进行测试,从中选择最优子树。&lt;/p&gt;
+&lt;p&gt;CART剪枝算法由两步组成:首先从生成算法产生的决策树&lt;code&gt;$T_0$&lt;/code&gt;底端开始不断剪枝, 直到&lt;code&gt;$T_0$&lt;/code&gt;的根结点,形成一个子树序列&lt;code&gt;$\{T_0,T_1, \cdots ,T_n\}$&lt;/code&gt;; 然后通过交叉验证法在独立的验证数据集上对子树序列进行测试,从中选择最优子树。&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;剪枝,形成一个子树序列
 在剪枝过程中,计算子树的损失函数:
-$$ C&lt;em&gt;\alpha (T) = C(T) + \alpha \lvert T \rvert $$&lt;br /&gt;
-其中, $T$为任意子树, $C(T)$为对训练数据的预测误差(如基尼指数, 平方误差), $ \lvert T \rvert  $为子树的叶子点个数, $\alpha \ge 0$为参数, $C&lt;/em&gt;\alpha (T)  $为参数是$\alpha$时的子树$T$的整体损失。参数$\alpha$权衡训练数据的拟合程度与模型的复杂度。&lt;br /&gt;
-对固定的$\alpha$, 一定存在使损失函数$C&lt;em&gt;\alpha (T)  $最小的子树, 将其表示为$T&lt;/em&gt;\alpha$。$T&lt;em&gt;\alpha$在损失函数$C&lt;/em&gt;\alpha (T)  $最小的意义下是最优的.&lt;br /&gt;
-从整体树$T&lt;em&gt;0$开始剪枝。对$T_0$的任意内部结点$t$, 以$t$为单结点树的损失函数是
-$$ C&lt;/em&gt;\alpha (T) = C(t)  + \alpha \ , \ (\lvert t \rvert  = 1) $$&lt;br /&gt;
-以$t$为根结点的子树$T&lt;em&gt;t$的损失函数是
-$$ C&lt;/em&gt;\alpha (T&lt;em&gt;t) = C(T_t)  + \alpha \lvert T_t \rvert$$&lt;br /&gt;
-当$\alpha=0$及$\alpha$充分小时, 有不等式
-$$ C&lt;/em&gt;\alpha (T&lt;em&gt;t)  &amp;lt; C&lt;/em&gt;\alpha (t)   $$&lt;br /&gt;
-当$\alpha$增大时, 在某一$\alpha$有&lt;br /&gt;
-$$ C&lt;em&gt;\alpha (T_t)  =  C&lt;/em&gt;\alpha (t)   $$&lt;br /&gt;
-当$\alpha$再增大时,不等式反向。只要$ \alpha = \frac {C(t) - C(T_t)} {\lvert T_t \rvert -1}$, $T_t$与$t$有相同的损失函数值,  而$t$的结点少, 因此$t$比$T_t$更可取, 对$T_t$进行剪枝。&lt;br /&gt;
-为此, 对$T_0$的每一内部结点t, 计算
-$$ g(t) = \frac {C(t) - C(T_t)} {\lvert T_t \rvert -1}$$&lt;br /&gt;
-&lt;strong&gt;它表示剪枝后整体损失函数减少的程度&lt;/strong&gt;。在$T _0$中剪去$g(t)$最小的$T_t$ , 将得到的子树作为$T_1$ ,同时将最小的$g(t)$设为$\alpha_1$。$T_1$为区间$[\alpha_1,\alpha_2)$的最优子树。&lt;br /&gt;
-如此剪枝下去,直至得到根结点。在这一过程中,不断地增加$\alpha$的值,产生新的区间。&lt;/p&gt;&lt;/li&gt;
+&lt;code&gt;$$ C_\alpha (T) = C(T) + \alpha \lvert T \rvert $$&lt;/code&gt;&lt;br /&gt;
+其中, &lt;code&gt;$T$&lt;/code&gt;为任意子树, &lt;code&gt;$C(T)$&lt;/code&gt;为对训练数据的预测误差(如基尼指数, 平方误差), &lt;code&gt;$ \lvert T \rvert  $&lt;/code&gt;为子树的叶子点个数, &lt;code&gt;$\alpha \ge 0$&lt;/code&gt;为参数, &lt;code&gt;$C_\alpha (T)  $&lt;/code&gt;为参数是&lt;code&gt;$\alpha$&lt;/code&gt;时的子树&lt;code&gt;$T$&lt;/code&gt;的整体损失。参数&lt;code&gt;$\alpha$&lt;/code&gt;权衡训练数据的拟合程度与模型的复杂度。&lt;br /&gt;
+对固定的&lt;code&gt;$\alpha$&lt;/code&gt;, 一定存在使损失函数&lt;code&gt;$C_\alpha (T)  $&lt;/code&gt;最小的子树, 将其表示为&lt;code&gt;$T_\alpha$&lt;/code&gt;。&lt;code&gt;$T_\alpha$&lt;/code&gt;在损失函数&lt;code&gt;$C_\alpha (T)  $&lt;/code&gt;最小的意义下是最优的.&lt;br /&gt;
+从整体树&lt;code&gt;$T_0$&lt;/code&gt;开始剪枝。对&lt;code&gt;$T_0$&lt;/code&gt;的任意内部结点&lt;code&gt;$t$&lt;/code&gt;, 以&lt;code&gt;$t$&lt;/code&gt;为单结点树的损失函数是
+&lt;code&gt;$$ C_\alpha (T) = C(t)  + \alpha \ , \ (\lvert t \rvert  = 1) $$&lt;/code&gt;&lt;br /&gt;
+以&lt;code&gt;$t$&lt;/code&gt;为根结点的子树&lt;code&gt;$T_t$&lt;/code&gt;的损失函数是
+&lt;code&gt;$$ C_\alpha (T_t) = C(T_t)  + \alpha \lvert T_t \rvert$$&lt;/code&gt;&lt;br /&gt;
+当&lt;code&gt;$\alpha=0$及$\alpha$&lt;/code&gt;充分小时, 有不等式
+&lt;code&gt;$$ C_\alpha (T_t)  &amp;lt; C_\alpha (t)   $$&lt;/code&gt;&lt;br /&gt;
+当&lt;code&gt;$\alpha$&lt;/code&gt;增大时, 在某一&lt;code&gt;$\alpha$&lt;/code&gt;有&lt;br /&gt;
+&lt;code&gt;$$ C_\alpha (T_t)  =  C_\alpha (t)   $$&lt;/code&gt;&lt;br /&gt;
+当&lt;code&gt;$\alpha$&lt;/code&gt;再增大时,不等式反向。只要&lt;code&gt;$ \alpha = \frac {C(t) - C(T_t)} {\lvert T_t \rvert -1}$&lt;/code&gt;, &lt;code&gt;$T_t$&lt;/code&gt;与&lt;code&gt;$t$&lt;/code&gt;有相同的损失函数值,  而&lt;code&gt;$t$&lt;/code&gt;的结点少, 因此&lt;code&gt;$t$&lt;/code&gt;比&lt;code&gt;$T_t$&lt;/code&gt;更可取, 对&lt;code&gt;$T_t$&lt;/code&gt;进行剪枝。&lt;br /&gt;
+为此, 对&lt;code&gt;$T_0$&lt;/code&gt;的每一内部结点t, 计算
+&lt;code&gt;$$ g(t) = \frac {C(t) - C(T_t)} {\lvert T_t \rvert -1}$$&lt;/code&gt;&lt;br /&gt;
+&lt;strong&gt;它表示剪枝后整体损失函数减少的程度&lt;/strong&gt;。在&lt;code&gt;$T _0$&lt;/code&gt;中剪去&lt;code&gt;$g(t)$&lt;/code&gt;最小的&lt;code&gt;$T_t$&lt;/code&gt; , 将得到的子树作为&lt;code&gt;$T_1$&lt;/code&gt; ,同时将最小的&lt;code&gt;$g(t)$&lt;/code&gt;设为&lt;code&gt;$\alpha_1$&lt;/code&gt;。&lt;code&gt;$T_1$&lt;/code&gt;为区间&lt;code&gt;$[\alpha_1,\alpha_2)$&lt;/code&gt;的最优子树。&lt;br /&gt;
+如此剪枝下去,直至得到根结点。在这一过程中,不断地增加&lt;code&gt;$\alpha$&lt;/code&gt;的值,产生新的区间。&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;在剪枝得到的子树序列$T&lt;em&gt;0,T_1,\cdots,T_n$中通过交叉验证选取最优子树$T_a$&lt;br /&gt;
-具体地, &lt;strong&gt;利用独立的验证数据集&lt;/strong&gt;, 测试子树序列$T_0,T_1,\cdots,T_n$中各棵子树的平方误差或基尼指数。平方误差或基尼指数最小的决策树被认为是最优的决策树。在子树序列中,每棵子树$T_0,T_1,\cdots,T_n$都对应于一个参数$\alpha_1, \alpha_2,\cdots, \alpha_n$。所以, 当最优子树$T_k$确定时, 对应的$\alpha_k$也确定了, 即得到最优决策树$T&lt;/em&gt;\alpha$。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在剪枝得到的子树序列&lt;code&gt;$T_0,T_1,\cdots,T_n$&lt;/code&gt;中通过交叉验证选取最优子树&lt;code&gt;$T_a$&lt;/code&gt;&lt;br /&gt;
+具体地, &lt;strong&gt;利用独立的验证数据集&lt;/strong&gt;, 测试子树序列&lt;code&gt;$T_0,T_1,\cdots,T_n$&lt;/code&gt;中各棵子树的平方误差或基尼指数。平方误差或基尼指数最小的决策树被认为是最优的决策树。在子树序列中,每棵子树&lt;code&gt;$T_0,T_1,\cdots,T_n$&lt;/code&gt;都对应于一个参数&lt;code&gt;$\alpha_1, \alpha_2,\cdots, \alpha_n$&lt;/code&gt;。所以, 当最优子树&lt;code&gt;$T_k$&lt;/code&gt;确定时, 对应的&lt;code&gt;$\alpha_k$&lt;/code&gt;也确定了, 即得到最优决策树&lt;code&gt;$T_\alpha$&lt;/code&gt;。&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;&lt;strong&gt;CART剪枝算法:&lt;/strong&gt;&lt;br /&gt;
-输入: CART算法生成的决策树$T&lt;em&gt;0$;&lt;br /&gt;
-输出: 最优决策树$T&lt;/em&gt;\alpha$&lt;br /&gt;
-1. 设$k=0,\ T=T&lt;em&gt;0$.
-2. 设$ \alpha = + \infty$
-3. 自下而上地对各内部结点$t$计算$C(T_t)$, $ \lvert T_t \rvert $以及
-$$ g(t) = \frac {C(t) - C(T_t)} {\lvert T_t \rvert -1} \
+输入: CART算法生成的决策树&lt;code&gt;$T_0$&lt;/code&gt;;&lt;br /&gt;
+输出: 最优决策树&lt;code&gt;$T_\alpha$&lt;/code&gt;&lt;br /&gt;
+1. 设&lt;code&gt;$k=0,\ T=T_0$&lt;/code&gt;.
+2. 设&lt;code&gt;$ \alpha = + \infty$&lt;/code&gt;
+3. 自下而上地对各内部结点&lt;code&gt;$t$&lt;/code&gt;计算&lt;code&gt;$C(T_t)$&lt;/code&gt;, &lt;code&gt;$ \lvert T_t \rvert $&lt;/code&gt;以及
+&lt;code&gt;$$ g(t) = \frac {C(t) - C(T_t)} {\lvert T_t \rvert -1} \\ 
 \alpha = \min \left(\alpha, g(t) \right)
-$$&lt;br /&gt;
-这里,$T_t$表示以$t$为根结点的子树, $C(T_t)$是对训练数据的预测误差, $\lvert T_t \rvert $是$T_t$的叶结点个数。&lt;br /&gt;
-4. 对$g(t)=\alpha$的内部节点$t$进行剪枝, 并对叶结点$t$以多数表决法决定其类,得到树$T$。&lt;br /&gt;
-5. 设$k=k+1, \alpha_k=\alpha, T_k=T$。&lt;br /&gt;
-6. 如果$T_k$不是由根结点及两个叶结点构成的树, 则回到步骤(3), 否则令$T_k = T_n$。
-7. 采用交叉验证法在子树序列$T_0,T_1,\cdots,T_n$中选取最优子树$T&lt;/em&gt;\alpha$。&lt;/p&gt;
+$$&lt;/code&gt;&lt;br /&gt;
+这里,&lt;code&gt;$T_t$&lt;/code&gt;表示以&lt;code&gt;$t$&lt;/code&gt;为根结点的子树, &lt;code&gt;$C(T_t)$&lt;/code&gt;是对训练数据的预测误差, &lt;code&gt;$\lvert T_t \rvert $&lt;/code&gt;是&lt;code&gt;$T_t$&lt;/code&gt;的叶结点个数。&lt;br /&gt;
+4. 对&lt;code&gt;$g(t)=\alpha$&lt;/code&gt;的内部节点&lt;code&gt;$t$&lt;/code&gt;进行剪枝, 并对叶结点&lt;code&gt;$t$&lt;/code&gt;以多数表决法决定其类,得到树&lt;code&gt;$T$&lt;/code&gt;。&lt;br /&gt;
+5. 设&lt;code&gt;$k=k+1, \alpha_k=\alpha, T_k=T$&lt;/code&gt;。&lt;br /&gt;
+6. 如果&lt;code&gt;$T_k$&lt;/code&gt;不是由根结点及两个叶结点构成的树, 则回到步骤(3), 否则令&lt;code&gt;$T_k = T_n$&lt;/code&gt;。
+7. 采用交叉验证法在子树序列&lt;code&gt;$T_0,T_1,\cdots,T_n$&lt;/code&gt;中选取最优子树&lt;code&gt;$T_\alpha$&lt;/code&gt;。&lt;/p&gt;
 </description>
     </item>
     

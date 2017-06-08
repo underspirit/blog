@@ -6,15 +6,195 @@
     <description>Recent content on Leon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sat, 18 Mar 2017 09:40:10 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 18 Mar 2017 09:54:19 +0800</lastBuildDate>
     <atom:link href="http://blog.songru.org/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>放松地方</title>
-      <link>http://blog.songru.org/posts/linux/%E6%94%BE%E6%9D%BE%E5%9C%B0%E6%96%B9/</link>
-      <pubDate>Sat, 18 Mar 2017 09:40:10 +0800</pubDate>
+      <title>Ubuntu修复Grub引导(备忘)</title>
+      <link>http://blog.songru.org/posts/linux/Ubuntu-grub/</link>
+      <pubDate>Sat, 18 Mar 2017 09:54:19 +0800</pubDate>
       
-      <guid>http://blog.songru.org/posts/linux/%E6%94%BE%E6%9D%BE%E5%9C%B0%E6%96%B9/</guid>
+      <guid>http://blog.songru.org/posts/linux/Ubuntu-grub/</guid>
+      <description>&lt;p&gt;我的系统是win7 + Ubuntu双系统, 但win7基本不用了. 由于/home目录快满了, 于是在Ubuntu中删除了win7系统下的C盘所在的分区. 但是我没有注意到我的引导程序是安装在这个分区, 导致重启之后两个系统都进不去了.&lt;/p&gt;
+
+&lt;p&gt;下面是修复步骤:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;使用Ubuntu的U盘启动盘进入试用模式, 打开命令行, 在这个模式下可以查看以及操作系统的分区.&lt;/li&gt;
+&lt;li&gt;安装testdisk软件, 用于恢复删除的分区.&lt;/li&gt;
+&lt;li&gt;使用sudo或root运行testdisk_static, 选择&lt;code&gt;create -&amp;gt; Disk /dev/sda(选择需要恢复的磁盘) -&amp;gt; Proceed -&amp;gt; Intel -&amp;gt; Analyse -&amp;gt; Backup(备份当前的分区表, 不行还可以使用它进行恢复) -&amp;gt; Quick Search&lt;/code&gt;,  之后会查找出你丢失的分区, 然后可以选择&lt;code&gt;write&lt;/code&gt;进行写入.&lt;/li&gt;
+&lt;li&gt;再找回分区时, 发现testdisk给我们多生成了一个分区, 据我的理解也没有影响, 因为我的C盘分区是磁盘的第一个分区, 以0号扇区为起点. 而引导器数据是写入在分区的第一个磁道上, 所以如果恢复后的C盘还是从0号扇区开始, 那么就相当于引导数据也恢复了.&lt;/li&gt;
+&lt;li&gt;这样就找回了误删的分区, 重启电脑出现了easybcd创建的启动项, 可以进入win7系统, 但是不能进入ubuntu, 显示一个命令行&lt;code&gt;grub rescue &amp;gt;&lt;/code&gt;.不知道什么原因.&lt;/li&gt;
+&lt;li&gt;再次用Ubuntu启动盘进入试用, &lt;code&gt;fdisk -l&lt;/code&gt;找到&lt;code&gt;/&lt;/code&gt;分区,然后使用&lt;code&gt;grub2-install /dev/sda&lt;/code&gt;安装grub(大概是这个命令&amp;hellip;.)&lt;/li&gt;
+&lt;li&gt;再次重启, 显示的是grub2的启动项, 选择Ubuntu, 这一次没有出现&lt;code&gt;grub rescue &amp;gt;&lt;/code&gt;模式, 而是进入了启动界面, 但是一直进不去系统.&lt;/li&gt;
+&lt;li&gt;从显示的信息可以看到, 应该是开机自动挂载出现了问题. 这是因为我使用testdisk恢复分区时, 虽然恢复了第一个C盘分区, 但是软件还自动修复了一些分区上的错误, 给我多加了一个分区. 这就导致各个分区的设备目录名(/dev/sda1这些)发生了变化, 所以需要更新/etc/fstab中的设备目录名.&lt;/li&gt;
+&lt;li&gt;重启, 进入Ubuntu的recovery mode, 进入root命令模式. 因为默认的根目录和home目录是使用UUID进行挂载的, 所以它们是不会变的, 只需要把其他的自定义的自动挂载项注释掉即可(或者更新).&lt;/li&gt;
+&lt;li&gt;但是发现不能编辑, 提示是read only模式, 重新挂载根目录&amp;rdquo;&lt;code&gt;mount –o remount, rw /&lt;/code&gt;&amp;rdquo;, 再编辑即可.&lt;/li&gt;
+&lt;li&gt;重启&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux Socket使用小结</title>
+      <link>http://blog.songru.org/posts/linux/Linux-Socket/</link>
+      <pubDate>Sat, 18 Mar 2017 09:54:01 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/linux/Linux-Socket/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;1. 关于recv, read, write, send方法&lt;/strong&gt;
+recv较read多了一个flag参数，如果flag为0，则recv相当于read，write与send类似。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. 关于阻塞&lt;/strong&gt;
+recv方法默认会阻塞，直到有数据读取或者对方关闭了socket。返回读取到的字节数，这个数可能会小于指定要读取的大小，所以socket编程应该是需要自己协商需要读取的数据长度（比如把长度放在最开始）。
+send方法默认不会阻塞，send之后立马返回，数据应该是已经发送到了网络上。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3. 总结&lt;/strong&gt;
+socket就有点像是两个命名管道， &lt;code&gt;pipe_1[]&lt;/code&gt; 与 &lt;code&gt;pipe_2[]&lt;/code&gt;比如：
+server端读取的是&lt;code&gt;pipe_1[0]&lt;/code&gt;的数据，client端向&lt;code&gt;pipe_1[1]&lt;/code&gt;写入数据。
+client端读取的是&lt;code&gt;pipe_2[0]&lt;/code&gt;的数据，server端向&lt;code&gt;pipe_2[1]&lt;/code&gt;写入数据。
+读数据时默认会阻塞，等待另一端向管道写入数据；写数据默认不阻塞，写入的数据直接到pipe中去了，就算写入端关闭了socket，读写的还能从pipe中获取已写入的数据。&lt;/p&gt;
+
+&lt;p&gt;可以通过select函数检测文件描述符的状态，比如有数据可读时则去读之类的。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux IPC总结(Posix和System V对比)</title>
+      <link>http://blog.songru.org/posts/linux/Linux-IPC/</link>
+      <pubDate>Sat, 18 Mar 2017 09:53:43 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/linux/Linux-IPC/</guid>
+      <description>
+
+&lt;h2 id=&#34;1-管道-pipe:37b1137f87a98db4271649d677fe0ecf&#34;&gt;1. 管道(Pipe)&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-1-匿名管道-unnamed-pipe:37b1137f87a98db4271649d677fe0ecf&#34;&gt;1.1 匿名管道(Unnamed Pipe)&lt;/h3&gt;
+
+&lt;h4 id=&#34;1-1-1-popen:37b1137f87a98db4271649d677fe0ecf&#34;&gt;1.1.1 popen&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;stdio.h&amp;gt;
+FILE* popen (const char *command, const char *open_mode);
+int pclose(FILE *stream_to_close);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　popen()函数通过创建一个管道，调用fork()产生一个子进程，执行一个shell以运行命令来开启一个进程。这个管道必须由pclose()函数关闭，而不是fclose()函数。pclose()函数关闭标准I/O流，等待命令执行结束，然后返回shell的终止状态。如果shell不能被执行，则pclose()返回的终止状态与shell已执行exit一样。&lt;/p&gt;
+
+&lt;p&gt;　　type参数只能是读或者写中的一种，得到的返回值（标准I/O流）也具有和type相应的只读或只写类型。如果type是&amp;rdquo;r&amp;rdquo;则文件指针连接到command的标准输出；如果type是&amp;rdquo;w&amp;rdquo;则文件指针连接到command的标准输入。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; #include &amp;lt;unistd.h&amp;gt;
+ #include &amp;lt;stdlib.h&amp;gt;
+ #include &amp;lt;stdio.h&amp;gt;
+ #include &amp;lt;string.h&amp;gt;
+ 
+ int main()
+ {
+     FILE *read_fp = NULL;
+     FILE *write_fp = NULL;
+     char buffer[BUFSIZ + 1]; 
+     printf(&amp;quot;BUFSIZ: %d\n&amp;quot;, BUFSIZ);
+     int chars_read = 0;
+     
+     //初始化缓冲区
+     memset(buffer, &#39;\0&#39;, sizeof(buffer));
+     //打开ls和grep进程
+     read_fp = popen(&amp;quot;ls -l /home/lsr&amp;quot;, &amp;quot;r&amp;quot;);
+     write_fp = popen(&amp;quot;grep rwxrwxr-x&amp;quot;, &amp;quot;w&amp;quot;);
+     //两个进程都打开成功
+     if(read_fp &amp;amp;&amp;amp; write_fp)
+     {   
+         //读取一个数据块
+         chars_read = fread(buffer, sizeof(char), BUFSIZ, read_fp);
+         while(chars_read &amp;gt; 0)
+         {
+             //设置结尾字符
+             buffer[chars_read] = &#39;\0&#39;;
+             //把数据写入grep进程
+             fwrite(buffer, sizeof(char), chars_read, write_fp);
+             //还有数据可读，循环读取数据，直到读完所有数据
+             chars_read = fread(buffer, sizeof(char), BUFSIZ, read_fp);
+         }
+         //关闭文件流
+         pclose(read_fp);
+         pclose(write_fp);
+         exit(EXIT_SUCCESS);
+     }   
+     exit(EXIT_FAILURE);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;1-1-2-pipe:37b1137f87a98db4271649d677fe0ecf&#34;&gt;1.1.2 pipe&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;unistd.h&amp;gt;
+int pipe(int file_descriptor[2]);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;pipe&lt;/code&gt;函数跟&lt;code&gt;popen&lt;/code&gt;函数的一个重大区别是，&lt;code&gt;popen&lt;/code&gt;函数是基于文件流（FILE）工作的，而&lt;code&gt;pipe&lt;/code&gt;是基于文件描述符工作的，所以在使用&lt;code&gt;pipe&lt;/code&gt;后，数据必须要用底层的&lt;code&gt;read&lt;/code&gt;和&lt;code&gt;write&lt;/code&gt;调用来读取和发送。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;pipe&lt;/code&gt;函数会创建两个文件描述符, 并且不要用&lt;code&gt;file_descriptor[0]&lt;/code&gt;写数据，也不要用&lt;code&gt;file_descriptor[1]&lt;/code&gt;读数据，其行为未定义的，但在有些系统上可能会返回-表示调用失败。数据只能从&lt;code&gt;file_descriptor[0]&lt;/code&gt;中读取，数据也只能写入到&lt;code&gt;file_descriptor[1]&lt;/code&gt;, 不能倒过来。&lt;/p&gt;
+
+&lt;p&gt;它的一个&lt;strong&gt;缺点&lt;/strong&gt;，就是通信的进程，它们的关系一定是父子进程的关系，这就使得它的使用受到了一点的限制，但是我们可以使用命名管道来解决这个问题。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-命名管道-named-pipe:37b1137f87a98db4271649d677fe0ecf&#34;&gt;1.2 命名管道(Named Pipe)&lt;/h3&gt;
+
+&lt;p&gt;命名管道也被称为FIFO文件，它是一种特殊类型的文件，它在文件系统中以文件名的形式存在，但是它的行为却和之前所讲的没有名字的管道（匿名管道）类似。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+#include &amp;lt;sys/types.h&amp;gt;
+#include &amp;lt;sys/stat.h&amp;gt;
+int mkfifo(const char *filename, mode_t mode);
+int mknod(const char *filename, mode_t mode | S_IFIFO, (dev_t)0);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这两个函数都能创建一个FIFO文件，注意是创建一个真实存在于文件系统中的文件，filename指定了文件名，而mode则指定了文件的读写权限。
+&lt;code&gt;mknod&lt;/code&gt;是比较老的函数，而使用&lt;code&gt;mkfifo&lt;/code&gt;函数更加简单和规范，所以建议在可能的情况下，尽量使用&lt;code&gt;mkfifo&lt;/code&gt;而不是&lt;code&gt;mknod&lt;/code&gt;。
+在Linux系统的shell下, 也可以使用&lt;code&gt;mkfifo&lt;/code&gt;或者&lt;code&gt;mknod&lt;/code&gt;命令创建管道文件, 然后通过流重定向&lt;code&gt;echo hello &amp;gt; myfifo&lt;/code&gt;可以向管道写入, 通过&lt;code&gt;cat mypipe&lt;/code&gt;可以读取管道数据.&lt;/p&gt;
+
+&lt;p&gt;在C++程序中, 也是使用&lt;code&gt;open&lt;/code&gt;函数打开一个管道, 然后在不同的进程中可以只用&lt;code&gt;read&lt;/code&gt;和&lt;code&gt;write&lt;/code&gt;函数读取和写入数据到管道中.&lt;/p&gt;
+
+&lt;h2 id=&#34;2-信号-signal:37b1137f87a98db4271649d677fe0ecf&#34;&gt;2. 信号(Signal)&lt;/h2&gt;
+
+&lt;p&gt;信号是UNIX和Linux系统响应某些条件而产生的一个事件，接收到该信号的进程会相应地采取一些行动。通常信号是由一个错误产生的。但它们还可以作为进程间通信或修改行为的一种方式，明确地由一个进程发送给另一个进程。一个信号的产生叫生成，接收到一个信号叫捕获。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;signal.h&amp;gt;
+void (*signal(int sig, void (*func)(int)))(int);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;程序可用使用&lt;code&gt;signal&lt;/code&gt;函数来指定接受到某种信号后的处理方式，也可以选择忽略和恢复其默认行为来工作。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;signal&lt;/code&gt;函数定义的是某一个信号的行为, 我们还可以使用信息集的系列函数来定义多个信号的行为, 比如可以设定一些我们需要处理的信号，并设置一些我们不需要处理的信号.&lt;/p&gt;
+
+&lt;h2 id=&#34;3-信号量-semaphore:37b1137f87a98db4271649d677fe0ecf&#34;&gt;3. 信号量(Semaphore)&lt;/h2&gt;
+
+&lt;p&gt;信号量的使用主要是用来&lt;strong&gt;保护共享资源&lt;/strong&gt;，使得资源在一个时刻只有一个进程（线程）所拥有。
+信号量的值为正的时候，说明它空闲。所测试的线程可以锁定而使用它。若为0，说明它被占用，测试的线程要进入睡眠队列中，等待被唤醒。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-1-posix信号量:37b1137f87a98db4271649d677fe0ecf&#34;&gt;3.1 POSIX信号量&lt;/h3&gt;
+
+&lt;p&gt;对POSIX来说，信号量是个&lt;strong&gt;非负整数&lt;/strong&gt;。常用于线程间同步。
+POSIX信号量的引用头文件是&lt;code&gt;&amp;lt;semaphore.h&amp;gt;&lt;/code&gt;, 其相关函数名都是sem_op这个带下划线的形式.&lt;/p&gt;
+
+&lt;h3 id=&#34;3-1-2-无名信号量:37b1137f87a98db4271649d677fe0ecf&#34;&gt;3.1.2 无名信号量&lt;/h3&gt;
+
+&lt;p&gt;无名信号量常用于多线程间的同步，同时也用于相关进程间的同步。也就是说，无名信号量必须是多个进程（线程）的共享变量，无名信号量要保护的变量也必须是多个进程（线程）的共享变量，这两个条件是缺一不可的。
+POSIX无名信号量由&lt;code&gt;sem_init&lt;/code&gt;函数创建:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;semaphore.h&amp;gt;
+int sem_init(sem_t *sem, int pshared, unsigned int value);
+
+Link with -pthread.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;4-共享内存-shared-memory:37b1137f87a98db4271649d677fe0ecf&#34;&gt;4. 共享内存(Shared memory)&lt;/h2&gt;
+
+&lt;h2 id=&#34;5-消息队列-message-queue:37b1137f87a98db4271649d677fe0ecf&#34;&gt;5. 消息队列(Message queue)&lt;/h2&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Centos 7安装tmate和tmate-slave</title>
+      <link>http://blog.songru.org/posts/linux/CentOS7-Install-tmate&amp;tmate-slave/</link>
+      <pubDate>Sat, 18 Mar 2017 09:48:26 +0800</pubDate>
+      
+      <guid>http://blog.songru.org/posts/linux/CentOS7-Install-tmate&amp;tmate-slave/</guid>
       <description>&lt;pre&gt;&lt;code&gt;yum install gcc kernel-devel make ncurses-devel
 yum install git cmake ruby zlib-devel openssl-devel libevent-devel ncurses-devel
 yum group install &amp;quot;Development Tools&amp;quot;
@@ -995,506 +1175,6 @@ S2      =       GCGCAATG
 &lt;blockquote&gt;
 &lt;p&gt;Written with &lt;a href=&#34;https://stackedit.io/&#34;&gt;StackEdit&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【自然语言处理之一】介绍</title>
-      <link>http://blog.songru.org/posts/nlp/nlp_1_introduction/</link>
-      <pubDate>Thu, 16 Jul 2015 10:09:12 +0800</pubDate>
-      
-      <guid>http://blog.songru.org/posts/nlp/nlp_1_introduction/</guid>
-      <description>
-
-&lt;h1 id=&#34;一-什么是自然语言处理-nature-language-processing:a1b5d0a3988a3fc353b3287af28cee1e&#34;&gt;一、什么是自然语言处理（Nature Language Processing）？&lt;/h1&gt;
-
-&lt;p&gt;首先看什么是自然语言，自然语言是指一种自然地随文化演化的语言。各个国家地区的语言,英语、汉语、日语等等都属于自然语言，它们都是随这文化发展自然形成的，自然语言是人类交流和思维的主要工具，是人类智慧的结晶。与之相对的是“人造语言”，比如各种编程语言。&lt;/p&gt;
-
-&lt;p&gt;自然语言处理的任务就是让计算机理解人类的自然语言，从而实现人与计算机之间用自然语言进行有效通信。&lt;/p&gt;
-
-&lt;p&gt;自然语言处理并不是一般地研究自然语言，而在于研制能有效地实现自然语言通信的计算机系统，特别是其中的软件系统。因而它是计算机科学的一部分。&lt;/p&gt;
-
-&lt;h1 id=&#34;二-自然语言处理的实际应用:a1b5d0a3988a3fc353b3287af28cee1e&#34;&gt;二、自然语言处理的实际应用&lt;/h1&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;机器翻译&lt;/strong&gt;&lt;br /&gt;
-我们最常接触的自然语言处理的应用就是机器翻译，它能够将某种语言 译为你指定的目标语言。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;回答问题&lt;/strong&gt;&lt;br /&gt;
-比如Iphone中的Siri能够理解用户所说的话,并能做出回应。&lt;br /&gt;
-说到回答问题，不得不提IBM创造的Watson，它是一台懂得人类语言的超级电脑。2011年2月17日,它在美国最受欢迎的智力竞猜电视节目《危险边缘》中击败该节目历史上两位最成功的选手肯-詹宁斯和布拉德-鲁特，成为《危险边缘》节目新的王者。《危险边缘》是哥伦比亚广播公司益智问答游戏节目，已经经历了数十年历史。该节目的比赛以一种独特的问答形式进行，问题设置的涵盖面非常广泛，涉及到各个领域。与一般问答节目相反，《危险边缘》以答案形式提问、提问形式作答，比如这样一个题目：
-&lt;code&gt;这种带刺类型的植物有大约50个种类；因此是依据它的多刺的果实来命名的。&lt;/code&gt;
-这个题目的答案是仙人掌。显然这需要watson具有理解自然语言的能力才能对这种题目进行作答。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;情感分析&lt;/strong&gt;&lt;br /&gt;
-又称倾向性分析和意见挖掘，它是对带有情感色彩的主观性文本进行分析、处理、归纳和推理的过程，如从大量网页文本中分析用户对“数码相机”的“变焦、价格、大小、重量、闪光、易用性”等属性的情感倾向。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;信息抽取&lt;/strong&gt;&lt;br /&gt;
-其目的是将非结构化或半结构化的自然语言描述文本转化结构化的数据，如自动根据邮件内容生成Calendar。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&#34;三-自然语言处理的研究进展:a1b5d0a3988a3fc353b3287af28cee1e&#34;&gt;三、自然语言处理的研究进展&lt;/h1&gt;
-
-&lt;p&gt;自然语言处理也被分为许多小的研究领域，并且在某些方面已经取得了很好成果，但很多方面的研究依然很困难。&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;基本解决&lt;/strong&gt;：词性标注、命名实体识别、Spam识别&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;取得长足进展&lt;/strong&gt;：情感分析、共指消解、词义消歧、句法分析、机器翻译、信息抽取&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;挑战&lt;/strong&gt;：自动问答、复述、文摘、会话机器人&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://blog.songru.org/img/nlp_challenge.png&#34; alt=&#34;challenge&#34; /&gt;
-&lt;/p&gt;
-
-&lt;p&gt;这里记录几个专业术语：
-英文 | 中文
-&amp;mdash;- | &amp;mdash;-
-Part-of-speech (POS) tagging | 词性标注
-Named entity recognition(NER) | 命名实体识别
-Sentiment analysis | 情感分析
-Coreference resolution | 指代消解
-Word sense disambiguation(WSD) | 词义消歧
-Paraphrase | 复述
-Summarization | 摘要生成
-neologisms | 新词
-idioms | 成语&lt;/p&gt;
-
-&lt;h1 id=&#34;四-自然语言处理的难点:a1b5d0a3988a3fc353b3287af28cee1e&#34;&gt;四、自然语言处理的难点&lt;/h1&gt;
-
-&lt;p&gt;有多方面原因导致自然语言处理变得相当困难：&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;自然语言具有多样性（不同语种、不同地域、不同人群）。让计算机理解一种语言已经足够困难，何况世界上一共有n种语言。&lt;/li&gt;
-&lt;li&gt;自然语言具有进化性。网络语言就是随着社会的发展进化而来，它和传统的正式语言又有一定的差别，出现了很多新的表达方式（网络新词等等）。&lt;/li&gt;
-&lt;li&gt;自然语言具有模糊性。&lt;/li&gt;
-&lt;li&gt;自然语言具有歧义性。处理歧义问题是NLP的核心问题。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&#34;五-自然语言处理的基本方法:a1b5d0a3988a3fc353b3287af28cee1e&#34;&gt;五、自然语言处理的基本方法&lt;/h1&gt;
-
-&lt;p&gt;在NLP领域中，目前使用较多是概率模型（probabilistic model）或称为统计模型（statistical model），或者称为“经验主义模型”，其建模过程基于大规模真实语料库，从中各级语言单位上的统计信息，并且，依据较低级语言单位上的统计信息，运行相关的统计、推理等技术计算较高级语言单位上的统计信息。与其相对的“理想主义模型”，即基于Chomsky形式语言的确定性语言模型，它建立在人脑中先天存在语法规则这一假设基础上，认为语言是人脑语言能力推导出来的，建立语言模型就是通过建立人工编辑的语言规则集来模拟这种先天的语言能力。&lt;/p&gt;
-
-&lt;p&gt;本课程主要侧重于&lt;strong&gt;基于统计的NLP技术，如Viterbi、贝叶斯和最大熵分类器、N-gram语言模型&lt;/strong&gt;等等。
-&amp;gt; Written with &lt;a href=&#34;https://stackedit.io/&#34;&gt;StackEdit&lt;/a&gt;.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>统计学习方法读书笔记(5)-决策树</title>
-      <link>http://blog.songru.org/posts/machine-learning/statical-learning-5-Decition-tree/</link>
-      <pubDate>Tue, 07 Jul 2015 10:51:18 +0800</pubDate>
-      
-      <guid>http://blog.songru.org/posts/machine-learning/statical-learning-5-Decition-tree/</guid>
-      <description>
-
-&lt;p&gt;决策树(decision tree)是一种基本的分类与回归方法。它可以认为是if-then规则的集合,也可以认为是定义在特征空间与类空间上的条件概率分布。决策树学习通常包括3个步骤:&lt;strong&gt;特征选择、决策树的生成和决策树的修剪&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;h1 id=&#34;决策树模型与学习:0b17248df6960d4fcec23e1367068474&#34;&gt;决策树模型与学习&lt;/h1&gt;
-
-&lt;p&gt;分类决策树模型是一种描述对实例进行分类的树形结构。决策树由结点(node)和有向边(directed edge)组成。结点有两种类型:内部结点(internal node)和叶结点(leaf    node)。内部结点表示一个特征或属性,叶结点表示一个类。&lt;/p&gt;
-
-&lt;p&gt;用决策树分类,从根结点开始,对实例的某一特征进行测试,根据测试结果,将实例分配到其子结点;这时,每一个子结点对应着该特征的一个取值。如此递归地对实例进行测试并分配,直至达到叶结点。最后将实例分到叶结点的类中。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;可以将决策树看成一个if-then规则的集合。&lt;/strong&gt;将决策树转换成if-then规则的过程是这样的:由决策树的根结点到叶结点的每一条路径构建一条规则;路径上内部结点的特征对应着规则的条件,而叶结点的类对应着规则的结论。决策树的路径或其对应的if-then规则集合具有一个重要的性质:&lt;strong&gt;互斥并且完备&lt;/strong&gt;。这就是说,每一个实例都被一条路径或一条规则所覆盖,而且只被一条路径或一条规则所覆盖。&lt;/p&gt;
-
-&lt;h2 id=&#34;决策树与条件概率分布:0b17248df6960d4fcec23e1367068474&#34;&gt;决策树与条件概率分布&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;决策树还表示给定特征条件下类的条件概率分布。&lt;/strong&gt;这一条件概率分布定义在特征空间的一个划分
-(partition)上。将特征空间划分为互不相交的单元(cell)或区域(region),并&lt;strong&gt;在每个单元定义一个类的概率分布就构成了一个条件概率分布&lt;/strong&gt;。&lt;strong&gt;决策树的一条路径对应于划分中的一个单元。&lt;/strong&gt;决策树所表示的条件概率分布由各个单元给定条件下类的条件概率分布组成。假设X为表示特征的随机变量,Y为表示类的随机变量,那么这个条件概率分布可以表示为P(Y|X)。X取值于给定划分下单元的集合,Y取值于类的集合。各叶结点(单元)上的条件概率往往偏向某一个类,即属于某一类的概率较大。决策树分类时将该结点的实例强行分到条件概率大的那一类去。&lt;/p&gt;
-
-&lt;h1 id=&#34;决策树学习:0b17248df6960d4fcec23e1367068474&#34;&gt;决策树学习&lt;/h1&gt;
-
-&lt;p&gt;决策树学习,假设给定训练数据集
-&lt;code&gt;$$ D = \{  (x_1, y_1), (x_2, y_2), \cdots, (x_N, y_N)  \} $$&lt;/code&gt;
-其中&lt;code&gt;$   x_i=(x_i^{(1)}, x_i^{(2)} ,  \cdots, x_i^{(n)} )^T  $&lt;/code&gt;为输入实例(特征向量), &lt;code&gt;$n$&lt;/code&gt;为特征个数, &lt;code&gt;$y_i \in \{1,2, \cdots ,K\}$&lt;/code&gt;为类标记, &lt;code&gt;$i=1,2, \cdots ,N$&lt;/code&gt;, &lt;code&gt;$N$&lt;/code&gt;为样本容量.学习的目标是根据给定的训练数据集构建一个决策树模型,使它能够对实例进行正确的分类。&lt;/p&gt;
-
-&lt;p&gt;决策树学习是由训练数据集估计条件概率模型。基于特征空间划分的类的条件概率模型有无穷多个。我们选择的条件概率模型应该不仅对训练数据有很好的拟合,而且对未知数据有很好的预测。&lt;/p&gt;
-
-&lt;p&gt;决策树学习用损失函数表示这一目标。如下所述,决策树学习的&lt;strong&gt;损失函数通常是正则化的极大似然函数&lt;/strong&gt;。决策树学习的策略是以损失函数为目标函数的最小化。&lt;/p&gt;
-
-&lt;p&gt;当损失函数确定以后,学习问题就变为在损失函数意义下选择最优决策树的问题。因为从所有可能的决策
-树中选取最优决策树是&lt;strong&gt;NP完全问题&lt;/strong&gt;,所以现实中决策树学习算法通常采用启发式方法,近似求解这一最优化问题。这样得到的决策树是&lt;strong&gt;次最优(sub-optimal)的&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;决策树学习算法包含&lt;strong&gt;特征选择、决策树的生成与决策树的剪枝过程&lt;/strong&gt;。由于决策树表示一个条件概率分布,所以深浅不同的决策树对应着不同复杂度的概率模型。&lt;strong&gt;决策树的生成对应于模型的局部选择,决策树的剪枝对应于模型的全局选择。决策树的生成只考虑局部最优,相对地,决策树的剪枝则考虑全局最优。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;特征选择:0b17248df6960d4fcec23e1367068474&#34;&gt;特征选择&lt;/h2&gt;
-
-&lt;p&gt;特征选择在于选取对训练数据具有分类能力的特征。如果利用一个特征进行分类的结果与随机分类的结果没有很大差别,则称这个特征是没有分类能力的。&lt;br /&gt;
-直观上,如果一个特征具有更好的分类能力,或者说,按照这一特征将训练数据集分割成子集,使得各个子集在当前条件下有最好的分类,那么就更应该选择这个特征。&lt;strong&gt;信息增益(information gain)&lt;/strong&gt;就能够很好地表示这一直观的准则。&lt;/p&gt;
-
-&lt;h3 id=&#34;熵-entropy:0b17248df6960d4fcec23e1367068474&#34;&gt;熵(entropy)&lt;/h3&gt;
-
-&lt;p&gt;在信息论与概率统计中,&lt;strong&gt;熵(entropy)&lt;/strong&gt;是表示随机变量&lt;strong&gt;不确定性&lt;/strong&gt;的度量。设&lt;code&gt;$X$&lt;/code&gt;是一个取有限个值的离散随机变量,其概率分布为
-&lt;code&gt;$$ P(X=x_I) = p_i, \quad i=1,2,\cdots, n $$&lt;/code&gt;
-则随机变量X的熵定义为
-&lt;code&gt;$$ H(X) = - \sum_{i=1}^n  p_i \log p_i $$&lt;/code&gt;
-若&lt;code&gt;$p_i=0$&lt;/code&gt;, 则定义&lt;code&gt;$0\log0=0$&lt;/code&gt;。   通常, 对数以2为底或以e为底(自然对数),这时熵的单位分别称作&lt;strong&gt;比特(bit)或纳特(nat)&lt;/strong&gt;。由定义可知,熵只依赖于&lt;code&gt;$X$&lt;/code&gt;的分布,而与&lt;code&gt;$X$&lt;/code&gt;的取值无关,所以也可将&lt;code&gt;$X$&lt;/code&gt;的熵记作&lt;code&gt;$H(p)$&lt;/code&gt;,即
-&lt;code&gt;$$ H(p) = - \sum_{i=1}^n  p_i \log p_i $$&lt;/code&gt;
-&lt;strong&gt;熵越大,随机变量的不确定性就越大。&lt;/strong&gt;从定义可验证
-&lt;code&gt;$$ 0 \le H(p) \le \log n $$&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;条件熵-conditional-entropy:0b17248df6960d4fcec23e1367068474&#34;&gt;条件熵(conditional entropy)&lt;/h3&gt;
-
-&lt;p&gt;设有随机变量&lt;code&gt;$(X,Y)$&lt;/code&gt;,其联合概率分布为
-&lt;code&gt;$$ P(X=x_i, Y=y_i) = p_{ij}, \quad i=1,2,\cdots,n ; \quad j=1,2,\cdots,m  $$&lt;/code&gt;
-条件熵&lt;code&gt;$H(Y|X)$&lt;/code&gt;表示&lt;strong&gt;在已知随机变量X的条件下随机变量Y的不确定性&lt;/strong&gt;。随机变量X给定的条件下随机变量Y的条件熵(conditional entropy)&lt;code&gt;$H(Y|X)$&lt;/code&gt;, 定义为&lt;strong&gt;在X已经给定的条件下Y的条件概率分布的熵对X的数学期望&lt;/strong&gt;
-&lt;code&gt;$$  H(Y \mid X) = \sum_{i=1}^n p_i H(Y \mid X = x_i) $$&lt;/code&gt;
-这里, &lt;code&gt;$p_i=P(X=x_i), \ i=1,2,...,n$&lt;/code&gt;。
-当熵和条件熵中的概率由数据估计(特别是极大似然估计)得到时,所对应的熵与条件熵分别称为&lt;strong&gt;经验熵(empirical  entropy)和经验条件熵(empirical     conditional entropy)&lt;/strong&gt;。此时,如果有0概率,令&lt;code&gt;$0\log0=0$&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h3 id=&#34;信息增益-information-gain:0b17248df6960d4fcec23e1367068474&#34;&gt;信息增益(information gain)&lt;/h3&gt;
-
-&lt;p&gt;信息增益(information gain)表示&lt;strong&gt;得知特征X的信息而使得类Y的信息的不确定性减少的程度&lt;/strong&gt;。&lt;br /&gt;
-特征A对训练数据集D的信息增益&lt;code&gt;$g(D,A)$&lt;/code&gt;,定义为集合D的经验熵&lt;code&gt;$H(D)$&lt;/code&gt;与特征A给定条件下D的经验条件熵&lt;code&gt;$H(D \mid A)$&lt;/code&gt;之差,即
- &lt;code&gt;$$  g(D, A) = H(D) - H(D \mid A) $$&lt;/code&gt;
- 熵&lt;code&gt;$H(Y)$&lt;/code&gt;与条件熵&lt;code&gt;$H(Y \mid X)$&lt;/code&gt;之差又称为&lt;strong&gt;互信息(mutual information)&lt;/strong&gt;。决策树学习中的信息增益等价于训练数据集中类与特征的互信息。&lt;/p&gt;
-
-&lt;p&gt;给定训练数据集D和特征A,经验熵&lt;code&gt;$H(D)$&lt;/code&gt;表示对数据集D进行分类的不确定性。而经验条件熵&lt;code&gt;$H(D \mid A)$&lt;/code&gt;表示在特征A给定的条件下对数据集D进行分类的不确定性。那么它们的差,即信息增益,就&lt;strong&gt;表示由于特征A而使得对数据集D的分类的不确定性减少的程度&lt;/strong&gt;。显然,对于数据集D而言,信息增益依赖于特征,不同的特征往往具有不同的信息增益。&lt;strong&gt;信息增益大的特征具有更强的分类能力&lt;/strong&gt;。&lt;br /&gt;
-&lt;strong&gt;根据信息增益准则的特征选择方法是:&lt;/strong&gt;对训练数据集(或子集)D,计算其每个特征的信息增益,并比较它们的大小,选择信息增益最大的特征。&lt;/p&gt;
-
-&lt;p&gt;设训练数据集为D, &lt;code&gt;$|D|$&lt;/code&gt; 表示其样本容量,即样本个数。设有K个类&lt;code&gt;$C_k,k=1,2, \cdots ,K$&lt;/code&gt;, &lt;code&gt;$|C_k|$&lt;/code&gt;为属于类&lt;code&gt;$C_k$&lt;/code&gt;的样本个数 。设特征A有n个不同的取值&lt;code&gt;$\{a_1,a_2, \cdots, a_n\}$&lt;/code&gt;, 根据特征A的取值将D划分为n个子集&lt;code&gt;$D_1,D_2, \cdots ,D_n$, $|D_i|$&lt;/code&gt;为&lt;code&gt;$D_i$&lt;/code&gt;的样本个数 。记子集&lt;code&gt;$D_i$&lt;/code&gt;中属于类&lt;code&gt;$C_k$&lt;/code&gt;的样本的集合为&lt;code&gt;$D_{ik}$&lt;/code&gt;, 即&lt;code&gt;$D_{ik} = D_i \cap C_k$&lt;/code&gt;, &lt;code&gt;$|D_{ik}|$&lt;/code&gt;为&lt;code&gt;$D_{ik}$&lt;/code&gt;的样本个数。于是信息增益的算法如下:&lt;/p&gt;
-
-&lt;p&gt;输入:训练数据集D和特征A;&lt;br /&gt;
-输出:特征A对训练数据集D的信息增益&lt;code&gt;$g(D,A)$&lt;/code&gt;。&lt;br /&gt;
-步骤:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;计算数据集D的经验熵&lt;code&gt;$H(D)$&lt;/code&gt;
-&lt;code&gt;$$ H(D) = - \sum_{k=1}^K \frac{\lvert C_k \rvert} { \lvert D \rvert} \log \frac{\lvert C_k \rvert} { \lvert D \rvert}  $$&lt;/code&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;计算特征A对数据集D的经验条件熵&lt;code&gt;$H(D \mid A)$&lt;/code&gt;
-&lt;code&gt;$$ 
-\begin{align*}
-H(D \mid A) &amp;amp;= \sum_{i=1}^n \frac{\lvert D_i\rvert} { \lvert D \rvert}  H(D_i)   \\ 
-&amp;amp;=  \sum_{i=1}^n \frac{\lvert D_i\rvert} { \lvert D \rvert}  \sum_{k=1}^K  \frac{\lvert D_{ik}\rvert} { \lvert D_i \rvert}  \log \frac{\lvert D_{ik}\rvert} { \lvert D_i \rvert} 
-\end{align*}
-$$&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;计算信息增益
-&lt;code&gt;$$ g(D,A) = H(D) - H(D \mid A) $$&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;信息增益比:0b17248df6960d4fcec23e1367068474&#34;&gt;信息增益比&lt;/h3&gt;
-
-&lt;p&gt;以信息增益作为划分训练数据集的特征, 存在偏向于选择取值较多的特征的问题。使用信息增益比(information gain ratio)可以对这一问题进行校正。这是特征选择的另一准则。&lt;br /&gt;
- 特征A对训练数据集D的信息增益比&lt;code&gt;$g_R(D,A)$&lt;/code&gt;定义为其信息增益&lt;code&gt;$g(D,A)$&lt;/code&gt;与训练数据集D的关于特征&lt;code&gt;$A$&lt;/code&gt;的值的熵&lt;code&gt;$H_A(D)$&lt;/code&gt;之比:
- &lt;code&gt;$$ g_R(D, A) = \frac {g(D, A)} {H_A(D)} $$&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;这里的分母应该是
-&lt;code&gt;$$ H_A(D) = - \sum_{i=1}^n \frac{\lvert D_i \rvert} { \lvert D \rvert} \log \frac{ \lvert D_i \rvert }{ \lvert D \rvert} $$&lt;/code&gt;
-分子不再是&lt;code&gt;$C_i$&lt;/code&gt;了. 其中分母又被称为分裂信息量或内在信息（Intrinsic Information），可简单地理解为表示信息分支所需要的信息量, &lt;strong&gt;是将特征A的可选值作为划分(而不是类别)&lt;/strong&gt;，计算节点上样本总的信息熵。&lt;/p&gt;
-
-&lt;h2 id=&#34;决策树的生成:0b17248df6960d4fcec23e1367068474&#34;&gt;决策树的生成&lt;/h2&gt;
-
-&lt;h3 id=&#34;id3算法:0b17248df6960d4fcec23e1367068474&#34;&gt;ID3算法&lt;/h3&gt;
-
-&lt;p&gt;ID3算法的&lt;strong&gt;核心是在决策树各个结点上应用信息增益准则选择特征,递归地构建决策树。&lt;/strong&gt;具体方法是:从根结点(root node)开始,对结点计算所有可能的特征的信息增益,选择信息增益最大的特征作为结点的特征,由该特征的不同取值建立子结点;再对子结点递归地调用以上方法,构建决策树;直到所有特征的信息增益均很小或没有特征可以选择为止。最后得到一个决策树。&lt;strong&gt;ID3相当于用极大似然法进行概率模型的选择&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;输入:训练数据集D,特征集A, 阈值&lt;code&gt;$ \epsilon$&lt;/code&gt;;&lt;br /&gt;
-输出:决策树T。&lt;br /&gt;
-步骤:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;若D中所有实例属于同一类&lt;code&gt;$C_k$&lt;/code&gt;, 则T为单结点树, 并将类&lt;code&gt;$C_k$&lt;/code&gt;作为该结点的类标记, 返回T;&lt;br /&gt;&lt;/li&gt;
-&lt;li&gt;若&lt;code&gt;$A= \varnothing $&lt;/code&gt;,则T为单结点树, 并将D中实例数最大的类&lt;code&gt;$C_k$&lt;/code&gt;作为该结点的类标记, 返回T;&lt;/li&gt;
-&lt;li&gt;否则, 计算A中各特征对D的信息增益, 选择信息增益最大的特征&lt;code&gt;$A_g$&lt;/code&gt;;&lt;/li&gt;
-&lt;li&gt;如果&lt;code&gt;$A_g$&lt;/code&gt;的信息增益小于阈值&lt;code&gt;$\epsilon$&lt;/code&gt; , 则置T为单结点树,并将D中实例数最大的类&lt;code&gt;$C_k$&lt;/code&gt; 作为该结点的类标记, 返回T;&lt;/li&gt;
-&lt;li&gt;否则, 对&lt;code&gt;$A_g$&lt;/code&gt;的每一可能值&lt;code&gt;$a_i$&lt;/code&gt;, 依&lt;code&gt;$A_g=a_i$&lt;/code&gt;将D分割为若干非空子集&lt;code&gt;$D_i$&lt;/code&gt;, 将&lt;code&gt;$D_i$&lt;/code&gt;中实例数最大的类作为标记,构建子结点,由结点及其子结点构成树T, 返回T;&lt;/li&gt;
-&lt;li&gt;对第i个子结点,以&lt;code&gt;$D_i$&lt;/code&gt;为训练集, 以&lt;code&gt;$A-\{A_g\}$&lt;/code&gt;为特征集, 递归地调用步(1)~步(5),得到子树&lt;code&gt;$T_i$&lt;/code&gt;, 返回&lt;code&gt;$T_i$&lt;/code&gt;。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;c4-5算法:0b17248df6960d4fcec23e1367068474&#34;&gt;C4.5算法&lt;/h3&gt;
-
-&lt;p&gt;C4.5克服了ID3的2个缺点：&lt;br /&gt;
-1. 用信息增益选择属性时偏向于选择分枝比较多的属性值(即取值多的属性), 所有C4,5采用信息增益比来选择特征。&lt;br /&gt;
-2. ID3不能处理连续型的属性特征&lt;/p&gt;
-
-&lt;p&gt;输入: 训练数据集D,特征集A,阈值&lt;code&gt;$\epsilon$&lt;/code&gt; ;&lt;br /&gt;
-输出: 决策树T。&lt;br /&gt;
-步骤:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;如果D中所有实例属于同一类&lt;code&gt;$C_k$&lt;/code&gt; , 则置T为单结点树, 并将&lt;code&gt;$C_k$&lt;/code&gt;作为该结点的类, 返回T;&lt;/li&gt;
-&lt;li&gt;若&lt;code&gt;$A= \varnothing $&lt;/code&gt;,则T为单结点树, 并将D中实例数最大的类&lt;code&gt;$C_k$&lt;/code&gt;作为该结点的类标记, 返回T;&lt;/li&gt;
-&lt;li&gt;否则, 计算A中各特征对D的信息增益, 选择信息增益最大的特征&lt;code&gt;$A_g$&lt;/code&gt;;&lt;/li&gt;
-&lt;li&gt;如果&lt;code&gt;$A_g$&lt;/code&gt;的信息增益比小于阈值&lt;code&gt;$\epsilon$&lt;/code&gt; , 则置T为单结点树,并将D中实例数最大的类&lt;code&gt;$C_k$&lt;/code&gt; 作为该结点的类标记, 返回T;&lt;/li&gt;
-&lt;li&gt;否则, 对&lt;code&gt;$A_g$&lt;/code&gt;的每一可能值&lt;code&gt;$a_i$&lt;/code&gt;, 依&lt;code&gt;$A_g=a_i$&lt;/code&gt;将D分割为若干非空子集$D_i$, 将$D_i$中实例数最大的类作为标记,构建子结点,由结点及其子结点构成树T, 返回T;&lt;/li&gt;
-&lt;li&gt;对第i个子结点, 以$D_i$为训练集, 以$A-{A_g}$为特征集, 递归地调用步(1)~步(5),得到子树$T_i$, 返回$T_i$。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&#34;连续型特征的处理:0b17248df6960d4fcec23e1367068474&#34;&gt;连续型特征的处理&lt;/h4&gt;
-
-&lt;p&gt;先把连续属性转换为离散属性再进行处理。虽然本质上属性的取值是连续的，但对于有限的采样数据它是离散的，如果有N条样本，那么我们有N-1种离散化的方法：$&amp;lt;=v_j$的分到左子树，$&amp;gt;v_j$的分到右子树。计算这N-1种情况下最大的信息增益比。&lt;br /&gt;
-在离散属性上只需要计算1次信息增益率，而在连续属性上却需要计算N-1次，计算量是相当大的。可以如下减少计算量: 对于连续属性先进行排序，&lt;strong&gt;只在决策属性(即类别)发生改变的地方进行切分&lt;/strong&gt;。&lt;br /&gt;
-如果利用增益率来选择连续值属性的分界点，会导致一些副作用。分界点将样本分成两个部分，这两个部分的样本个数之比也会影响增益率。根据增益率公式，我们可以发现，当分界点能够把样本分成数量相等的两个子集时（我们称此时的分界点为等分分界点），增益率的抑制会被最大化(此时分母$H(D)$增大, 增益率减小)，因此等分分界点被过分抑制了。子集样本个数能够影响分界点，显然不合理。&lt;strong&gt;因此在决定分界点是还是采用增益这个指标，而选择属性的时候才使用增益率这个指标。这个改进能够很好得抑制连续值属性的倾向。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;设训练数据集为D, $|D|$ 表示其样本容量,即样本个数。设有K个类$C&lt;em&gt;k,k=1,2, \cdots ,K$, $|C_k|$为属于类$C_k$的样本个数 。设特征A有n个不同的取值${a_1,a_2, \cdots, a_n}$, 根据特征A的取值将D划分为n个子集$D_1,D_2, \cdots ,D_n$, $|D_i|$为$D_i$的样本个数 。记子集$D_i$中属于类$C_k$的样本的集合为$D&lt;/em&gt;{ik}$, 即$D&lt;em&gt;{ik} = D_i \cap C_k$, $|D&lt;/em&gt;{ik}|$为$D_{ik}$的样本个数。于是信息增益的算法如下:&lt;br /&gt;
-输入:训练数据集D和特征A;
-输出:特征A对训练数据集D的信息增益$g(D,A)$。&lt;/p&gt;
-
-&lt;h4 id=&#34;属性缺失值的处理:0b17248df6960d4fcec23e1367068474&#34;&gt;属性缺失值的处理&lt;/h4&gt;
-
-&lt;p&gt;现实任务中常会遇到不完整的样本, 即样本的某些属性值缺失. 如果简单的放弃不完整样本, 仅使用无缺失值的样本来进行学习, 显然是对数据的极大浪费.&lt;br /&gt;
-两个问题:
-1. 如何在属性值缺失的情况下进行划分属性的选择?
-2. 给定划分属性, 若样本在该属性上的值缺失, 如何对样本进行划分?&lt;/p&gt;
-
-&lt;p&gt;给定训练集$D$和属性$A$, 特征A有V个不同的取值${a&lt;em&gt;1,a_2, \cdots, a_V}$, 令$ \tilde{D} $表示$D$中在属性$A$上没有缺失值的样本子集. 对问题(1), 根据$ \tilde{D} $来判断属性$A$的优劣. 令$  \tilde{D&lt;/em&gt;{v}}  $为$ \tilde{D} $中在属性$A$上取值为$a&lt;em&gt;v$的样本子集,  $  \tilde{D^{k}}  $为$ \tilde{D} $中在属于第$k$类的样本子集. $ \tilde{D}&lt;/em&gt;{ik} $表示在属性$A$上取值为$a&lt;em&gt;v$的, 且属于第$k$类的样本子集, 则有 $  \tilde{D} =  \bigcup _{k=1} ^K \tilde{D^k}$, $  \tilde{D} =  \bigcup _{v=1} ^V \tilde{D_v}$. 假设我们为每个样本$x$ 赋予一个权重$w_x$(一般初始化为1), 并定义
-$$
-\rho = \frac{ \sum&lt;/em&gt;{x \in  \tilde{D}} w&lt;em&gt;x } { \sum&lt;/em&gt;{x \in  D} w&lt;em&gt;x  }  , \
-\tilde{p}_k = \frac{ \sum&lt;/em&gt;{x \in  \tilde{D&lt;em&gt;k}} w_x } { \sum&lt;/em&gt;{x \in  D} w&lt;em&gt;x  }  , \
-\tilde{r}_v = \frac{ \sum&lt;/em&gt;{x \in  \tilde{D^v}} w&lt;em&gt;x } { \sum&lt;/em&gt;{x \in  D} w&lt;em&gt;x  }  , \
-$$&lt;br /&gt;
-对属性$A$, $\rho$表示无缺失值样本所占比例, $\tilde{p}_k$表示无缺失值样本中第$k$类所占比例, $\tilde{r}_v$表示无缺失值样本中在属性$A$上取值$a_v$的样本所占比例.&lt;br /&gt;
-基于上述定义, 将信息增益推广为:
- $$  g(D, A) = \rho \ g(\tilde{D}, A) = \rho \ \left(H(\tilde{D}) - H(\tilde{D} \mid A) \right)$$
-$$
-\begin{align*}
-H(\tilde{D} \mid A) &amp;amp;= \sum&lt;/em&gt;{i=1}^V \frac{\lvert \tilde{D}&lt;em&gt;i\rvert} { \lvert \tilde{D} \rvert}  H(\tilde{D}_i)   \
-&amp;amp;=  \sum&lt;/em&gt;{i=1}^V \frac{\lvert \tilde{D}&lt;em&gt;i\rvert} { \lvert \tilde{D} \rvert}  \sum&lt;/em&gt;{k=1}^K  \frac{\lvert \tilde{D}&lt;em&gt;{ik}\rvert} { \lvert \tilde{D}_i \rvert}  \log \frac{\lvert \tilde{D}&lt;/em&gt;{ik}\rvert} { \lvert \tilde{D}_i \rvert}
-\end{align*}
-$$&lt;br /&gt;
-对问题(2), 若样本$x$在划分属性$A$上的取值已知, 则将$x$划入与其取值对应的子结点, 且样本权值在子节点中保持为$w_x$. 若样本$x$在划分属性是的取值未知, 则将$x$同时划分到所有子节点, 且样本取值在与属性值$a_v$对应的子节点中调整为$\tilde{r}_v  \cdot w_x$; 直观的看, 就是让同一样本以不同的概率划入不同的子节点中取.&lt;/p&gt;
-
-&lt;h4 id=&#34;决策树的剪枝-后剪枝:0b17248df6960d4fcec23e1367068474&#34;&gt;决策树的剪枝(后剪枝)&lt;/h4&gt;
-
-&lt;p&gt;决策树生成算法递归地产生决策树,直到不能继续下去为止。这样产生的树往往出现&lt;strong&gt;过拟合&lt;/strong&gt;现象。解决这个问题的办法是考虑决策树的复杂度,对已生成的决策树进行简化。&lt;br /&gt;
-将已生成的树进行简化的过程称为&lt;strong&gt;剪枝(pruning)&lt;/strong&gt;。具体地,剪枝从已生成的树上裁掉一些子树或叶结点,并将其根结点或父结点作为新的叶结点,从而简化分类树模型。&lt;/p&gt;
-
-&lt;p&gt;决策树的剪枝往往通过&lt;strong&gt;极小化决策树整体的损失函数&lt;/strong&gt;(loss function)或代价函数(cost function)来实现。设树T的叶结点个数为$|T|$, $t$是树$T$的叶结点, 该叶结点有$N&lt;em&gt;t$个样本点, 其中k类的样本点有$N&lt;/em&gt;{tk}$个, $k=1,2, \cdots ,K$, $H&lt;em&gt;t(T)$为叶结点t上的经验熵, $\alpha≥0$为参数,则决策树学习的损失函数可以定义为
-$$ C&lt;/em&gt;{\alpha} (T) = \sum&lt;em&gt;{t=1}^{|T|} N_t H_t(T) + \alpha \lvert T \rvert  $$
-其中经验熵为
-$$ H_t(T) = - \sum&lt;/em&gt;{k=1}^K \frac{N&lt;em&gt;{tk}} {N_t} \log  \frac{N&lt;/em&gt;{tk}} {N&lt;em&gt;t} $$
-在损失函数中,将式右端的第1项记作
-$$ C(T) =  \sum&lt;/em&gt;{t=1}^{|T|} N&lt;em&gt;t H_t(T) = - \sum&lt;/em&gt;{t=1}^{|T|} \sum&lt;em&gt;{k=1}^K N&lt;/em&gt;{tk} \log \frac{N&lt;em&gt;{tk}} {N_t}   $$
-这时有:
-$$ C&lt;/em&gt;{\alpha} (T) = C(T) + \alpha  \lvert T \rvert  $$
-$C(T)$表示模型对训练数据的预测误差, 即模型与训练数据的拟合程度, $|T|$表示模型复杂度(正则项), 参数$\alpha≥0$控制两者之间的影响。较大的$\alpha$促使选择较简单的模型(树), 较小的$\alpha$促使选择较复杂的模型(树)。$\alpha=0$意味着只考虑模型与训练数据的拟合程度, 不考虑模型的复杂度。&lt;br /&gt;
-剪枝,就是当$\alpha$确定时,选择损失函数最小的模型,即损失函数最小的子树。可以看出,决策树生成只考虑了通过提高信息增益(或信息增益比)对训练数据进行更好的拟合。而决策树剪枝通过优化损失函数还考虑了减小模型复杂度。&lt;strong&gt;决策树生成学习局部的模型,而决策树剪枝学习整体的模型。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;损失函数的极小化等价于正则化的极大似然估计&lt;/strong&gt;。所以,利用损失函数最小原则进行剪枝就是用正则化的极大似然估计进行模型选择。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;树的剪枝算法(最小误差剪枝)&lt;/strong&gt;&lt;br /&gt;
-输入: 生成算法产生的整个树$T$, 参数$\alpha$;
-输出: 修剪后的子树$T&lt;em&gt;{\alpha}$。
-1. 计算每个结点的经验熵。
-2. 递归地从树的叶结点向上回缩。
-设一组叶结点回缩到其父结点之前与之后的整体树分别为$T_B$与$T_A$, 其对应的损失函数值分别$C&lt;/em&gt;{\alpha}(T&lt;em&gt;B)$与$C&lt;/em&gt;{\alpha}(T&lt;em&gt;A)$, 如果
-$$ C&lt;/em&gt;{\alpha}(T&lt;em&gt;B) \ge C&lt;/em&gt;{\alpha}(T&lt;em&gt;A) $$
-则进行剪枝,即将父结点变为新的叶结点。&lt;br /&gt;
-3. 返回(2), 直至不能继续为止, 得到损失函数最小的子树$T&lt;/em&gt;{\alpha}$。&lt;br /&gt;
-上式只需考虑两个树的损失函数的差,其计算可以在局部进行。所以,决策树的剪枝算法可以由一种动态规划的算法实现。&lt;/p&gt;
-
-&lt;h4 id=&#34;决策树的剪枝-预剪枝:0b17248df6960d4fcec23e1367068474&#34;&gt;决策树的剪枝(预剪枝)&lt;/h4&gt;
-
-&lt;p&gt;预剪枝是指在决策树生成过程中, 对每个节点在划分前先进行估计, 若当前节点的划分不能带来&lt;strong&gt;决策树泛化能力&lt;/strong&gt;的提升, 则停止划分并将当前节点标记为叶节点.&lt;br /&gt;
-&lt;strong&gt;通过在验证集上的准确率来进行判断是否剪枝.&lt;/strong&gt; 分别计算划分前后的准确率, 若划分后准确率下降, 则不进行该次划分, 直接标记该节点为叶节点, 所属类别为节点中实例数最大的类.&lt;br /&gt;
-预剪枝使得很多分支没有&amp;rdquo;展开&amp;rdquo;, 这不仅降低了过拟合的风险, 还显著降低了决策树的训练时间和预测时间开销. 但另一方面, 有些分支的当前划分虽不能提升泛化性能,甚至可能导致泛化性能暂时下降, 但在其基础上进行的后续划分却有可能导致性能显著提高; 预剪纸基于&amp;rdquo;贪心&amp;rdquo;本质禁止这些分支展开, 给决策树带来了欠拟合的风险.&lt;/p&gt;
-
-&lt;p&gt;上面的后剪纸也可以采用这种通过验证集准确率决定是否剪纸的策略.&lt;/p&gt;
-
-&lt;h4 id=&#34;cart算法:0b17248df6960d4fcec23e1367068474&#34;&gt;CART算法&lt;/h4&gt;
-
-&lt;p&gt;CART是在给定输入随机变量X条件下输出随机变量Y的条件概率分布的学习方法。&lt;strong&gt;CART假设决策树是二叉树&lt;/strong&gt;, &lt;strong&gt;内部结点特征的取值为“是”和“否&lt;/strong&gt;”,左分支是取值为“是”的分支,右分支是取值为“否”的分支。这样的决策树等价于递归地二分每个特征,将输入空间即特征空间划分为有限个单元,并在这些单元上确定预测的概率分布,也就是在输入给定的条件下输出的条件概率分布。&lt;/p&gt;
-
-&lt;p&gt;CART算法由以下两步组成:
-(1)决策树生成:基于训练数据集生成决策树,&lt;strong&gt;生成的决策树要尽量大&lt;/strong&gt;;
-(2)决策树剪枝:用&lt;strong&gt;验证数据集&lt;/strong&gt;对已生成的树进行剪枝并选择最优子树,这时用损失函数最小作为剪枝
-的标准。&lt;/p&gt;
-
-&lt;h4 id=&#34;cart的生成:0b17248df6960d4fcec23e1367068474&#34;&gt;CART的生成&lt;/h4&gt;
-
-&lt;p&gt;决策树的生成就是递归地构建&lt;strong&gt;二叉决策树&lt;/strong&gt;的过程。对&lt;strong&gt;回归树用平方误差最小化准则&lt;/strong&gt;, 对&lt;strong&gt;分类树用基尼指数(Gini  index)最小化准则&lt;/strong&gt;,进行特征选择,生成二叉树。&lt;/p&gt;
-
-&lt;h4 id=&#34;回归树的生成:0b17248df6960d4fcec23e1367068474&#34;&gt;回归树的生成&lt;/h4&gt;
-
-&lt;p&gt;假设$X$与$Y$分别为输入和输出变量, 并且$Y$是&lt;strong&gt;连续变量&lt;/strong&gt;,给定训练数据集考虑如何生成回归树.
-$$ D = {  (x&lt;em&gt;1, y_1), (x_2, y_2), \cdots, (x_N, y_N)  } $$&lt;br /&gt;
-&lt;strong&gt;一个回归树对应着输入空间(即特征空间)的一个划分以及在划分的单元上的输出值&lt;/strong&gt;。假设已将输入空间划分为$M$个单元$R_1,R2, \cdots ,R_M$, 并且在每个单元$R_m$上有一个固定的输出值$c_m$,于是回归树模型可表示为
-$$ f(x) = \sum&lt;/em&gt;{m=1}^M c&lt;em&gt;m I(x \in R_m) $$&lt;br /&gt;
-当输入空间的划分确定时,可以用&lt;strong&gt;平方误差&lt;/strong&gt;$ \sum&lt;/em&gt;{x&lt;em&gt;i \in R_m} (y_i - f(x_i))^2 $来表示回归树对于训练数据的预测误差, 用&lt;strong&gt;平方误差最小的准则求解每个单元上的最优输出值&lt;/strong&gt;。易知,单元$R_m$上的$c_m$的最优值$\hat{c}_m$是$R_m$上的所有输入实例$x_i$对应的输出$y_i$的均值,即
-$$ \hat{c}_m = avg (y_i \mid x_i \in R_m) $$&lt;br /&gt;
-采用启发式的方法样对输入空间进行划分, 选择第$j$个变量$x^{(j)}$和它取的值$s$作为切分变量(splitting variable)和切分点(splitting  point), 并定义两个区域:
-$$ R_1(j, s) = { x \mid x^{(j)} \le s }  \quad  和   \quad R_2(j, s) = { x \mid x^{(j)} &amp;gt; s }  $$
-然后寻找最优切分变量j和最优切分点s。具体地,求解&lt;br /&gt;
-$$  \min \limits&lt;/em&gt;{j, s} \left[ \min \limits&lt;em&gt;{c_1} \sum&lt;/em&gt;{x&lt;em&gt;i \in R_1(j, s)} (y_i - c_1)^2 + \min \limits&lt;/em&gt;{c&lt;em&gt;2} \sum&lt;/em&gt;{x&lt;em&gt;i \in R_2(j, s)} (y_i - c_2)^2  \right] $$&lt;br /&gt;
-对固定输入变量$j$可以找到最优切分点$s$。
-$$  \hat{c}_1 = avg( y_i \mid x_i \in R_1(j, s) )  \quad 和 \quad   \hat{c}_2 = avg( y_i \mid x_i \in R_2(j, s) )$$&lt;br /&gt;
-遍历所有输入变量, 找到最优的切分变量$j$, 构成一个对$(j,s)$。依此将输入空间划分为两个区域。接着,对每个区域重复上述划分过程, 直到满足停止条件为止。这样就生成一棵回归树。这样的回归树通常称为&lt;strong&gt;最小二乘回归树(least   squares regression tree)&lt;/strong&gt;,现将算法叙述如下:&lt;br /&gt;
-输入: 训练数据集$D$;&lt;br /&gt;
-输出: 回归树$f(x)$。&lt;br /&gt;
-在训练数据集所在的输入空间中, 递归地将每个区域划分为两个子区域并决定每个子区域上的输出值,构建二叉决策树:&lt;br /&gt;
-1. 选择最优切分变量$j$与切分点$s$, 求解&lt;br /&gt;
-$$  \min \limits&lt;/em&gt;{j, s} \left[ \min \limits&lt;em&gt;{c_1} \sum&lt;/em&gt;{x&lt;em&gt;i \in R_1(j, s)} (y_i - c_1)^2 + \min \limits&lt;/em&gt;{c&lt;em&gt;2} \sum&lt;/em&gt;{x&lt;em&gt;i \in R_2(j, s)} (y_i - c_2)^2  \right] $$&lt;br /&gt;
-遍历变量$j$, 对固定的切分变量$j$扫描切分点$s$, 选择使上式达到最小值的对$(j,s)$。&lt;br /&gt;
-2. 用选定的对$(j,s)$划分区域并决定相应的输出值:&lt;br /&gt;
-$$ R_1(j, s) = { x \mid x^{(j)} \le s }  \  ,   \quad R_2(j, s) = { x \mid x^{(j)} &amp;gt; s }   \
-\hat{c}_m = \frac{1} {N_m} \sum&lt;/em&gt;{x&lt;em&gt;i \in R_m(j, s)} y_i \ , \quad x \in R_m, \ m=1,2
-$$&lt;br /&gt;
-3. 继续对两个子区域调用步骤(1),(2),直至满足停止条件。&lt;br /&gt;
-4. 将输入空间划分为$M$个区域$R_1,R_2, \cdots, R_m$,生成决策树:&lt;br /&gt;
-$$ f(x) = \sum&lt;/em&gt;{m=1}^M \hat{c}_m I(x \in R_m) $$&lt;/p&gt;
-
-&lt;h4 id=&#34;分类树的生成:0b17248df6960d4fcec23e1367068474&#34;&gt;分类树的生成&lt;/h4&gt;
-
-&lt;p&gt;分类树用基尼指数选择最优特征,同时决定该特征的最优二值切分点。&lt;/p&gt;
-
-&lt;h4 id=&#34;基尼指数:0b17248df6960d4fcec23e1367068474&#34;&gt;基尼指数&lt;/h4&gt;
-
-&lt;p&gt;分类问题中,假设有$K$个类, 样本点属于第$k$类的概率为$p$ , 则概率分布的基尼指数$k$定义为&lt;br /&gt;
-$$ Gini(p) = 1 -  \sum_{k=1}^K \left(  \frac{ \lvert C_k \rvert  } { \lvert  D \rvert  }  \right) $$&lt;br /&gt;
-这里$C_k$是$D$中属于第$k$类的样本子集, $K$是类的个数.&lt;br /&gt;
-如果样本集合$D$根据特征$A$是否取某一可能值$a$被分割成$D_1$和$D_2$两部分,即&lt;br /&gt;
-$$ D_1 = {  (x, y) \in D \mid A(x) = a } \ , \quad D_2 = D - D_1  $$&lt;br /&gt;
-则在特征A的条件下, 集合$D$的基尼指数定义为&lt;br /&gt;
-$$  Gini(D, A) =  \frac{ \lvert D_1 \rvert  } { \lvert  D \rvert  } Gini(D_1) + \frac{ \lvert D_2 \rvert  } { \lvert  D \rvert  } Gini(D_2)$$&lt;br /&gt;
-基尼指数$Gini(D)$表示集合$D$的不确定性, 基尼指数$Gini(D,A)$表示经$A=a$分割后集合$D$的不确定性。&lt;strong&gt;基尼指数值越大,样本集合的不确定性也就越大,这一点与熵相似。&lt;/strong&gt;&lt;br /&gt;
-二类分类问题中基尼指数$Gini(p)$、熵(单位比特)之半$\frac{1}{2}H(p)$和分类误差率的关系&lt;br /&gt;
-&lt;img src=&#34;./1467279391154.png&#34; alt=&#34;Alt text&#34; /&gt;
-&lt;br /&gt;
-基尼指数和熵之半的曲线很接近,都可以近似地代表分类误差率。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;CART生成算法&lt;/strong&gt;
-输入: 训练数据集$D$, 停止计算的条件;&lt;br /&gt;
-输出: CART决策树。&lt;br /&gt;
-根据训练数据集,从根结点开始,递归地对每个结点进行以下操作,构建二叉决策树:&lt;br /&gt;
-1. 设结点的训练数据集为$D$, 计算现有特征对该数据集的基尼指数。此时,对每一个特征$A$,对其可能取的每个值$a$, 根据样本点对$A=a$的测试为“是”或“否”将$D$分割成$D_1$和$D_2$两部分, 计算$A=a$时的基尼指数$Gini(D, A)$。&lt;br /&gt;
-2. 在所有可能的特征$A$以及它们所有可能的切分点$a$中, &lt;strong&gt;选择基尼指数最小的特征及其对应的切分点&lt;/strong&gt;作为最优特征与最优切分点. 依最优特征与最优切分点,从现结点生成两个子结点,将训练数据集依特征分配到两个子结点中去。&lt;br /&gt;
-3. 对两个子结点递归地调用(1),(2),直至满足停止条件。
-4. 生成CART决策树。&lt;br /&gt;
-&lt;strong&gt;算法停止计算的条件&lt;/strong&gt;是结点中的样本个数小于预定阈值, 或样本集的基尼指数小于预定阈值(样本基本属于同一类),或者没有更多特征。&lt;/p&gt;
-
-&lt;h4 id=&#34;cart剪枝:0b17248df6960d4fcec23e1367068474&#34;&gt;CART剪枝&lt;/h4&gt;
-
-&lt;p&gt;CART剪枝算法由两步组成:首先从生成算法产生的决策树$T_0$底端开始不断剪枝, 直到$T_0$的根结点,形成一个子树序列${T_0,T_1, \cdots ,T_n}$; 然后通过交叉验证法在独立的验证数据集上对子树序列进行测试,从中选择最优子树。&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;剪枝,形成一个子树序列
-在剪枝过程中,计算子树的损失函数:
-$$ C&lt;em&gt;\alpha (T) = C(T) + \alpha \lvert T \rvert $$&lt;br /&gt;
-其中, $T$为任意子树, $C(T)$为对训练数据的预测误差(如基尼指数, 平方误差), $ \lvert T \rvert  $为子树的叶子点个数, $\alpha \ge 0$为参数, $C&lt;/em&gt;\alpha (T)  $为参数是$\alpha$时的子树$T$的整体损失。参数$\alpha$权衡训练数据的拟合程度与模型的复杂度。&lt;br /&gt;
-对固定的$\alpha$, 一定存在使损失函数$C&lt;em&gt;\alpha (T)  $最小的子树, 将其表示为$T&lt;/em&gt;\alpha$。$T&lt;em&gt;\alpha$在损失函数$C&lt;/em&gt;\alpha (T)  $最小的意义下是最优的.&lt;br /&gt;
-从整体树$T&lt;em&gt;0$开始剪枝。对$T_0$的任意内部结点$t$, 以$t$为单结点树的损失函数是
-$$ C&lt;/em&gt;\alpha (T) = C(t)  + \alpha \ , \ (\lvert t \rvert  = 1) $$&lt;br /&gt;
-以$t$为根结点的子树$T&lt;em&gt;t$的损失函数是
-$$ C&lt;/em&gt;\alpha (T&lt;em&gt;t) = C(T_t)  + \alpha \lvert T_t \rvert$$&lt;br /&gt;
-当$\alpha=0$及$\alpha$充分小时, 有不等式
-$$ C&lt;/em&gt;\alpha (T&lt;em&gt;t)  &amp;lt; C&lt;/em&gt;\alpha (t)   $$&lt;br /&gt;
-当$\alpha$增大时, 在某一$\alpha$有&lt;br /&gt;
-$$ C&lt;em&gt;\alpha (T_t)  =  C&lt;/em&gt;\alpha (t)   $$&lt;br /&gt;
-当$\alpha$再增大时,不等式反向。只要$ \alpha = \frac {C(t) - C(T_t)} {\lvert T_t \rvert -1}$, $T_t$与$t$有相同的损失函数值,  而$t$的结点少, 因此$t$比$T_t$更可取, 对$T_t$进行剪枝。&lt;br /&gt;
-为此, 对$T_0$的每一内部结点t, 计算
-$$ g(t) = \frac {C(t) - C(T_t)} {\lvert T_t \rvert -1}$$&lt;br /&gt;
-&lt;strong&gt;它表示剪枝后整体损失函数减少的程度&lt;/strong&gt;。在$T _0$中剪去$g(t)$最小的$T_t$ , 将得到的子树作为$T_1$ ,同时将最小的$g(t)$设为$\alpha_1$。$T_1$为区间$[\alpha_1,\alpha_2)$的最优子树。&lt;br /&gt;
-如此剪枝下去,直至得到根结点。在这一过程中,不断地增加$\alpha$的值,产生新的区间。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;在剪枝得到的子树序列$T&lt;em&gt;0,T_1,\cdots,T_n$中通过交叉验证选取最优子树$T_a$&lt;br /&gt;
-具体地, &lt;strong&gt;利用独立的验证数据集&lt;/strong&gt;, 测试子树序列$T_0,T_1,\cdots,T_n$中各棵子树的平方误差或基尼指数。平方误差或基尼指数最小的决策树被认为是最优的决策树。在子树序列中,每棵子树$T_0,T_1,\cdots,T_n$都对应于一个参数$\alpha_1, \alpha_2,\cdots, \alpha_n$。所以, 当最优子树$T_k$确定时, 对应的$\alpha_k$也确定了, 即得到最优决策树$T&lt;/em&gt;\alpha$。&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;strong&gt;CART剪枝算法:&lt;/strong&gt;&lt;br /&gt;
-输入: CART算法生成的决策树$T&lt;em&gt;0$;&lt;br /&gt;
-输出: 最优决策树$T&lt;/em&gt;\alpha$&lt;br /&gt;
-1. 设$k=0,\ T=T&lt;em&gt;0$.
-2. 设$ \alpha = + \infty$
-3. 自下而上地对各内部结点$t$计算$C(T_t)$, $ \lvert T_t \rvert $以及
-$$ g(t) = \frac {C(t) - C(T_t)} {\lvert T_t \rvert -1} \
-\alpha = \min \left(\alpha, g(t) \right)
-$$&lt;br /&gt;
-这里,$T_t$表示以$t$为根结点的子树, $C(T_t)$是对训练数据的预测误差, $\lvert T_t \rvert $是$T_t$的叶结点个数。&lt;br /&gt;
-4. 对$g(t)=\alpha$的内部节点$t$进行剪枝, 并对叶结点$t$以多数表决法决定其类,得到树$T$。&lt;br /&gt;
-5. 设$k=k+1, \alpha_k=\alpha, T_k=T$。&lt;br /&gt;
-6. 如果$T_k$不是由根结点及两个叶结点构成的树, 则回到步骤(3), 否则令$T_k = T_n$。
-7. 采用交叉验证法在子树序列$T_0,T_1,\cdots,T_n$中选取最优子树$T&lt;/em&gt;\alpha$。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>统计学习方法读书笔记(4)-朴素贝叶斯算法</title>
-      <link>http://blog.songru.org/posts/machine-learning/statical-learning-4-Naive-bayes/</link>
-      <pubDate>Tue, 07 Jul 2015 10:34:24 +0800</pubDate>
-      
-      <guid>http://blog.songru.org/posts/machine-learning/statical-learning-4-Naive-bayes/</guid>
-      <description>
-
-&lt;p&gt;朴素贝叶斯(naïve Bayes)法是基于&lt;strong&gt;贝叶斯定理与特征条件独立假设&lt;/strong&gt;的分类方法。对于给定的训练数据集,首先基于特征条件独立假设学习输入/输出的&lt;strong&gt;联合概率分布&lt;/strong&gt;;然后基于此模型,对给定的输入x,利用贝叶斯定理求出后验概率最大的输出y。&lt;/p&gt;
-
-&lt;h1 id=&#34;定义:099c9edb24a218621028d97385cd3c12&#34;&gt;定义:&lt;/h1&gt;
-
-&lt;p&gt;设输入空间&lt;code&gt;$\mathcal{X}⊆R^n$&lt;/code&gt;为n维向量的集合,输出空间为类标记集合&lt;code&gt;$ \mathcal{Y} = \{c_1,c_2, \cdots ,c_K\}$&lt;/code&gt;。输入为特征向量&lt;code&gt;$x \in \mathcal{X}$&lt;/code&gt;,输出为类标记(class label)&lt;code&gt;$y \in \mathcal{Y}$&lt;/code&gt;。&lt;code&gt;$X$&lt;/code&gt;是定义在输入空间&lt;code&gt;$\mathcal{X}$&lt;/code&gt;上的随机向量,&lt;code&gt;$Y$&lt;/code&gt;是定义在输出空间&lt;code&gt;$\mathcal{Y}$&lt;/code&gt;上的随机变量. &lt;code&gt;$P(X,Y)$&lt;/code&gt;是&lt;code&gt;$X$&lt;/code&gt;和&lt;code&gt;$Y$&lt;/code&gt;的联合概率分布。&lt;/p&gt;
-
-&lt;p&gt;训练数据集&lt;code&gt;$T=\{(x_1,y_1),(x_2,y_2),\cdots,(x_N,y_N) \}$&lt;/code&gt;,由&lt;code&gt;$P(X,Y)$&lt;/code&gt;独立同分布产生。&lt;br /&gt;
-其中&lt;code&gt;$x_i = (x_i^{(1)}, x_i^{(2)}, \cdots , x_i^{(n)})^T$&lt;/code&gt;, &lt;code&gt;$x_i^{(j)}$&lt;/code&gt;是第i个样本的第j个特征, &lt;code&gt;$x_i^{(j)} \in \{a_{j1},a_{j2}, \cdots ,a_{jS_j} \}$&lt;/code&gt;, &lt;code&gt;$a_{jl}$&lt;/code&gt;是第j个特征可能取的第l个值, &lt;code&gt;$j=1,2, \cdots ,n$&lt;/code&gt; , &lt;code&gt;$l=1,2, \cdots ,S_j $&lt;/code&gt;, &lt;code&gt;$y_i \in \{c_1,c_2, \cdots ,c_K\} $&lt;/code&gt;;&lt;/p&gt;
-
-&lt;p&gt;朴素贝叶斯法通过训练数据集学习联合概率分布&lt;code&gt;$P(X,Y)$&lt;/code&gt;, 再根据贝叶斯公式
-&lt;code&gt;$$ P(Y \mid X) = \frac{P(X, Y)}{P(X)}  = \frac {P(X \mid Y) P(Y) }  {\sum \limits_Y P(X \mid Y) P(Y)}$$&lt;/code&gt;
-求出后验概率。&lt;/p&gt;
-
-&lt;p&gt;朴素贝叶斯法分类时,对给定的输入x,通过学习到的模型计算后验概率分布&lt;code&gt;$P(Y=c_k|X=x)$&lt;/code&gt;,将后验概率最大的类作为x的类输出。后验概率计算根据贝叶斯公式进行:
-&lt;code&gt;$$ 
-\begin{align}
-P(Y=c_K \mid X = x) &amp;amp;= \frac{P(X = x, Y = c_k)}{P(X = x)}  \\ 
-&amp;amp;= \frac {P(X = x \mid Y = c_k) P(Y = c_k) }  {\sum_{k=1}^K P(X = x \mid Y = c_k) P(Y = c_k)}
-\end{align}
-$$&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;具体地,需要学习以下先验概率分布&lt;code&gt;$P(Y=c_k)$&lt;/code&gt;及条件概率分布&lt;code&gt;$P(X = x \mid Y = c_k)$&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h1 id=&#34;求解方法-极大似然估计方法:099c9edb24a218621028d97385cd3c12&#34;&gt;求解方法, 极大似然估计方法:&lt;/h1&gt;
-
-&lt;p&gt;先验概率分布
-&lt;code&gt;$$ P(Y=c_K) = \frac{\sum_{i=1}^{N} I(y_i = c_k)} {N} , \quad k=1,2,\cdots,K $$&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;条件概率分布:
-&lt;code&gt;$$  P(X=x \mid Y = c_k) = P(X^{(1)} = x_{(1)}, \cdots, X^{(n)} = x_{(n)} \mid Y=c_k) \quad  k=1,2,\cdots,K $$&lt;/code&gt;
-首先朴素贝叶斯法对条件概率分布作了&lt;strong&gt;条件独立性的假设&lt;/strong&gt;。由于这是一个较强的假设,朴素贝叶斯法也由此得名。具体地,条件独立性假设是
-&lt;code&gt;$$
-\begin{align}  
-  P(X=x \mid Y=c_k)  &amp;amp;= P(X^{(1)} = x_{(1)}, \cdots, X^{(n)} = x_{(n)} \mid Y=c_k)    \\  
-             &amp;amp;= \prod_{j=1} ^n P( X^{(j)} = x^{(j)} \mid Y = c_k )  \\
-  P(X^{(j)} = a_{jl} \mid Y = c_k) &amp;amp;=  \frac {\sum_{i=1}^N I(x_i^{(j)} = a_{jl}, y_i = c_k) } {\sum_{i=1}^N I(y_i = c_k)}
-\end{align} 
-$$&lt;/code&gt;
-&lt;strong&gt;条件独立假设等于是说用于分类的特征在类确定的条件下都是条件独立的&lt;/strong&gt;。这一假设使朴素贝叶斯法变得简单,但有时会牺牲一定的分类准确率。&lt;/p&gt;
-
-&lt;p&gt;最终后验概率为:
-&lt;code&gt;$$ P(Y = c_k \mid X = x)  =  \frac{P(Y = c_k) \prod_{j=1}^n P(X^{(j)} = x^{(j)} \mid Y = c_k)}  { \sum_{k=1}^K \left( P(Y = c_k) \prod_{j=1}^n P(X^{(j)} = x^{(j)} \mid Y = c_k) \right) }  \quad \text{(K为类别个数, n为特征个数)}$$&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;朴素贝叶斯分类器可表示为
-&lt;code&gt;$$ y = f(x) = \arg \max_{c_k} \frac{P(Y = c_k) \prod_{j=1}^n P(X^{(j)} = x^{(j)} \mid Y = c_k)}  { \sum_{k=1}^K \left( P(Y = c_k) \prod_{j=1}^n P(X^{(j)} = x^{(j)} \mid Y = c_k) \right) } $$&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;其中分母对所有$c_k$都是相同的,所以
-&lt;code&gt;$$ y = f(x) = \arg \max_{c_k} P(Y = c_k) \prod_{j=1}^n P(X^{(j)} = x^{(j)} \mid Y = c_k) $$&lt;/code&gt;
-朴素贝叶斯法实际上学习到生成数据的机制,所以&lt;strong&gt;属于生成模型&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;h1 id=&#34;贝叶斯估计-平滑:099c9edb24a218621028d97385cd3c12&#34;&gt;贝叶斯估计(平滑)&lt;/h1&gt;
-
-&lt;p&gt;用极大似然估计可能会出现所要估计的概率值为0的情况。这时会影响到后验概率的计算结果,使分类产生偏差。解决这一问题的方法是采用贝叶斯估计。具体地,条件概率的贝叶斯估计是
-&lt;code&gt;$$  P(X^{(j)} = a_{jl} \mid Y = c_k) =  \frac {\sum_{i=1}^N I(x_i^{(j)} = a_{jl}, y_i = c_k) + \lambda} {\sum_{i=1}^N I(y_i = c_k) + S_j \lambda}  $$&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;式中&lt;code&gt;$ \lambda ≥0$&lt;/code&gt;。等价于在随机变量各个取值的频数上赋予一个正数&lt;code&gt;$ \lambda&amp;gt;0$&lt;/code&gt;。当&lt;code&gt;$ \lambda=0$&lt;/code&gt;时就是极大似然估计。常取&lt;code&gt;$ \lambda = 1$&lt;/code&gt;, 这时称为拉普拉斯平滑(Laplace smoothing)。&lt;/p&gt;
-
-&lt;h1 id=&#34;后验概率最大化的含义-不是很懂:099c9edb24a218621028d97385cd3c12&#34;&gt;后验概率最大化的含义(不是很懂)&lt;/h1&gt;
-
-&lt;p&gt;朴素贝叶斯法将实例分到后验概率最大的类中。这&lt;strong&gt;等价于期望风险最小化&lt;/strong&gt;。假设选择0-1损失函数:
-&lt;code&gt;$$ L(Y, f(X)) = \begin{cases}
-                1, &amp;amp; Y \ne f(X) \\
-                0, &amp;amp; Y = f(X)
-                \end{cases}
-$$&lt;/code&gt;
-式中&lt;code&gt;$f(X)$&lt;/code&gt;是分类决策函数。这时,期望风险函数为
-&lt;code&gt;$$ R_{exp}(f) = E [L(Y, f(X))] $$&lt;/code&gt;
-期望是对联合分布$P(X,Y)$取的。由此取条件期望
-&lt;code&gt;$$ R_{exp}(f) = E_X \sum_{k=1}^K[ L(c_k, f(X)) ] P(c_k \mid X)$$&lt;/code&gt;
-为了使期望风险最小化,只需对&lt;code&gt;$X=x$&lt;/code&gt;逐个极小化,由此得到:
-&lt;code&gt;$$
-\begin{align}  
-  f(x) &amp;amp;= \arg \max_{y \in \mathcal{Y}} \sum_{k=1}^K L(c_k, y) P(c_k \mid X = x)  \\
-  &amp;amp;= \arg \max_{y \in \mathcal{Y}} \sum_{k=1}^K P(y \ne  c_k \mid X =x ) \\
-  &amp;amp;= \arg \min_{y \in \mathcal{Y}} (1 - P(y = c_k \mid X =x)) \\
-  &amp;amp;= \arg \max_{y \in \mathcal{Y}} P(y = c_k \mid X = x)
-\end{align} 
-$$&lt;/code&gt;
-这样一来,根据期望风险最小化准则就得到了后验概率最大化准则:
-&lt;code&gt;$$ f(x) = \arg \max_{c_k} P( y = c_k \mid X = x)  $$&lt;/code&gt;
-即朴素贝叶斯法所采用的原理。&lt;/p&gt;
 </description>
     </item>
     

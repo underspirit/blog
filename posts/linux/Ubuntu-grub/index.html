@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    Opinion Mining with Deep Recurrent Neural Networks笔记 | Leon&#39;s Blog
+    Ubuntu修复Grub引导(备忘) | Leon&#39;s Blog
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -16,11 +16,11 @@
 <meta name="author" content="">
 <meta name="generator" content="Hugo 0.14" />
 
-  <meta property="og:title" content="Opinion Mining with Deep Recurrent Neural Networks笔记" />
+  <meta property="og:title" content="Ubuntu修复Grub引导(备忘)" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://blog.songru.org/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/" />
+<meta property="og:url" content="http://blog.songru.org/posts/linux/Ubuntu-grub/" />
 
 
   
@@ -141,14 +141,14 @@ code.has-jax {font: inherit;
 	    
   		<section class="post">
             <h1 class="post-title">
-              <a href="/posts/notebook/Opinion_Mining_with_Deep_Recurrent_Neural_Networks_NOTE/">Opinion Mining with Deep Recurrent Neural Networks笔记</a>
+              <a href="/posts/linux/Ubuntu-grub/">Ubuntu修复Grub引导(备忘)</a>
             </h1>
             <h3 class="post-subtitle">
             	
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>24</sup></span><span class="post-date-separator">/</span><span class="post-date-month">May</span> <span class="post-date-year">2016</span>
+                	<span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2017</span>
             	</span>
             	
             
@@ -159,7 +159,9 @@ code.has-jax {font: inherit;
 			
 				<div class="post-categories" style="margin-bottom: 25px;">
 				
-					<a class="post-category post-category-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>
+					<a class="post-category post-category-ubuntu" href="http://blog.songru.org//tags/ubuntu">Ubuntu</a>
+				
+					<a class="post-category post-category-grub" href="http://blog.songru.org//tags/grub">grub</a>
 				
 				</div>
 			
@@ -168,41 +170,23 @@ code.has-jax {font: inherit;
 
 			
 
-            <p>本文对传统的RNN进行改进，结合BidirectionalRNN，提出了Deep bidirectional RNN。</p>
+            <p>我的系统是win7 + Ubuntu双系统, 但win7基本不用了. 由于/home目录快满了, 于是在Ubuntu中删除了win7系统下的C盘所在的分区. 但是我没有注意到我的引导程序是安装在这个分区, 导致重启之后两个系统都进不去了.</p>
 
-<hr />
+<p>下面是修复步骤:</p>
 
-<p><img src="/img/1464096878586.png" alt="Alt text" />
-</p>
-
-<p><strong>传统的RNN</strong>（图a）信息传播方向是从前往后一个方向，某个时刻t的隐藏状态仅仅包含它之前词语的语义信息：<br />
-<img src="/img/1464097111614.png" alt="Alt text" />
-<br />
-$f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（比如softmax）。</p>
-
-<p><strong>Bidirectional RNN</strong>（图b）包含前向和后向RNN两个部分，分别从相反的反向进行信息的传播，再将每个时刻的两个方向的隐藏状态联合起来计算输出值：<br />
-<img src="/img/1464097064201.png" alt="Alt text" />
-</p>
-
-<p>可以看到，前向RNN和反向RNN的参数是互相独立的。</p>
-
-<p><strong>Deep  RNN</strong>（图c）是将多个传统RNN进行叠加而来，即每一层计算隐藏状态的输入都为上一层的输出。</p>
-
-<p><strong>Deep Bidirectional  RNN</strong>（图d）则是将Bidirectional RNN与Deep RNN结合起来：<br />
-第$i$层（$i&gt;1$）第$t$个时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i)}}$依赖于三个输入：第$i-1$层$t$时刻的前向隐藏状态$\overrightarrow{{h_t}^{(i-1)}}$和后向隐藏状态$\overleftarrow{{h_t}^{(i-1)}}$以及第$i$层$t-1$时刻的前向隐藏状态.<br />
-第$i$层（$i&gt;1$）第$t$个时刻的后向隐藏状态$\overleftarrow{{h_t}^{(i)}}$的计算同理:<br />
-<img src="/img/1464098995066.png" alt="Alt text" />
-</p>
-
-<p>第1层隐藏状态机算比较特殊,也比较简单:<br />
-<img src="/img/1464099041075.png" alt="Alt text" />
-</p>
-
-<p>输出的计算有两种选择:一是使用所有时刻的隐藏状态计算输出,或者仅使用最后一个时刻的隐藏状态.这里使用第二种方案:<br />
-<img src="/img/1464097751597.png" alt="Alt text" />
-</p>
-
-<p>该文是通过堆叠（stack）RNN的方式达到Deep RNN的结构，<a href="http://arxiv.org/abs/1312.6026">Pascanu等</a>的论文采取了另一种思路进行Deep RNN的扩展。</p>
+<ol>
+<li>使用Ubuntu的U盘启动盘进入试用模式, 打开命令行, 在这个模式下可以查看以及操作系统的分区.</li>
+<li>安装testdisk软件, 用于恢复删除的分区.</li>
+<li>使用sudo或root运行testdisk_static, 选择<code>create -&gt; Disk /dev/sda(选择需要恢复的磁盘) -&gt; Proceed -&gt; Intel -&gt; Analyse -&gt; Backup(备份当前的分区表, 不行还可以使用它进行恢复) -&gt; Quick Search</code>,  之后会查找出你丢失的分区, 然后可以选择<code>write</code>进行写入.</li>
+<li>再找回分区时, 发现testdisk给我们多生成了一个分区, 据我的理解也没有影响, 因为我的C盘分区是磁盘的第一个分区, 以0号扇区为起点. 而引导器数据是写入在分区的第一个磁道上, 所以如果恢复后的C盘还是从0号扇区开始, 那么就相当于引导数据也恢复了.</li>
+<li>这样就找回了误删的分区, 重启电脑出现了easybcd创建的启动项, 可以进入win7系统, 但是不能进入ubuntu, 显示一个命令行<code>grub rescue &gt;</code>.不知道什么原因.</li>
+<li>再次用Ubuntu启动盘进入试用, <code>fdisk -l</code>找到<code>/</code>分区,然后使用<code>grub2-install /dev/sda</code>安装grub(大概是这个命令&hellip;.)</li>
+<li>再次重启, 显示的是grub2的启动项, 选择Ubuntu, 这一次没有出现<code>grub rescue &gt;</code>模式, 而是进入了启动界面, 但是一直进不去系统.</li>
+<li>从显示的信息可以看到, 应该是开机自动挂载出现了问题. 这是因为我使用testdisk恢复分区时, 虽然恢复了第一个C盘分区, 但是软件还自动修复了一些分区上的错误, 给我多加了一个分区. 这就导致各个分区的设备目录名(/dev/sda1这些)发生了变化, 所以需要更新/etc/fstab中的设备目录名.</li>
+<li>重启, 进入Ubuntu的recovery mode, 进入root命令模式. 因为默认的根目录和home目录是使用UUID进行挂载的, 所以它们是不会变的, 只需要把其他的自定义的自动挂载项注释掉即可(或者更新).</li>
+<li>但是发现不能编辑, 提示是read only模式, 重新挂载根目录&rdquo;<code>mount –o remount, rw /</code>&rdquo;, 再编辑即可.</li>
+<li>重启</li>
+</ol>
 
 	
 			
@@ -211,7 +195,9 @@ $f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（�
 				<div class="tags-list">
 					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
 					
-	                <a class="post-tag post-tag-nlp" href="http://blog.songru.org//tags/nlp">NLP</a>,
+	                <a class="post-tag post-tag-ubuntu" href="http://blog.songru.org//tags/ubuntu">Ubuntu</a>,
+	                
+	                <a class="post-tag post-tag-grub" href="http://blog.songru.org//tags/grub">grub</a>,
 	                
 				</div>
 			
@@ -220,16 +206,11 @@ $f$为非线性激活函数（比如sigmoid），$g$为输出的计算函数（�
 				<div class="paging">
 					<div class="paging-label">More Reading</div>
 					
-					<span class="paging-newer">
-						<span class="dark-red">下一篇</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="/posts/notebook/Sequence-to-Sequence-Learning-with-Neural-Networks/">Sequence to Sequence Learning with Neural Networks</a>
-		            </span>
-		            
 
 					
 					<span class="paging-older">
 						<span class="dark-red">上一篇</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="/posts/linux/Ubuntu_Matplotlib_fix/">Ubuntu下matplotlib绘图中文乱码</a>
+			            <a class="paging-link" href="/posts/linux/Linux-Socket/">Linux Socket使用小结</a>
 		            </span>
 		            
 	            </div>

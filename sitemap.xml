@@ -3,13 +3,28 @@
   
   <url>
     <loc>http://blog.songru.org/</loc>
-    <lastmod>2017-03-18T09:40:10+08:00</lastmod>
+    <lastmod>2017-03-18T09:54:19+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://blog.songru.org/posts/linux/%E6%94%BE%E6%9D%BE%E5%9C%B0%E6%96%B9/</loc>
-    <lastmod>2017-03-18T09:40:10+08:00</lastmod>
+    <loc>http://blog.songru.org/posts/linux/Ubuntu-grub/</loc>
+    <lastmod>2017-03-18T09:54:19+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.songru.org/posts/linux/Linux-Socket/</loc>
+    <lastmod>2017-03-18T09:54:01+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.songru.org/posts/linux/Linux-IPC/</loc>
+    <lastmod>2017-03-18T09:53:43+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.songru.org/posts/linux/CentOS7-Install-tmate&amp;tmate-slave/</loc>
+    <lastmod>2017-03-18T09:48:26+08:00</lastmod>
   </url>
   
   <url>
